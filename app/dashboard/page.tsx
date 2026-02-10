@@ -113,20 +113,55 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Entrepreneur Actions */}
+          {profile?.role === 'entrepreneur' && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-neutral-900">Mes projets</h2>
+                <Link href="/projects/new">
+                  <Button variant="primary">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Créer un projet
+                  </Button>
+                </Link>
+              </div>
+              <p className="text-neutral-600">
+                Créez un projet pour trouver des talents locaux qui vous aideront à le concrétiser.
+              </p>
+            </div>
+          )}
+
+          {/* Talent Actions */}
+          {profile?.role === 'talent' && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-neutral-900">Projets disponibles</h2>
+                <Button variant="primary">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Rechercher des projets
+                </Button>
+              </div>
+              <p className="text-neutral-600">
+                Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.
+              </p>
+            </div>
+          )}
+
           <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">
-              🚧 Dashboard en construction
+              🚧 Fonctionnalités à venir
             </h2>
-            <p className="text-neutral-700 mb-4">
-              Votre authentification fonctionne parfaitement ! Les prochaines étapes incluront :
-            </p>
             <ul className="list-disc list-inside space-y-2 text-neutral-700">
-              <li>Complétion de votre profil (localisation, compétences, bio)</li>
-              <li>Navigation entre projets et talents</li>
-              <li>Création de projets (pour entrepreneurs)</li>
-              <li>Système de matching intelligent</li>
-              <li>Messagerie et notifications</li>
-              <li>Tableau de bord avec statistiques</li>
+              <li>Liste et filtres des projets</li>
+              <li>Système de matching intelligent (compétences + proximité)</li>
+              <li>Gestion des candidatures</li>
+              <li>Messagerie entre entrepreneurs et talents</li>
+              <li>Notifications en temps réel</li>
+              <li>Tableau de bord avec statistiques et badges</li>
             </ul>
           </div>
         </div>
