@@ -107,6 +107,9 @@ export default function ProfileView({ userId }: { userId: string }) {
       if (profileError) throw profileError;
       setProfile(profileData);
 
+      // Declare projectsData outside scope for stats calculation
+      let projectsData: any[] = [];
+
       // If talent, get skills
       if (profileData.role === 'talent') {
         const { data: skillsData } = await supabase
@@ -134,13 +137,14 @@ export default function ProfileView({ userId }: { userId: string }) {
 
       // If entrepreneur, get projects
       if (profileData.role === 'entrepreneur') {
-        const { data: projectsData } = await supabase
+        const { data } = await supabase
           .from('projects')
           .select('id, title, short_pitch, current_phase, city, created_at')
           .eq('owner_id', userId)
           .order('created_at', { ascending: false });
 
-        setProjects(projectsData || []);
+        projectsData = data || [];
+        setProjects(projectsData);
       }
 
       // Get stats
