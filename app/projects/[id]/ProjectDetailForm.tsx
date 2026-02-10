@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
-import { Button, Badge } from '@/components/ui';
+import { Button, Badge, Modal, Textarea } from '@/components/ui';
 
 interface ProjectDetailProps {
   projectId: string;
@@ -38,6 +38,10 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   const [project, setProject] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const [applicationMessage, setApplicationMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [applicationError, setApplicationError] = useState('');
 
   useEffect(() => {
     loadData();
@@ -115,9 +119,53 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
     }
   };
 
-  const handleApply = async () => {
-    // TODO: Implement application flow
-    alert('Fonctionnalité de candidature à venir ! 🚀');
+  const handleApply = () => {
+    setIsApplicationModalOpen(true);
+    setApplicationMessage('');
+    setApplicationError('');
+  };
+
+  const handleSubmitApplication = async () => {
+    if (!applicationMessage.trim()) {
+      setApplicationError('Veuillez rédiger un message de motivation');
+      return;
+    }
+
+    if (applicationMessage.trim().length < 50) {
+      setApplicationError('Votre message doit contenir au moins 50 caractères');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setApplicationError('');
+
+    try {
+      const { error } = await supabase
+        .from('applications')
+        .insert({
+          project_id: projectId,
+          applicant_id: user.id,
+          message: applicationMessage,
+          status: 'pending',
+        });
+
+      if (error) {
+        console.error('Application error:', error);
+        setApplicationError('Une erreur est survenue. Veuillez réessayer.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Success
+      setHasApplied(true);
+      setIsApplicationModalOpen(false);
+      setApplicationMessage('');
+      setIsSubmitting(false);
+    } catch (error) {
+      console.error('Application error:', error);
+      setApplicationError('Une erreur est survenue. Veuillez réessayer.');
+      setIsSubmitting(false);
+    }
   };
 
   if (isLoading) {
@@ -328,14 +376,85 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                     Gérez les candidatures et suivez l'évolution de votre projet.
                   </p>
                 </div>
-                <Button variant="secondary">
-                  Voir les candidatures
-                </Button>
+                <Link href={`/projects/${projectId}/applications`}>
+                  <Button variant="secondary">
+                    Voir les candidatures
+                  </Button>
+                </Link>
               </div>
             </div>
           )}
         </div>
       </main>
+
+      {/* Application Modal */}
+      <Modal
+        isOpen={isApplicationModalOpen}
+        onClose={() => setIsApplicationModalOpen(false)}
+        title="Postuler à ce projet"
+        size="lg"
+      >
+        <div className="space-y-6">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+            <h3 className="font-semibold text-neutral-900 mb-2">
+              {project?.title}
+            </h3>
+            <p className="text-sm text-neutral-700">
+              Vous postulez auprès de {project?.owner.first_name} {project?.owner.last_name}
+            </p>
+          </div>
+
+          {applicationError && (
+            <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm">
+              {applicationError}
+            </div>
+          )}
+
+          <Textarea
+            label="Message de motivation"
+            placeholder="Expliquez pourquoi ce projet vous intéresse et comment vos compétences peuvent contribuer à sa réussite..."
+            value={applicationMessage}
+            onChange={(e) => setApplicationMessage(e.target.value)}
+            rows={8}
+            maxLength={1000}
+            helperText={`${applicationMessage.length}/1000 caractères (minimum 50)`}
+            required
+          />
+
+          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+            <h4 className="font-semibold text-neutral-900 mb-2">
+              📋 Informations partagées avec l'entrepreneur
+            </h4>
+            <ul className="text-sm text-neutral-700 space-y-1">
+              <li>• Votre nom et prénom</li>
+              <li>• Votre message de motivation</li>
+              <li>• Vos compétences</li>
+              <li>• Votre localisation</li>
+              <li>• Votre profil complet</li>
+            </ul>
+          </div>
+
+          <div className="flex gap-4 pt-4">
+            <Button
+              variant="ghost"
+              className="flex-1"
+              onClick={() => setIsApplicationModalOpen(false)}
+              disabled={isSubmitting}
+            >
+              Annuler
+            </Button>
+            <Button
+              variant="primary"
+              className="flex-1"
+              onClick={handleSubmitApplication}
+              isLoading={isSubmitting}
+              disabled={isSubmitting || applicationMessage.trim().length < 50}
+            >
+              Envoyer ma candidature
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

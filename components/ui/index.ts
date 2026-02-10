@@ -18,3 +18,6 @@ export type { TextareaProps } from './Textarea';
 
 export { Select } from './Select';
 export type { SelectProps } from './Select';
+
+export { Modal } from './Modal';
+export type { ModalProps } from './Modal';
