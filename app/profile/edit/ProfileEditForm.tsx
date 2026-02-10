@@ -116,7 +116,15 @@ export default function ProfileEditForm() {
           `)
           .eq('user_id', user.id);
 
-        setUserSkills(userSkillsData || []);
+        // Transform data to match expected format (skill is an array in response)
+        const transformedSkills = (userSkillsData || []).map((item: any) => ({
+          id: item.id,
+          skill_id: item.skill_id,
+          proficiency_level: item.proficiency_level,
+          skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
+        }));
+
+        setUserSkills(transformedSkills);
       }
     } catch (err: any) {
       console.error('Error loading data:', err);
