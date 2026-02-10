@@ -138,17 +138,27 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-neutral-900">Projets disponibles</h2>
-                <Link href="/projects">
-                  <Button variant="primary">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    Rechercher des projets
-                  </Button>
-                </Link>
+                <div className="flex gap-3">
+                  <Link href="/matching">
+                    <Button variant="primary">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                      Projets suggérés
+                    </Button>
+                  </Link>
+                  <Link href="/projects">
+                    <Button variant="secondary">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      Tous les projets
+                    </Button>
+                  </Link>
+                </div>
               </div>
               <p className="text-neutral-600">
-                Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.
+                Découvrez les projets correspondant à vos compétences et votre localisation, ou parcourez tous les projets disponibles.
               </p>
             </div>
           )}
