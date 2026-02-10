@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { Button, Input, Checkbox, Card, CardBody } from '@/components/ui';
 
 type UserRole = 'entrepreneur' | 'talent';
@@ -11,7 +11,10 @@ type UserRole = 'entrepreneur' | 'talent';
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   // Get role from URL query params if present
   const roleParam = searchParams.get('role') as UserRole | null;
