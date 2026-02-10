@@ -1,195 +1,324 @@
+import Link from 'next/link';
+import Navigation from '@/components/Navigation';
+import { Button, Card, CardBody, Badge } from '@/components/ui';
+
 export default function Home() {
   return (
-    <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-green-50 to-white py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Logo/Brand */}
-          <h1 className="text-5xl md:text-6xl font-bold text-green-800 mb-4">
-            NEYOTA
-          </h1>
+    <div className="min-h-screen bg-neutral-50">
+      <Navigation />
 
-          {/* Baseline */}
-          <p className="text-2xl md:text-3xl text-gray-700 mb-6">
-            Ensemble, faisons vivre nos territoires
-          </p>
+      <main>
+        {/* Hero Section - Modern & Clean */}
+        <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/30 py-20 lg:py-32 px-4 overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full blur-3xl opacity-20 -z-10"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-20 -z-10"></div>
 
-          {/* Manifesto */}
-          <div className="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-8 mb-8">
-            <div className="text-4xl mb-4">🌱</div>
-            <h2 className="text-xl font-semibold text-green-700 mb-4">
-              L&apos;entrepreneuriat qui fait vivre votre territoire
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Nous croyons que chaque territoire possède les talents nécessaires pour créer son avenir.
-              NEYOTA connecte gratuitement les porteurs de projets et les talents locaux pour dynamiser
-              l&apos;économie de proximité.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm font-medium text-green-700">
-              <span className="flex items-center gap-2">
-                <span className="text-2xl">✓</span> 100% gratuit
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="text-2xl">✓</span> 100% local
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="text-2xl">✓</span> 100% impact
-              </span>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a
-              href="/signup?role=entrepreneur"
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105 text-lg"
-            >
-              💼 Je porte un projet
-            </a>
-            <a
-              href="/signup?role=talent"
-              className="bg-white hover:bg-gray-50 text-green-600 font-semibold py-4 px-8 rounded-lg shadow-lg border-2 border-green-600 transition-all transform hover:scale-105 text-lg"
-            >
-              🌟 Je cherche un projet
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Projects Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-            Projets récents près de chez vous
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-gray-50 rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow">
-                <div className="text-sm text-green-600 font-medium mb-2">
-                  📍 Rennes (35) • À 5 km
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  Projet exemple #{i}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Description courte du projet qui permet de comprendre rapidement de quoi il s&apos;agit...
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                    Développement
-                  </span>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                    Design
-                  </span>
-                </div>
-                <a href="#" className="text-green-600 font-medium hover:text-green-700">
-                  Voir le projet →
-                </a>
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-8 animate-fade-in">
+                <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
+                <span className="text-sm font-medium text-neutral-700">
+                  Plateforme 100% gratuite pour entrepreneurs et talents
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Benefits Section */}
-      <section className="py-16 px-4 bg-green-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-            Pourquoi NEYOTA ?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-5xl mb-4">⚡</div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Rapide</h3>
-              <p className="text-gray-600">
-                Trouvez les bons talents ou projets près de chez vous en quelques clics
+              {/* Main Heading */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 animate-slide-up">
+                Ensemble, faisons vivre{' '}
+                <span className="text-primary-600">nos territoires</span>
+              </h1>
+
+              {/* Subheading */}
+              <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                NEYOTA connecte gratuitement les porteurs de projets et les talents locaux
+                pour dynamiser l&apos;économie de proximité.
+              </p>
+
+              {/* Value Props */}
+              <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium text-neutral-700">100% gratuit</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium text-neutral-700">100% local</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium text-neutral-700">100% impact</span>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
+                <Link href="/signup?role=entrepreneur">
+                  <Button variant="primary" size="lg" className="min-w-[200px]">
+                    💼 Je porte un projet
+                  </Button>
+                </Link>
+                <Link href="/signup?role=talent">
+                  <Button variant="secondary" size="lg" className="min-w-[200px]">
+                    🌟 Je cherche un projet
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Projects Section */}
+        <section className="py-20 px-4 bg-white">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+                Projets récents près de chez vous
+              </h2>
+              <p className="text-neutral-600 text-lg">
+                Découvrez des projets locaux qui ont besoin de vos talents
               </p>
             </div>
-            <div className="text-center">
-              <div className="text-5xl mb-4">🎯</div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Ciblé</h3>
-              <p className="text-gray-600">
-                Matching intelligent basé sur vos compétences, localisation et valeurs
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {[
+                {
+                  id: 1,
+                  title: 'Plateforme e-commerce local',
+                  location: 'Rennes',
+                  distance: '5 km',
+                  phase: 'MVP',
+                  description: 'Marketplace pour producteurs locaux. Recherche développeur full-stack et designer UX/UI.',
+                  skills: ['Développement', 'Design UX/UI']
+                },
+                {
+                  id: 2,
+                  title: 'Application mobilité durable',
+                  location: 'Nantes',
+                  distance: '12 km',
+                  phase: 'Idéation',
+                  description: 'Covoiturage pour trajets domicile-travail. Besoin de co-fondateur technique et expert mobilité.',
+                  skills: ['Mobile', 'Product']
+                },
+                {
+                  id: 3,
+                  title: 'Réseau d\'entraide locale',
+                  location: 'Saint-Malo',
+                  distance: '8 km',
+                  phase: 'Lancement',
+                  description: 'Plateforme de services entre voisins. Recherche growth marketer et community manager.',
+                  skills: ['Marketing', 'Community']
+                },
+              ].map((project) => (
+                <Card key={project.id} className="group">
+                  <CardBody>
+                    {/* Location & Distance */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-1 text-primary-600 text-sm font-medium">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                        <span>{project.location} • {project.distance}</span>
+                      </div>
+                      <Badge variant="success">{project.phase}</Badge>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {project.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Skills */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.skills.map((skill) => (
+                        <Badge key={skill} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* CTA */}
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center gap-1 group"
+                    >
+                      Voir le projet
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+
+            {/* View All Button */}
+            <div className="text-center mt-10">
+              <Link href="/projects">
+                <Button variant="ghost" size="lg">
+                  Voir tous les projets →
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Benefits Section */}
+        <section className="py-20 px-4 bg-primary-50/50">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+                Pourquoi NEYOTA ?
+              </h2>
+              <p className="text-neutral-600 text-lg">
+                Une plateforme pensée pour l&apos;entrepreneuriat territorial
               </p>
             </div>
-            <div className="text-center">
-              <div className="text-5xl mb-4">💚</div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Humain</h3>
-              <p className="text-gray-600">
-                Focus sur la compatibilité humaine et l&apos;engagement territorial
+
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {[
+                {
+                  icon: '⚡',
+                  title: 'Rapide',
+                  description: 'Trouvez les bons talents ou projets près de chez vous en quelques clics grâce à notre matching intelligent.'
+                },
+                {
+                  icon: '🎯',
+                  title: 'Ciblé',
+                  description: 'Algorithme basé sur vos compétences, votre localisation, vos valeurs et la phase du projet.'
+                },
+                {
+                  icon: '💚',
+                  title: 'Humain',
+                  description: 'Focus sur la compatibilité humaine, l&apos;engagement territorial et la création de valeur locale.'
+                }
+              ].map((benefit, index) => (
+                <div key={index} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
+                  <div className="text-5xl mb-4">{benefit.icon}</div>
+                  <h3 className="text-xl font-semibold text-neutral-900 mb-3">{benefit.title}</h3>
+                  <p className="text-neutral-600 leading-relaxed">{benefit.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Section */}
+        <section className="py-20 px-4 bg-white">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+                Notre impact territorial
+              </h2>
+              <p className="text-neutral-600 text-lg">
+                Des chiffres qui témoignent de la dynamique locale
               </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Impact Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">
-            Notre impact territorial
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">127</div>
-              <div className="text-gray-600">Projets créés</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">543</div>
-              <div className="text-gray-600">Talents engagés</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">284</div>
-              <div className="text-gray-600">Collaborations</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">89</div>
-              <div className="text-gray-600">Emplois créés</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+              {[
+                { value: '127', label: 'Projets créés' },
+                { value: '543', label: 'Talents engagés' },
+                { value: '284', label: 'Collaborations' },
+                { value: '89', label: 'Emplois créés' }
+              ].map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">{stat.value}</div>
+                  <div className="text-neutral-600 font-medium">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Final CTA */}
-      <section className="py-16 px-4 bg-green-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Prêt à faire vivre votre territoire ?
-          </h2>
-          <p className="text-xl mb-8 text-green-100">
-            Rejoignez la communauté NEYOTA et donnez vie à vos projets locaux
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/signup"
-              className="bg-white text-green-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105"
-            >
-              Créer un compte gratuitement
-            </a>
-            <a
-              href="/about"
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all"
-            >
-              En savoir plus
-            </a>
+        {/* Final CTA */}
+        <section className="py-20 px-4 bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+          <div className="container-custom">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Prêt à faire vivre votre territoire ?
+              </h2>
+              <p className="text-xl mb-10 text-primary-100">
+                Rejoignez la communauté NEYOTA et donnez vie à vos projets locaux
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/signup">
+                  <Button variant="secondary" size="lg" className="min-w-[220px] bg-white hover:bg-neutral-50 text-primary-600">
+                    Créer un compte gratuitement
+                  </Button>
+                </Link>
+                <Link href="/about">
+                  <Button variant="ghost" size="lg" className="min-w-[180px] text-white border-white hover:bg-primary-700">
+                    En savoir plus
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-8 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="mb-4">
-            © 2026 NEYOTA - Ensemble, faisons vivre nos territoires
-          </p>
-          <div className="flex flex-wrap justify-center gap-6 text-sm">
-            <a href="/about" className="hover:text-white">À propos</a>
-            <a href="/charter" className="hover:text-white">Charte éthique</a>
-            <a href="/privacy" className="hover:text-white">Confidentialité</a>
-            <a href="/contact" className="hover:text-white">Contact</a>
+        {/* Footer */}
+        <footer className="bg-neutral-900 text-neutral-300 py-12 px-4">
+          <div className="container-custom">
+            <div className="max-w-6xl mx-auto">
+              {/* Footer Grid */}
+              <div className="grid md:grid-cols-4 gap-8 mb-8">
+                {/* Brand */}
+                <div className="md:col-span-2">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
+                      <span className="text-white font-bold text-xl">N</span>
+                    </div>
+                    <span className="text-2xl font-bold text-white">NEYOTA</span>
+                  </div>
+                  <p className="text-neutral-400 mb-4">
+                    Ensemble, faisons vivre nos territoires.<br />
+                    Plateforme 100% gratuite de mise en relation entre porteurs de projets et talents locaux.
+                  </p>
+                </div>
+
+                {/* Links */}
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Plateforme</h4>
+                  <ul className="space-y-2">
+                    <li><Link href="/projects" className="hover:text-white transition-colors">Projets</Link></li>
+                    <li><Link href="/talents" className="hover:text-white transition-colors">Talents</Link></li>
+                    <li><Link href="/about" className="hover:text-white transition-colors">À propos</Link></li>
+                  </ul>
+                </div>
+
+                {/* Legal */}
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Légal</h4>
+                  <ul className="space-y-2">
+                    <li><Link href="/charter" className="hover:text-white transition-colors">Charte éthique</Link></li>
+                    <li><Link href="/privacy" className="hover:text-white transition-colors">Confidentialité</Link></li>
+                    <li><Link href="/terms" className="hover:text-white transition-colors">CGU</Link></li>
+                    <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Copyright */}
+              <div className="pt-8 border-t border-neutral-800 text-center text-sm text-neutral-400">
+                <p>© 2026 NEYOTA. Tous droits réservés.</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </footer>
-    </main>
+        </footer>
+      </main>
+    </div>
   );
 }
