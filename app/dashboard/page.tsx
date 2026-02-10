@@ -70,9 +70,18 @@ export default function DashboardPage() {
               </div>
               <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
             </Link>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              Déconnexion
-            </Button>
+            <div className="flex items-center gap-3">
+              {profile?.id && (
+                <Link href={`/profile/${profile.id}`}>
+                  <Button variant="ghost" size="sm">
+                    Mon profil
+                  </Button>
+                </Link>
+              )}
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                Déconnexion
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -168,12 +177,9 @@ export default function DashboardPage() {
               🚧 Fonctionnalités à venir
             </h2>
             <ul className="list-disc list-inside space-y-2 text-neutral-700">
-              <li>Liste et filtres des projets</li>
-              <li>Système de matching intelligent (compétences + proximité)</li>
-              <li>Gestion des candidatures</li>
               <li>Messagerie entre entrepreneurs et talents</li>
               <li>Notifications en temps réel</li>
-              <li>Tableau de bord avec statistiques et badges</li>
+              <li>Système de badges et gamification</li>
             </ul>
           </div>
         </div>
