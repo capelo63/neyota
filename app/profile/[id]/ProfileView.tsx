@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
+import { ImpactStats } from '@/components/badges/ImpactStats';
 
 interface Profile {
   id: string;
@@ -44,6 +46,21 @@ interface Stats {
   acceptedApplicationsCount: number;
 }
 
+interface UserBadge {
+  badge_type: BadgeType;
+  earned_at: string;
+}
+
+interface ImpactStats {
+  projects_helped?: number;
+  hours_contributed?: number;
+  impact_score: number;
+  average_rating?: number;
+  total_ratings?: number;
+  projects_created?: number;
+  talents_recruited?: number;
+}
+
 const PROFICIENCY_LABELS = {
   beginner: 'Débutant',
   intermediate: 'Intermédiaire',
@@ -73,6 +90,8 @@ export default function ProfileView({ userId }: { userId: string }) {
     applicationsCount: 0,
     acceptedApplicationsCount: 0,
   });
+  const [badges, setBadges] = useState<UserBadge[]>([]);
+  const [impactStats, setImpactStats] = useState<ImpactStats | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -193,6 +212,26 @@ export default function ProfileView({ userId }: { userId: string }) {
         applicationsCount,
         acceptedApplicationsCount,
       });
+
+      // Get badges
+      const { data: badgesData } = await supabase
+        .from('user_badges')
+        .select('badge_type, earned_at')
+        .eq('user_id', userId)
+        .order('earned_at', { ascending: false });
+
+      setBadges(badgesData || []);
+
+      // Get impact stats
+      const { data: impactData } = await supabase
+        .from('user_impact_stats')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (impactData) {
+        setImpactStats(impactData);
+      }
     } catch (err: any) {
       console.error('Error loading profile:', err);
       setError(err.message || 'Erreur lors du chargement du profil');
@@ -343,6 +382,21 @@ export default function ProfileView({ userId }: { userId: string }) {
             </div>
           </div>
         </div>
+
+        {/* Badges */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Badges obtenus
+          </h2>
+          <BadgeGrid badges={badges} />
+        </div>
+
+        {/* Impact Stats */}
+        {impactStats && (
+          <div className="mb-6">
+            <ImpactStats stats={impactStats} role={profile.role} />
+          </div>
+        )}
 
         {/* Skills (for talents) */}
         {profile.role === 'talent' && (
