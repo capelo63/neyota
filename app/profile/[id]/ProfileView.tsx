@@ -123,7 +123,13 @@ export default function ProfileView({ userId }: { userId: string }) {
           )
           .eq('user_id', userId);
 
-        setSkills(skillsData || []);
+        // Transform data to match expected format (skill is an array in response)
+        const transformedSkills = (skillsData || []).map((item: any) => ({
+          proficiency_level: item.proficiency_level,
+          skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
+        }));
+
+        setSkills(transformedSkills);
       }
 
       // If entrepreneur, get projects
