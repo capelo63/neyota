@@ -6,3 +6,9 @@ export type { CardProps, CardHeaderProps, CardBodyProps, CardFooterProps } from 
 
 export { Badge } from './Badge';
 export type { BadgeProps } from './Badge';
+
+export { Input } from './Input';
+export type { InputProps } from './Input';
+
+export { Checkbox } from './Checkbox';
+export type { CheckboxProps } from './Checkbox';
