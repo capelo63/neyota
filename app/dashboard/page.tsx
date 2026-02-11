@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -77,6 +78,7 @@ export default function DashboardPage() {
               <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
             </Link>
             <div className="flex items-center gap-3">
+              <NotificationBell />
               {profile?.id && (
                 <Link href={`/profile/${profile.id}`}>
                   <Button variant="ghost" size="sm">
@@ -184,8 +186,8 @@ export default function DashboardPage() {
             </h2>
             <ul className="list-disc list-inside space-y-2 text-neutral-700">
               <li>Messagerie entre entrepreneurs et talents</li>
-              <li>Notifications en temps réel</li>
-              <li>Système de badges et gamification</li>
+              <li>Filtres avancés et recherche territoriale</li>
+              <li>Tableau de bord analytique pour les entrepreneurs</li>
             </ul>
           </div>
         </div>
