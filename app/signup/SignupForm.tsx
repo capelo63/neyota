@@ -19,7 +19,7 @@ export default function SignupForm() {
   // Get role from URL query params if present
   const roleParam = searchParams.get('role') as UserRole | null;
 
-  const [step, setStep] = useState<'role' | 'info' | 'charter'>(roleParam ? 'info' : 'role');
+  const [step, setStep] = useState<'role' | 'info' | 'charter' | 'email-confirmation'>(roleParam ? 'info' : 'role');
   const [role, setRole] = useState<UserRole | null>(roleParam);
   const [formData, setFormData] = useState({
     email: '',
@@ -31,6 +31,7 @@ export default function SignupForm() {
   const [charterAccepted, setCharterAccepted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   // Update role when URL param changes
   useEffect(() => {
@@ -146,9 +147,17 @@ export default function SignupForm() {
         console.error('Charter acceptance error:', charterError);
       }
 
-      // 4. Redirect to onboarding
-      router.push('/onboarding');
-      router.refresh();
+      // 4. Check if email confirmation is required
+      if (authData.user.identities && authData.user.identities.length === 0) {
+        // Email confirmation required - show confirmation step
+        setUserEmail(formData.email);
+        setStep('email-confirmation');
+        setIsLoading(false);
+      } else {
+        // No email confirmation needed - redirect to onboarding
+        router.push('/onboarding');
+        router.refresh();
+      }
     } catch (error) {
       console.error('Signup error:', error);
       setErrors({ general: 'Une erreur est survenue. Veuillez réessayer.' });
@@ -475,6 +484,50 @@ export default function SignupForm() {
                     Créer mon compte
                   </Button>
                 </div>
+              </div>
+            )}
+
+            {/* STEP 4: Email Confirmation */}
+            {step === 'email-confirmation' && (
+              <div className="text-center py-8">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+
+                <h1 className="text-3xl font-bold text-neutral-900 mb-4">
+                  Vérifiez votre email
+                </h1>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
+                  <p className="text-neutral-700 mb-3">
+                    Nous avons envoyé un email de confirmation à :
+                  </p>
+                  <p className="font-semibold text-neutral-900 text-lg mb-4">
+                    {userEmail}
+                  </p>
+                  <p className="text-neutral-700">
+                    📧 <strong>Cliquez sur le lien dans l'email</strong> pour activer votre compte et accéder à NEYOTA.
+                  </p>
+                </div>
+
+                <div className="bg-neutral-50 rounded-lg p-4 text-sm text-neutral-600 mb-6">
+                  <p className="mb-2">
+                    <strong>Vous n'avez pas reçu l'email ?</strong>
+                  </p>
+                  <ul className="text-left space-y-1 list-disc list-inside">
+                    <li>Vérifiez votre dossier spam/courrier indésirable</li>
+                    <li>Assurez-vous que l'adresse email est correcte</li>
+                    <li>L'email peut prendre quelques minutes à arriver</li>
+                  </ul>
+                </div>
+
+                <Link href="/login">
+                  <Button variant="primary" className="w-full">
+                    Aller à la page de connexion
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

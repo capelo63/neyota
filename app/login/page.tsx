@@ -46,7 +46,16 @@ export default function LoginPage() {
       });
 
       if (error) {
-        setErrors({ general: 'Email ou mot de passe incorrect' });
+        // Check for specific error types
+        if (error.message.includes('Email not confirmed')) {
+          setErrors({
+            general: '📧 Votre email n\'a pas encore été confirmé. Veuillez vérifier votre boîte mail et cliquer sur le lien de confirmation que nous vous avons envoyé.'
+          });
+        } else if (error.message.includes('Invalid login credentials')) {
+          setErrors({ general: 'Email ou mot de passe incorrect' });
+        } else {
+          setErrors({ general: error.message || 'Email ou mot de passe incorrect' });
+        }
         setIsLoading(false);
         return;
       }
