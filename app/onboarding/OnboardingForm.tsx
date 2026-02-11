@@ -155,7 +155,7 @@ export default function OnboardingForm() {
 
     try {
       // Update profile
-      const { error: profileError } = await supabase
+      const { data: updatedProfile, error: profileError } = await supabase
         .from('profiles')
         .update({
           city: formData.city,
@@ -165,11 +165,21 @@ export default function OnboardingForm() {
           max_distance_km: formData.maxDistance,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id);
+        .eq('id', user.id)
+        .select()
+        .single();
 
       if (profileError) {
         console.error('Profile update error:', profileError);
         setErrors({ general: 'Erreur lors de la mise à jour du profil' });
+        setIsSaving(false);
+        return;
+      }
+
+      // Verify the update was successful
+      if (!updatedProfile || updatedProfile.postal_code === '00000' || updatedProfile.city === 'À définir') {
+        console.error('Profile update verification failed', updatedProfile);
+        setErrors({ general: 'Erreur lors de la mise à jour du profil. Veuillez réessayer.' });
         setIsSaving(false);
         return;
       }
@@ -191,29 +201,11 @@ export default function OnboardingForm() {
         }
       }
 
-      // Wait and verify the profile update is visible in the database
-      let retries = 0;
-      let profileUpdated = false;
+      // Wait a bit longer to ensure database commits are fully visible
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      while (retries < 5 && !profileUpdated) {
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        const { data: checkProfile } = await supabase
-          .from('profiles')
-          .select('postal_code, city')
-          .eq('id', user.id)
-          .single();
-
-        if (checkProfile && checkProfile.postal_code !== '00000' && checkProfile.city !== 'À définir') {
-          profileUpdated = true;
-        } else {
-          retries++;
-        }
-      }
-
-      // Redirect to dashboard
-      router.push('/dashboard');
-      router.refresh();
+      // Force a hard navigation to dashboard with cache bypass
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error('Onboarding error:', error);
       setErrors({ general: 'Une erreur est survenue. Veuillez réessayer.' });
