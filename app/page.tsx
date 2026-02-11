@@ -24,11 +24,21 @@ export default function Home() {
                 </span>
               </div>
 
+              {/* NEYOTA Brand & Tagline */}
+              <div className="mb-6 animate-slide-up">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-neutral-900 mb-3">
+                  NEYOTA
+                </h1>
+                <p className="text-xl md:text-2xl font-medium text-primary-600 mb-8">
+                  Need Your Talents
+                </p>
+              </div>
+
               {/* Main Heading */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 animate-slide-up">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 animate-slide-up">
                 Ensemble, faisons vivre{' '}
                 <span className="text-primary-600">nos territoires</span>
-              </h1>
+              </h2>
 
               {/* Subheading */}
               <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up">
@@ -277,15 +287,20 @@ export default function Home() {
               <div className="grid md:grid-cols-4 gap-8 mb-8">
                 {/* Brand */}
                 <div className="md:col-span-2">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold text-xl">N</span>
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-xl">N</span>
+                      </div>
+                      <span className="text-2xl font-bold text-white">NEYOTA</span>
                     </div>
-                    <span className="text-2xl font-bold text-white">NEYOTA</span>
+                    <p className="text-primary-400 font-medium text-sm ml-12">
+                      Need Your Talents
+                    </p>
                   </div>
                   <p className="text-neutral-400 mb-4">
-                    Ensemble, faisons vivre nos territoires.<br />
-                    Plateforme 100% gratuite de mise en relation entre porteurs de projets et talents locaux.
+                    La plateforme qui connecte les projets aux talents locaux.<br />
+                    100% gratuite, 100% locale, 100% impact.
                   </p>
                 </div>
 
