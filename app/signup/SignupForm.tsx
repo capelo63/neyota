@@ -119,15 +119,16 @@ export default function SignupForm() {
         return;
       }
 
-      // 2. Create profile
+      // 2. Create profile with temporary location data (will be completed in onboarding)
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
           id: authData.user.id,
-          email: formData.email,
           first_name: formData.firstName,
           last_name: formData.lastName,
           role: role,
+          postal_code: '00000', // Temporary - will be updated in onboarding
+          city: 'À définir', // Temporary - will be updated in onboarding
         });
 
       if (profileError) {
