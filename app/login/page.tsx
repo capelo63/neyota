@@ -63,12 +63,12 @@ export default function LoginPage() {
       // Check if profile is complete
       const { data: profile } = await supabase
         .from('profiles')
-        .select('role, postal_code, first_name, last_name')
+        .select('role, postal_code, city, first_name, last_name')
         .eq('id', data.user.id)
         .single();
 
       // Redirect based on profile completion
-      if (profile && profile.postal_code && profile.postal_code !== '00000' && profile.first_name && profile.last_name) {
+      if (profile && profile.postal_code && profile.postal_code !== '00000' && profile.city && profile.city !== 'À définir' && profile.first_name && profile.last_name) {
         router.push('/dashboard');
       } else {
         router.push('/onboarding');
