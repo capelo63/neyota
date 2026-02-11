@@ -166,7 +166,7 @@ BEGIN
         NEW.talent_id,
         'application_rejected',
         'Candidature refusée',
-        'Votre candidature pour "' || project_title || '" n\'a pas été retenue',
+        'Votre candidature pour "' || project_title || '" n''a pas été retenue',
         NEW.project_id,
         NEW.id,
         NULL
