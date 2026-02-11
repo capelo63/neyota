@@ -36,7 +36,7 @@ export default function DashboardPage() {
         .single();
 
       // If profile doesn't exist or is incomplete, redirect to onboarding
-      if (!profile || !profile.first_name || !profile.last_name || !profile.postal_code || profile.postal_code === '00000') {
+      if (!profile || !profile.first_name || !profile.last_name || !profile.postal_code || profile.postal_code === '00000' || profile.city === 'À définir') {
         router.push('/onboarding');
         return;
       }
