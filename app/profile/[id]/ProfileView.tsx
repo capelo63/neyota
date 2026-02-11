@@ -328,11 +328,21 @@ export default function ProfileView({ userId }: { userId: string }) {
               </div>
             </div>
 
-            {/* Edit button if own profile */}
+            {/* Action buttons if own profile */}
             {isOwnProfile && (
-              <Link href="/profile/edit">
-                <Button variant="secondary">Modifier mon profil</Button>
-              </Link>
+              <div className="flex gap-3">
+                <Link href="/dashboard">
+                  <Button variant="primary">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Retour au dashboard
+                  </Button>
+                </Link>
+                <Link href="/profile/edit">
+                  <Button variant="secondary">Modifier mon profil</Button>
+                </Link>
+              </div>
             )}
           </div>
 
@@ -347,59 +357,84 @@ export default function ProfileView({ userId }: { userId: string }) {
           )}
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="text-3xl font-bold text-orange-600 mb-1">
-              {stats.projectsCount}
-            </div>
-            <div className="text-gray-600">
-              {profile.role === 'entrepreneur'
-                ? 'Projets créés'
-                : 'Projets rejoints'}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="text-3xl font-bold text-blue-600 mb-1">
-              {stats.applicationsCount}
-            </div>
-            <div className="text-gray-600">
-              {profile.role === 'entrepreneur'
-                ? 'Candidatures reçues'
-                : 'Candidatures envoyées'}
+        {/* Dashboard redirect for own profile */}
+        {isOwnProfile && (
+          <div className="bg-gradient-to-br from-primary-50 to-primary-100 border-2 border-primary-200 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-neutral-900 mb-2">
+                  💡 Ceci est votre profil public
+                </h2>
+                <p className="text-neutral-700 mb-3">
+                  Consultez votre <strong>dashboard</strong> pour une vue complète avec vos statistiques, badges, et impact en temps réel.
+                </p>
+              </div>
+              <Link href="/dashboard">
+                <Button variant="primary" size="lg">
+                  Voir mon dashboard →
+                </Button>
+              </Link>
             </div>
           </div>
+        )}
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="text-3xl font-bold text-green-600 mb-1">
-              {stats.acceptedApplicationsCount}
+        {/* Stats - only for other users' profiles */}
+        {!isOwnProfile && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-3xl font-bold text-orange-600 mb-1">
+                {stats.projectsCount}
+              </div>
+              <div className="text-gray-600">
+                {profile.role === 'entrepreneur'
+                  ? 'Projets créés'
+                  : 'Projets rejoints'}
+              </div>
             </div>
-            <div className="text-gray-600">
-              {profile.role === 'entrepreneur'
-                ? 'Collaborations actives'
-                : 'Candidatures acceptées'}
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-3xl font-bold text-blue-600 mb-1">
+                {stats.applicationsCount}
+              </div>
+              <div className="text-gray-600">
+                {profile.role === 'entrepreneur'
+                  ? 'Candidatures reçues'
+                  : 'Candidatures envoyées'}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-3xl font-bold text-green-600 mb-1">
+                {stats.acceptedApplicationsCount}
+              </div>
+              <div className="text-gray-600">
+                {profile.role === 'entrepreneur'
+                  ? 'Collaborations actives'
+                  : 'Candidatures acceptées'}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Badges */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Badges obtenus
-          </h2>
-          <BadgeGrid badges={badges} />
-        </div>
+        {/* Badges - only for other users' profiles */}
+        {!isOwnProfile && (
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Badges obtenus
+            </h2>
+            <BadgeGrid badges={badges} />
+          </div>
+        )}
 
-        {/* Impact Stats */}
-        {impactStats && (
+        {/* Impact Stats - only for other users' profiles */}
+        {!isOwnProfile && impactStats && (
           <div className="mb-6">
             <ImpactStats stats={impactStats} role={profile.role} />
           </div>
         )}
 
-        {/* Skills (for talents) */}
-        {profile.role === 'talent' && (
+        {/* Skills (for talents) - only for other users' profiles */}
+        {!isOwnProfile && profile.role === 'talent' && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Compétences
@@ -437,8 +472,8 @@ export default function ProfileView({ userId }: { userId: string }) {
           </div>
         )}
 
-        {/* Projects (for entrepreneurs) */}
-        {profile.role === 'entrepreneur' && (
+        {/* Projects (for entrepreneurs) - only for other users' profiles */}
+        {!isOwnProfile && profile.role === 'entrepreneur' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Projets</h2>
             {projects.length === 0 ? (
