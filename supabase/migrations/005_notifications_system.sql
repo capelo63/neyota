@@ -31,11 +31,11 @@ CREATE TABLE notifications (
   read_at TIMESTAMP WITH TIME ZONE,
 
   -- Metadata
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-
-  -- Index for performance
-  INDEX idx_notifications_user_read (user_id, is_read, created_at DESC)
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Index for performance
+CREATE INDEX idx_notifications_user_read ON notifications (user_id, is_read, created_at DESC);
 
 -- Enable RLS
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
