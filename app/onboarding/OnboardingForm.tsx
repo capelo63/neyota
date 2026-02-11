@@ -191,8 +191,25 @@ export default function OnboardingForm() {
         }
       }
 
-      // Wait a bit to ensure database updates are committed
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Wait and verify the profile update is visible in the database
+      let retries = 0;
+      let profileUpdated = false;
+
+      while (retries < 5 && !profileUpdated) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        const { data: checkProfile } = await supabase
+          .from('profiles')
+          .select('postal_code, city')
+          .eq('id', user.id)
+          .single();
+
+        if (checkProfile && checkProfile.postal_code !== '00000' && checkProfile.city !== 'À définir') {
+          profileUpdated = true;
+        } else {
+          retries++;
+        }
+      }
 
       // Redirect to dashboard
       router.push('/dashboard');
