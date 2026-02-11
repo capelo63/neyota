@@ -133,6 +133,13 @@ export default function SignupForm() {
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
+        // Delete the auth user since profile creation failed
+        await supabase.auth.admin.deleteUser(authData.user.id);
+        setErrors({
+          general: `Erreur lors de la création du profil: ${profileError.message}. Vérifiez que les permissions RLS sont correctement configurées.`
+        });
+        setIsLoading(false);
+        return;
       }
 
       // 3. Record charter acceptance
