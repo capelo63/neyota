@@ -183,12 +183,12 @@ export default function ProfileView({ userId }: { userId: string }) {
             ? supabase
                 .from('applications')
                 .select('id', { count: 'exact', head: true })
-                .eq('applicant_id', userId)
+                .eq('talent_id', userId)
                 .then((res) => res.count || 0)
             : supabase
                 .from('applications')
                 .select('id', { count: 'exact', head: true })
-                .eq('project_id', { in: projectsData?.map((p) => p.id) || [] })
+                .in('project_id', projectsData?.map((p) => p.id) || [])
                 .then((res) => res.count || 0),
 
           // Accepted applications count
@@ -196,13 +196,13 @@ export default function ProfileView({ userId }: { userId: string }) {
             ? supabase
                 .from('applications')
                 .select('id', { count: 'exact', head: true })
-                .eq('applicant_id', userId)
+                .eq('talent_id', userId)
                 .eq('status', 'accepted')
                 .then((res) => res.count || 0)
             : supabase
                 .from('applications')
                 .select('id', { count: 'exact', head: true })
-                .eq('project_id', { in: projectsData?.map((p) => p.id) || [] })
+                .in('project_id', projectsData?.map((p) => p.id) || [])
                 .eq('status', 'accepted')
                 .then((res) => res.count || 0),
         ]);

@@ -179,6 +179,7 @@ export default function OnboardingForm() {
         const skillsToInsert = formData.selectedSkills.map(skillId => ({
           user_id: user.id,
           skill_id: skillId,
+          proficiency_level: 'intermediate', // Default proficiency, can be updated later in profile
         }));
 
         const { error: skillsError } = await supabase

@@ -56,7 +56,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
         .from('applications')
         .select(`
           *,
-          applicant:profiles!applicant_id(
+          applicant:profiles!talent_id(
             id, first_name, last_name, email, city, bio,
             skills:user_skills(
               skill:skills(id, name)
@@ -232,7 +232,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
                             <div className="bg-neutral-50 rounded-lg p-4 mb-4">
                               <p className="text-sm font-semibold text-neutral-900 mb-2">Message de motivation :</p>
                               <p className="text-neutral-700 whitespace-pre-wrap">
-                                {application.message}
+                                {application.motivation_message}
                               </p>
                             </div>
 
