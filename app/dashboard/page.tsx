@@ -19,28 +19,54 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const loadUserData = async () => {
+      console.log('[DASHBOARD] Loading user data...');
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
+        console.log('[DASHBOARD] No user found, redirecting to login');
         router.push('/login');
         return;
       }
 
+      console.log('[DASHBOARD] User found:', user.id);
       setUser(user);
 
       // Load profile
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
 
+      console.log('[DASHBOARD] Profile loaded:', {
+        profile,
+        error,
+        first_name: profile?.first_name,
+        last_name: profile?.last_name,
+        postal_code: profile?.postal_code,
+        city: profile?.city
+      });
+
       // If profile doesn't exist or is incomplete, redirect to onboarding
-      if (!profile || !profile.first_name || !profile.last_name || !profile.postal_code || profile.postal_code === '00000' || profile.city === 'À définir') {
+      const isIncomplete = !profile || !profile.first_name || !profile.last_name || !profile.postal_code || profile.postal_code === '00000' || profile.city === 'À définir';
+
+      console.log('[DASHBOARD] Profile check:', {
+        exists: !!profile,
+        has_first_name: !!profile?.first_name,
+        has_last_name: !!profile?.last_name,
+        has_postal_code: !!profile?.postal_code,
+        postal_code_value: profile?.postal_code,
+        city_value: profile?.city,
+        isIncomplete
+      });
+
+      if (isIncomplete) {
+        console.log('[DASHBOARD] Profile incomplete, redirecting to onboarding');
         router.push('/onboarding');
         return;
       }
 
+      console.log('[DASHBOARD] Profile complete, showing dashboard');
       setProfile(profile);
       setIsLoading(false);
     };
