@@ -6,6 +6,8 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
+import { ImpactStats as ImpactStatsComponent } from '@/components/badges/ImpactStats';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -16,6 +18,14 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [projects, setProjects] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    projectsCount: 0,
+    applicationsCount: 0,
+    acceptedApplicationsCount: 0,
+  });
+  const [badges, setBadges] = useState<Array<{ badge_type: BadgeType; earned_at: string }>>([]);
+  const [impactStats, setImpactStats] = useState<any>(null);
+  const [skills, setSkills] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -71,17 +81,108 @@ export default function DashboardPage() {
       setProfile(profile);
 
       // Load projects if entrepreneur
+      let projectsData: any[] = [];
       if (profile.role === 'entrepreneur') {
-        const { data: projectsData, error: projectsError } = await supabase
+        const { data, error: projectsError } = await supabase
           .from('projects')
           .select('*')
           .eq('owner_id', user.id)
           .order('created_at', { ascending: false });
 
-        if (!projectsError && projectsData) {
-          console.log('[DASHBOARD] Projects loaded:', projectsData.length);
-          setProjects(projectsData);
+        if (!projectsError && data) {
+          console.log('[DASHBOARD] Projects loaded:', data.length);
+          projectsData = data;
+          setProjects(data);
         }
+      }
+
+      // Load skills if talent
+      if (profile.role === 'talent') {
+        const { data: skillsData } = await supabase
+          .from('user_skills')
+          .select(`
+            proficiency_level,
+            skill:skills (
+              id,
+              name,
+              category
+            )
+          `)
+          .eq('user_id', user.id);
+
+        const transformedSkills = (skillsData || []).map((item: any) => ({
+          proficiency_level: item.proficiency_level,
+          skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
+        }));
+
+        setSkills(transformedSkills);
+      }
+
+      // Load stats
+      const [projectsCount, applicationsCount, acceptedApplicationsCount] =
+        await Promise.all([
+          // Projects count
+          profile.role === 'entrepreneur'
+            ? supabase
+                .from('projects')
+                .select('id', { count: 'exact', head: true })
+                .eq('owner_id', user.id)
+                .then((res) => res.count || 0)
+            : Promise.resolve(0),
+
+          // Applications count (sent if talent, received if entrepreneur)
+          profile.role === 'talent'
+            ? supabase
+                .from('applications')
+                .select('id', { count: 'exact', head: true })
+                .eq('talent_id', user.id)
+                .then((res) => res.count || 0)
+            : supabase
+                .from('applications')
+                .select('id', { count: 'exact', head: true })
+                .in('project_id', projectsData?.map((p) => p.id) || [])
+                .then((res) => res.count || 0),
+
+          // Accepted applications count
+          profile.role === 'talent'
+            ? supabase
+                .from('applications')
+                .select('id', { count: 'exact', head: true })
+                .eq('talent_id', user.id)
+                .eq('status', 'accepted')
+                .then((res) => res.count || 0)
+            : supabase
+                .from('applications')
+                .select('id', { count: 'exact', head: true })
+                .in('project_id', projectsData?.map((p) => p.id) || [])
+                .eq('status', 'accepted')
+                .then((res) => res.count || 0),
+        ]);
+
+      setStats({
+        projectsCount,
+        applicationsCount,
+        acceptedApplicationsCount,
+      });
+
+      // Load badges
+      const { data: badgesData } = await supabase
+        .from('user_badges')
+        .select('badge_type, earned_at')
+        .eq('user_id', user.id)
+        .order('earned_at', { ascending: false });
+
+      setBadges(badgesData || []);
+
+      // Load impact stats
+      const { data: impactData } = await supabase
+        .from('user_impact_stats')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (impactData) {
+        setImpactStats(impactData);
       }
 
       setIsLoading(false);
@@ -171,6 +272,81 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="text-3xl font-bold text-primary-600 mb-1">
+                {stats.projectsCount}
+              </div>
+              <div className="text-neutral-600">
+                {profile?.role === 'entrepreneur'
+                  ? 'Projets créés'
+                  : 'Projets rejoints'}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="text-3xl font-bold text-blue-600 mb-1">
+                {stats.applicationsCount}
+              </div>
+              <div className="text-neutral-600">
+                {profile?.role === 'entrepreneur'
+                  ? 'Candidatures reçues'
+                  : 'Candidatures envoyées'}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="text-3xl font-bold text-success-600 mb-1">
+                {stats.acceptedApplicationsCount}
+              </div>
+              <div className="text-neutral-600">
+                {profile?.role === 'entrepreneur'
+                  ? 'Collaborations actives'
+                  : 'Candidatures acceptées'}
+              </div>
+            </div>
+          </div>
+
+          {/* Badges */}
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+              Badges obtenus
+            </h2>
+            <BadgeGrid badges={badges} />
+          </div>
+
+          {/* Impact Stats */}
+          {impactStats && (
+            <div className="mb-6">
+              <ImpactStatsComponent stats={impactStats} role={profile?.role} />
+            </div>
+          )}
+
+          {/* Skills (for talents) */}
+          {profile?.role === 'talent' && skills.length > 0 && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+                Mes compétences
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {skills.map((userSkill: any, index: number) => (
+                  <div
+                    key={index}
+                    className="px-4 py-2 bg-neutral-100 rounded-lg"
+                  >
+                    <div className="font-medium text-neutral-900">
+                      {userSkill.skill.name}
+                    </div>
+                    <div className="text-xs text-neutral-500 capitalize">
+                      {userSkill.skill.category}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Entrepreneur Actions */}
           {profile?.role === 'entrepreneur' && (
