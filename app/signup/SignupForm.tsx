@@ -141,7 +141,8 @@ export default function SignupForm() {
         .insert({
           user_id: authData.user.id,
           accepted_at: new Date().toISOString(),
-          ip_address: '', // Could be populated if needed
+          charter_version: 'v1.0',
+          ip_address: '0.0.0.0', // Default IP - should be captured server-side in production
         });
 
       if (charterError) {

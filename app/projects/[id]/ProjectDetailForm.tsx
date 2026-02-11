@@ -106,7 +106,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
           .from('applications')
           .select('id')
           .eq('project_id', projectId)
-          .eq('applicant_id', user.id)
+          .eq('talent_id', user.id)
           .maybeSingle();
 
         setHasApplied(!!applicationData);
@@ -144,8 +144,8 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         .from('applications')
         .insert({
           project_id: projectId,
-          applicant_id: user.id,
-          message: applicationMessage,
+          talent_id: user.id,
+          motivation_message: applicationMessage,
           status: 'pending',
         });
 

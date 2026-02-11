@@ -60,15 +60,15 @@ export default function LoginPage() {
         return;
       }
 
-      // Check if user has accepted charter
+      // Check if profile is complete
       const { data: profile } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, postal_code, first_name, last_name')
         .eq('id', data.user.id)
         .single();
 
-      // Redirect based on profile state
-      if (profile?.role) {
+      // Redirect based on profile completion
+      if (profile && profile.postal_code && profile.postal_code !== '00000' && profile.first_name && profile.last_name) {
         router.push('/dashboard');
       } else {
         router.push('/onboarding');

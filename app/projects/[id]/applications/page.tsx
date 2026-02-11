@@ -1,7 +1,9 @@
 import { Suspense } from 'react';
 import ApplicationsListForm from './ApplicationsListForm';
 
-export default function ApplicationsPage({ params }: { params: { id: string } }) {
+export default async function ApplicationsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
@@ -11,7 +13,7 @@ export default function ApplicationsPage({ params }: { params: { id: string } })
         </div>
       </div>
     }>
-      <ApplicationsListForm projectId={params.id} />
+      <ApplicationsListForm projectId={id} />
     </Suspense>
   );
 }
