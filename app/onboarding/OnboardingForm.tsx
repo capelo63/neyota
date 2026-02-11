@@ -154,6 +154,12 @@ export default function OnboardingForm() {
     setErrors({});
 
     try {
+      console.log('[ONBOARDING] Starting profile update with data:', {
+        city: formData.city,
+        postal_code: formData.postalCode,
+        user_id: user.id
+      });
+
       // Update profile
       const { data: updatedProfile, error: profileError } = await supabase
         .from('profiles')
@@ -169,27 +175,41 @@ export default function OnboardingForm() {
         .select()
         .single();
 
+      console.log('[ONBOARDING] Update result:', { updatedProfile, profileError });
+
       if (profileError) {
-        console.error('Profile update error:', profileError);
-        setErrors({ general: 'Erreur lors de la mise à jour du profil' });
+        console.error('[ONBOARDING] Profile update error:', profileError);
+        setErrors({ general: `Erreur lors de la mise à jour du profil: ${profileError.message}` });
         setIsSaving(false);
         return;
       }
 
       // Verify the update was successful
-      if (!updatedProfile || updatedProfile.postal_code === '00000' || updatedProfile.city === 'À définir') {
-        console.error('Profile update verification failed', updatedProfile);
-        setErrors({ general: 'Erreur lors de la mise à jour du profil. Veuillez réessayer.' });
+      if (!updatedProfile) {
+        console.error('[ONBOARDING] No profile returned after update');
+        setErrors({ general: 'Aucune donnée retournée après la mise à jour. Veuillez réessayer.' });
         setIsSaving(false);
         return;
       }
 
+      console.log('[ONBOARDING] Verification - postal_code:', updatedProfile.postal_code, 'city:', updatedProfile.city);
+
+      if (updatedProfile.postal_code === '00000' || updatedProfile.city === 'À définir') {
+        console.error('[ONBOARDING] Profile still has temporary values after update:', updatedProfile);
+        setErrors({ general: `Erreur: le profil n'a pas été mis à jour correctement (code postal: ${updatedProfile.postal_code}, ville: ${updatedProfile.city})` });
+        setIsSaving(false);
+        return;
+      }
+
+      console.log('[ONBOARDING] Profile update verified successfully!');
+
       // If talent, save skills
       if (profile.role === 'talent' && formData.selectedSkills.length > 0) {
+        console.log('[ONBOARDING] Saving skills:', formData.selectedSkills.length);
         const skillsToInsert = formData.selectedSkills.map(skillId => ({
           user_id: user.id,
           skill_id: skillId,
-          proficiency_level: 'intermediate', // Default proficiency, can be updated later in profile
+          proficiency_level: 'intermediate',
         }));
 
         const { error: skillsError } = await supabase
@@ -197,13 +217,17 @@ export default function OnboardingForm() {
           .insert(skillsToInsert);
 
         if (skillsError) {
-          console.error('Skills insert error:', skillsError);
+          console.error('[ONBOARDING] Skills insert error:', skillsError);
+        } else {
+          console.log('[ONBOARDING] Skills saved successfully');
         }
       }
 
       // Wait a bit longer to ensure database commits are fully visible
+      console.log('[ONBOARDING] Waiting 1 second before redirect...');
       await new Promise(resolve => setTimeout(resolve, 1000));
 
+      console.log('[ONBOARDING] Redirecting to dashboard...');
       // Force a hard navigation to dashboard with cache bypass
       window.location.href = '/dashboard';
     } catch (error) {
