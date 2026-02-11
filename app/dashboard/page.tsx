@@ -15,6 +15,7 @@ export default function DashboardPage() {
   );
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
+  const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -68,6 +69,21 @@ export default function DashboardPage() {
 
       console.log('[DASHBOARD] Profile complete, showing dashboard');
       setProfile(profile);
+
+      // Load projects if entrepreneur
+      if (profile.role === 'entrepreneur') {
+        const { data: projectsData, error: projectsError } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('owner_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (!projectsError && projectsData) {
+          console.log('[DASHBOARD] Projects loaded:', projectsData.length);
+          setProjects(projectsData);
+        }
+      }
+
       setIsLoading(false);
     };
 
@@ -160,7 +176,9 @@ export default function DashboardPage() {
           {profile?.role === 'entrepreneur' && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-neutral-900">Mes projets</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">
+                  Mes projets {projects.length > 0 && `(${projects.length})`}
+                </h2>
                 <Link href="/projects/new">
                   <Button variant="primary">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,9 +188,66 @@ export default function DashboardPage() {
                   </Button>
                 </Link>
               </div>
-              <p className="text-neutral-600">
-                Créez un projet pour trouver des talents locaux qui vous aideront à le concrétiser.
-              </p>
+
+              {projects.length === 0 ? (
+                <p className="text-neutral-600">
+                  Vous n&apos;avez pas encore créé de projet. Créez votre premier projet pour trouver des talents locaux qui vous aideront à le concrétiser !
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="border border-neutral-200 rounded-lg p-4 hover:border-primary-300 transition-colors"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                            {project.title}
+                          </h3>
+                          <p className="text-sm text-neutral-600 mb-2">
+                            {project.short_pitch}
+                          </p>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          project.status === 'active'
+                            ? 'bg-success-100 text-success-700'
+                            : 'bg-neutral-100 text-neutral-700'
+                        }`}>
+                          {project.status === 'active' ? 'Actif' : 'Inactif'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-neutral-500 mb-3">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          {project.city}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          📊 Phase: {project.current_phase}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          📅 {new Date(project.created_at).toLocaleDateString('fr-FR')}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link href={`/projects/${project.id}`}>
+                          <Button variant="secondary" size="sm">
+                            Voir les détails
+                          </Button>
+                        </Link>
+                        <Link href={`/projects/${project.id}/applications`}>
+                          <Button variant="ghost" size="sm">
+                            📨 Candidatures
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
