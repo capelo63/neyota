@@ -191,6 +191,9 @@ export default function OnboardingForm() {
         }
       }
 
+      // Wait a bit to ensure database updates are committed
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Redirect to dashboard
       router.push('/dashboard');
       router.refresh();
