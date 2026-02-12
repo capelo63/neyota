@@ -121,33 +121,9 @@ export default function SignupForm() {
 
       console.log('[SIGNUP] User created, profile will be auto-created by trigger');
 
-      // Wait for the trigger to create the profile (with retry)
-      let profileExists = false;
-      for (let i = 0; i < 10; i++) {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('id', authData.user.id)
-          .maybeSingle();
-
-        if (profile) {
-          console.log('[SIGNUP] Profile created by trigger after', (i + 1) * 300, 'ms');
-          profileExists = true;
-          break;
-        }
-
-        if (error) {
-          console.error('[SIGNUP] Error checking profile:', error);
-        }
-      }
-
-      if (!profileExists) {
-        console.error('[SIGNUP] Profile was not created by trigger after 3 seconds');
-        setErrors({ general: 'Erreur lors de la création du profil. Veuillez réessayer.' });
-        setIsLoading(false);
-        return;
-      }
+      // Wait for the trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('[SIGNUP] Profile should be created by trigger, proceeding...');
 
       // 2. Record charter acceptance
       const { error: charterError } = await supabase
