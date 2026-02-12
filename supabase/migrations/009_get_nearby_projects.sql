@@ -1,56 +1,61 @@
 -- Function to get nearby projects for matching
+-- Drop existing function first
+DROP FUNCTION IF EXISTS get_nearby_projects(double precision, double precision, double precision);
+
+-- Create new function with owner information
 CREATE OR REPLACE FUNCTION get_nearby_projects(
   user_lat DOUBLE PRECISION,
   user_lng DOUBLE PRECISION,
   max_distance_km DOUBLE PRECISION
 )
-RETURNS TABLE (
-  id UUID,
-  title TEXT,
-  short_pitch TEXT,
-  full_description TEXT,
-  current_phase project_phase,
-  city TEXT,
-  postal_code TEXT,
-  region TEXT,
-  is_remote_possible BOOLEAN,
-  preferred_radius_km INTEGER,
-  status TEXT,
-  created_at TIMESTAMP WITH TIME ZONE,
-  owner_id UUID,
-  distance_km DOUBLE PRECISION
-)
+RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 DECLARE
   user_location geography;
+  result JSONB;
 BEGIN
   -- Create geography point from user coordinates
   user_location := ST_SetSRID(ST_MakePoint(user_lng, user_lat), 4326)::geography;
 
-  -- Return projects within distance
-  RETURN QUERY
-  SELECT
-    p.id,
-    p.title,
-    p.short_pitch,
-    p.full_description,
-    p.current_phase,
-    p.city,
-    p.postal_code,
-    p.region,
-    p.is_remote_possible,
-    p.preferred_radius_km,
-    p.status,
-    p.created_at,
-    p.owner_id,
-    CASE
-      WHEN p.location IS NOT NULL
-      THEN ROUND((ST_Distance(user_location, p.location) / 1000)::numeric, 2)::DOUBLE PRECISION
-      ELSE NULL
-    END AS distance_km
+  -- Return projects with owner information as JSONB
+  SELECT jsonb_agg(
+    jsonb_build_object(
+      'id', p.id,
+      'title', p.title,
+      'short_pitch', p.short_pitch,
+      'full_description', p.full_description,
+      'current_phase', p.current_phase,
+      'city', p.city,
+      'postal_code', p.postal_code,
+      'region', p.region,
+      'is_remote_possible', p.is_remote_possible,
+      'preferred_radius_km', p.preferred_radius_km,
+      'status', p.status,
+      'created_at', p.created_at,
+      'owner_id', p.owner_id,
+      'owner', jsonb_build_object(
+        'first_name', pr.first_name,
+        'last_name', pr.last_name,
+        'city', pr.city
+      ),
+      'distance_km', CASE
+        WHEN p.location IS NOT NULL
+        THEN ROUND((ST_Distance(user_location, p.location) / 1000)::numeric, 2)
+        ELSE NULL
+      END
+    )
+    ORDER BY
+      CASE
+        WHEN p.location IS NOT NULL
+        THEN ST_Distance(user_location, p.location)
+        ELSE 999999999
+      END
+  )
+  INTO result
   FROM projects p
+  INNER JOIN profiles pr ON pr.id = p.owner_id
   WHERE p.status = 'active'
     AND (
       -- Project within max distance
@@ -60,13 +65,9 @@ BEGIN
       )
       -- OR remote is possible
       OR p.is_remote_possible = TRUE
-    )
-  ORDER BY
-    CASE
-      WHEN p.location IS NOT NULL
-      THEN ST_Distance(user_location, p.location)
-      ELSE 999999999 -- Remote projects at the end
-    END;
+    );
+
+  RETURN COALESCE(result, '[]'::jsonb);
 END;
 $$;
 
