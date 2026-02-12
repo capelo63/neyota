@@ -9,7 +9,7 @@ async function getHomeData() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  // Fetch latest 3 projects (temporarily without status filter for debugging)
+  // Fetch latest 3 active projects
   const { data: projectsData, error: projectsError } = await supabase
     .from('projects')
     .select(`
@@ -21,10 +21,9 @@ async function getHomeData() {
       current_phase,
       is_remote_possible,
       created_at,
-      owner_id,
-      status
+      owner_id
     `)
-    // .eq('status', 'active')  // Temporarily disabled to check if projects exist
+    .eq('status', 'active')
     .order('created_at', { ascending: false })
     .limit(3);
 
@@ -32,9 +31,7 @@ async function getHomeData() {
     console.error('[HOME] Error fetching projects:', projectsError);
   }
 
-  console.log('[HOME] Projects fetched:', projectsData?.length, projectsData);
-
-  // For each project, try to fetch owner separately (optional, won't fail if RLS blocks)
+  // For each project, fetch owner info separately
   const projects = await Promise.all(
     (projectsData || []).map(async (project) => {
       const { data: ownerData } = await supabase
@@ -78,18 +75,11 @@ async function getHomeData() {
       entrepreneurs: entrepreneursCount || 0,
       applications: applicationsCount || 0,
     },
-    debug: {
-      rawProjectsCount: projectsData?.length || 0,
-      finalProjectsCount: projects?.length || 0,
-      hasError: !!projectsError,
-      errorMessage: projectsError?.message || null,
-      projectStatuses: projectsData?.map(p => p.status).join(', ') || 'none',
-    },
   };
 }
 
-// Force revalidation every 10 seconds during development
-export const revalidate = 10;
+// Revalidate every 60 seconds to keep data fresh
+export const revalidate = 60;
 
 const PHASE_LABELS: Record<string, string> = {
   ideation: 'Idéation',
@@ -100,7 +90,7 @@ const PHASE_LABELS: Record<string, string> = {
 };
 
 export default async function Home() {
-  const { projects, stats, debug } = await getHomeData();
+  const { projects, stats } = await getHomeData();
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
@@ -193,17 +183,6 @@ export default async function Home() {
               <p className="text-neutral-600 text-lg">
                 Découvrez des projets locaux qui ont besoin de vos talents
               </p>
-              {/* Debug Info - Always visible for troubleshooting */}
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-left max-w-md mx-auto">
-                <p className="text-sm font-mono">
-                  <strong>Debug:</strong><br />
-                  Raw projects: {debug.rawProjectsCount}<br />
-                  Final projects: {debug.finalProjectsCount}<br />
-                  Project statuses: {debug.projectStatuses}<br />
-                  Has error: {debug.hasError ? 'Yes' : 'No'}<br />
-                  {debug.errorMessage && <>Error: {debug.errorMessage}</>}
-                </p>
-              </div>
             </div>
 
             {projects.length === 0 ? (
