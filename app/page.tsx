@@ -1,8 +1,73 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { Button, Card, CardBody, Badge } from '@/components/ui';
+import { createClient } from '@supabase/supabase-js';
 
-export default function Home() {
+async function getHomeData() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  // Fetch latest 3 active projects with owner info
+  const { data: projects } = await supabase
+    .from('projects')
+    .select(`
+      id,
+      title,
+      short_pitch,
+      city,
+      postal_code,
+      current_phase,
+      is_remote_possible,
+      created_at,
+      owner:owner_id(first_name, last_name)
+    `)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  // Fetch real stats
+  const { count: projectsCount } = await supabase
+    .from('projects')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'active');
+
+  const { count: talentsCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'talent');
+
+  const { count: entrepreneursCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'entrepreneur');
+
+  const { count: applicationsCount } = await supabase
+    .from('applications')
+    .select('*', { count: 'exact', head: true });
+
+  return {
+    projects: projects || [],
+    stats: {
+      projects: projectsCount || 0,
+      talents: talentsCount || 0,
+      entrepreneurs: entrepreneursCount || 0,
+      applications: applicationsCount || 0,
+    },
+  };
+}
+
+const PHASE_LABELS: Record<string, string> = {
+  ideation: 'Idéation',
+  mvp_development: 'Développement MVP',
+  launch: 'Lancement',
+  growth: 'Croissance',
+  scaling: 'Structuration',
+};
+
+export default async function Home() {
+  const { projects, stats } = await getHomeData();
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
@@ -97,82 +162,75 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {[
-                {
-                  id: 1,
-                  title: 'Plateforme e-commerce local',
-                  location: 'Rennes',
-                  distance: '5 km',
-                  phase: 'MVP',
-                  description: 'Marketplace pour producteurs locaux. Recherche développeur full-stack et designer UX/UI.',
-                  skills: ['Développement', 'Design UX/UI']
-                },
-                {
-                  id: 2,
-                  title: 'Application mobilité durable',
-                  location: 'Nantes',
-                  distance: '12 km',
-                  phase: 'Idéation',
-                  description: 'Covoiturage pour trajets domicile-travail. Besoin de co-fondateur technique et expert mobilité.',
-                  skills: ['Mobile', 'Product']
-                },
-                {
-                  id: 3,
-                  title: 'Réseau d\'entraide locale',
-                  location: 'Saint-Malo',
-                  distance: '8 km',
-                  phase: 'Lancement',
-                  description: 'Plateforme de services entre voisins. Recherche growth marketer et community manager.',
-                  skills: ['Marketing', 'Community']
-                },
-              ].map((project) => (
-                <Card key={project.id} className="group">
-                  <CardBody>
-                    {/* Location & Distance */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-1 text-primary-600 text-sm font-medium">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                        </svg>
-                        <span>{project.location} • {project.distance}</span>
-                      </div>
-                      <Badge variant="success">{project.phase}</Badge>
-                    </div>
+            {projects.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <div className="text-6xl mb-4">🚀</div>
+                <h3 className="text-2xl font-semibold text-neutral-900 mb-4">
+                  Bientôt les premiers projets !
+                </h3>
+                <p className="text-neutral-600 mb-6">
+                  Soyez parmi les premiers à rejoindre NEYOTA et faites vivre votre territoire.
+                </p>
+                <Link href="/signup">
+                  <Button variant="primary" size="lg">
+                    Créer un compte
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {projects.map((project: any) => {
+                  const owner = Array.isArray(project.owner) ? project.owner[0] : project.owner;
+                  return (
+                    <Card key={project.id} className="group">
+                      <CardBody>
+                        {/* Location & Phase */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-1 text-primary-600 text-sm font-medium">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            <span>{project.city}</span>
+                            {project.is_remote_possible && (
+                              <span className="text-neutral-400">• Distanciel</span>
+                            )}
+                          </div>
+                          <Badge variant="success">{PHASE_LABELS[project.current_phase]}</Badge>
+                        </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
-                      {project.title}
-                    </h3>
+                        {/* Title */}
+                        <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                          {project.title}
+                        </h3>
 
-                    {/* Description */}
-                    <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
+                        {/* Description */}
+                        <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
+                          {project.short_pitch}
+                        </p>
 
-                    {/* Skills */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
+                        {/* Owner */}
+                        {owner && (
+                          <p className="text-sm text-neutral-500 mb-4">
+                            Par {owner.first_name} {owner.last_name}
+                          </p>
+                        )}
 
-                    {/* CTA */}
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center gap-1 group"
-                    >
-                      Voir le projet
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </CardBody>
-                </Card>
-              ))}
-            </div>
+                        {/* CTA */}
+                        <Link
+                          href={`/projects/${project.id}`}
+                          className="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center gap-1 group"
+                        >
+                          Voir le projet
+                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      </CardBody>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
 
             {/* View All Button */}
             <div className="text-center mt-10">
@@ -237,19 +295,48 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              {[
-                { value: '127', label: 'Projets créés' },
-                { value: '543', label: 'Talents engagés' },
-                { value: '284', label: 'Collaborations' },
-                { value: '89', label: 'Emplois créés' }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">{stat.value}</div>
-                  <div className="text-neutral-600 font-medium">{stat.label}</div>
+            {stats.projects > 0 || stats.talents > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
+                    {stats.projects}
+                  </div>
+                  <div className="text-neutral-600 font-medium">
+                    Projet{stats.projects > 1 ? 's' : ''} actif{stats.projects > 1 ? 's' : ''}
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
+                    {stats.talents}
+                  </div>
+                  <div className="text-neutral-600 font-medium">
+                    Talent{stats.talents > 1 ? 's' : ''}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
+                    {stats.entrepreneurs}
+                  </div>
+                  <div className="text-neutral-600 font-medium">
+                    Entrepreneur{stats.entrepreneurs > 1 ? 's' : ''}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
+                    {stats.applications}
+                  </div>
+                  <div className="text-neutral-600 font-medium">
+                    Candidature{stats.applications > 1 ? 's' : ''}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="text-neutral-600 text-lg">
+                  Les premières statistiques apparaîtront bientôt !
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
