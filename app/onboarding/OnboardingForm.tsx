@@ -160,17 +160,47 @@ export default function OnboardingForm() {
         user_id: user.id
       });
 
+      // Get coordinates from postal code using French government API
+      console.log('[ONBOARDING] Fetching coordinates for postal code:', formData.postalCode);
+      let coordinates = null;
+      try {
+        const geoResponse = await fetch(
+          `https://api-adresse.data.gouv.fr/search/?q=${formData.postalCode}&type=municipality&limit=1`
+        );
+        const geoData = await geoResponse.json();
+
+        if (geoData.features && geoData.features.length > 0) {
+          const [lng, lat] = geoData.features[0].geometry.coordinates;
+          coordinates = { lng, lat };
+          console.log('[ONBOARDING] Coordinates found:', coordinates);
+        } else {
+          console.warn('[ONBOARDING] No coordinates found for postal code');
+        }
+      } catch (geoError) {
+        console.error('[ONBOARDING] Geocoding error:', geoError);
+      }
+
+      // Prepare update data
+      const updateData: any = {
+        city: formData.city,
+        postal_code: formData.postalCode,
+        region: formData.region || null,
+        bio: formData.bio,
+        max_distance_km: formData.maxDistance,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Add location if coordinates were found
+      if (coordinates) {
+        updateData.location = `POINT(${coordinates.lng} ${coordinates.lat})`;
+      }
+
+      console.log('[ONBOARDING] Update data prepared:', updateData);
+
       // Update profile
       const { data: updatedProfile, error: profileError } = await supabase
         .from('profiles')
-        .update({
-          city: formData.city,
-          postal_code: formData.postalCode,
-          region: formData.region || null,
-          bio: formData.bio,
-          max_distance_km: formData.maxDistance,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('id', user.id)
         .select()
         .single();
