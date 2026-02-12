@@ -231,7 +231,6 @@ export default async function Home() {
                 })}
               </div>
             )}
-            </div>
 
             {/* View All Button */}
             <div className="text-center mt-10">
