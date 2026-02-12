@@ -116,8 +116,6 @@ export default function MatchingView() {
         { talent_id: user.id }
       );
 
-      console.log('[MATCHING] Profile data from RPC:', profileData);
-
       if (profileError || !profileData || profileData.length === 0) {
         console.error('[MATCHING] Profile error:', profileError);
         setError('Profil introuvable');
@@ -133,8 +131,6 @@ export default function MatchingView() {
         return;
       }
 
-      console.log('[MATCHING] Profile coordinates:', { lng: profile.lng, lat: profile.lat });
-
       // Check if profile has location data
       if (!profile.lng || !profile.lat) {
         setError('Votre profil n\'a pas de coordonnées GPS. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
@@ -144,8 +140,6 @@ export default function MatchingView() {
 
       const userLng = profile.lng;
       const userLat = profile.lat;
-
-      console.log('[MATCHING] Using coordinates:', { userLng, userLat });
 
       // Store profile for state (add location object for compatibility)
       const profileWithLocation = {
