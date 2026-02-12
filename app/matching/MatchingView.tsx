@@ -129,12 +129,35 @@ export default function MatchingView() {
         return;
       }
 
+      console.log('[MATCHING] Profile location data:', profileData.location);
+      console.log('[MATCHING] Location type:', typeof profileData.location);
+
       // Check if profile has location data
-      if (!profileData.location || !profileData.location.coordinates) {
+      // PostGIS returns location in GeoJSON format with coordinates array
+      let userLng, userLat;
+
+      if (!profileData.location) {
         setError('Votre profil n\'a pas de coordonnées GPS. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
         setIsLoading(false);
         return;
       }
+
+      // Try to extract coordinates from different possible formats
+      if (profileData.location.coordinates && Array.isArray(profileData.location.coordinates)) {
+        // GeoJSON format: { type: "Point", coordinates: [lng, lat] }
+        [userLng, userLat] = profileData.location.coordinates;
+      } else if (profileData.location.lng && profileData.location.lat) {
+        // Object format: { lng: x, lat: y }
+        userLng = profileData.location.lng;
+        userLat = profileData.location.lat;
+      } else {
+        console.error('[MATCHING] Invalid location format:', profileData.location);
+        setError('Format de localisation invalide. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
+        setIsLoading(false);
+        return;
+      }
+
+      console.log('[MATCHING] Extracted coordinates:', { userLng, userLat });
 
       setProfile(profileData);
       setMaxDistance(profileData.max_distance_km);
@@ -152,8 +175,8 @@ export default function MatchingView() {
       const { data: projectsData, error: projectsError } = await supabase.rpc(
         'get_nearby_projects',
         {
-          user_lat: profileData.location.coordinates[1],
-          user_lng: profileData.location.coordinates[0],
+          user_lat: userLat,
+          user_lng: userLng,
           max_distance_km: 1000, // Large initial radius, we'll filter in frontend
         }
       );

@@ -191,10 +191,7 @@ export default function OnboardingForm() {
       };
 
       // Add location if coordinates were found
-      if (coordinates) {
-        updateData.location = `POINT(${coordinates.lng} ${coordinates.lat})`;
-      }
-
+      // Don't send raw location string, we'll use RPC function instead
       console.log('[ONBOARDING] Update data prepared:', updateData);
 
       // Update profile
@@ -212,6 +209,23 @@ export default function OnboardingForm() {
         setErrors({ general: `Erreur lors de la mise à jour du profil: ${profileError.message}` });
         setIsSaving(false);
         return;
+      }
+
+      // Update location with PostGIS if coordinates were found
+      if (coordinates) {
+        console.log('[ONBOARDING] Updating location with coordinates:', coordinates);
+        const { error: locationError } = await supabase.rpc('update_profile_location', {
+          user_id: user.id,
+          lng: coordinates.lng,
+          lat: coordinates.lat,
+        });
+
+        if (locationError) {
+          console.error('[ONBOARDING] Location update error:', locationError);
+          // Don't fail the whole process, just log the error
+        } else {
+          console.log('[ONBOARDING] Location updated successfully');
+        }
       }
 
       // Verify the update was successful
