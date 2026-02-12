@@ -1,0 +1,21 @@
+# robots.txt for NEYOTA - Plateforme de mise en relation territoriale
+# https://neyota.vercel.app
+
+User-agent: *
+Allow: /
+Allow: /projects
+Allow: /projects/*
+
+# Pages à ne pas indexer
+Disallow: /dashboard
+Disallow: /onboarding
+Disallow: /matching
+Disallow: /settings
+Disallow: /api/
+
+# Authentification
+Disallow: /login
+Disallow: /signup
+
+# Sitemap
+Sitemap: https://neyota.vercel.app/sitemap.xml
