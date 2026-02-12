@@ -98,7 +98,7 @@ export default function ProjectsListForm() {
         .from('projects')
         .select(`
           *,
-          owner:profiles!owner_id(first_name, last_name),
+          owner:owner_id(first_name, last_name),
           skills:project_skills_needed(
             skill:skills(id, name)
           )
