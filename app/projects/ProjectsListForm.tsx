@@ -109,12 +109,14 @@ export default function ProjectsListForm() {
       if (projectsError) {
         console.error('Error loading projects:', projectsError);
       } else {
-        // Transform the data to flatten skills
-        const transformedProjects = (projectsData || []).map((project: any) => ({
-          ...project,
-          owner: project.owner,
-          skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
-        }));
+        // Transform the data to flatten skills and handle missing owners
+        const transformedProjects = (projectsData || [])
+          .filter((project: any) => project.owner !== null) // Filtrer les projets sans propriétaire
+          .map((project: any) => ({
+            ...project,
+            owner: project.owner,
+            skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+          }));
         setProjects(transformedProjects);
         setFilteredProjects(transformedProjects);
       }
