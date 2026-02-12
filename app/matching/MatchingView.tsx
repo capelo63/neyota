@@ -173,7 +173,7 @@ export default function MatchingView() {
         {
           user_lat: userLat,
           user_lng: userLng,
-          max_distance_km: 1000, // Large initial radius, we'll filter in frontend
+          search_radius_km: 1000, // Large initial radius, we'll filter in frontend
         }
       );
 
