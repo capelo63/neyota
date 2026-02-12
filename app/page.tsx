@@ -77,8 +77,17 @@ async function getHomeData() {
       entrepreneurs: entrepreneursCount || 0,
       applications: applicationsCount || 0,
     },
+    debug: {
+      rawProjectsCount: projectsData?.length || 0,
+      finalProjectsCount: projects?.length || 0,
+      hasError: !!projectsError,
+      errorMessage: projectsError?.message || null,
+    },
   };
 }
+
+// Force revalidation every 10 seconds during development
+export const revalidate = 10;
 
 const PHASE_LABELS: Record<string, string> = {
   ideation: 'Idéation',
@@ -89,7 +98,7 @@ const PHASE_LABELS: Record<string, string> = {
 };
 
 export default async function Home() {
-  const { projects, stats } = await getHomeData();
+  const { projects, stats, debug } = await getHomeData();
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
@@ -182,6 +191,18 @@ export default async function Home() {
               <p className="text-neutral-600 text-lg">
                 Découvrez des projets locaux qui ont besoin de vos talents
               </p>
+              {/* Debug Info */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-left max-w-md mx-auto">
+                  <p className="text-sm font-mono">
+                    <strong>Debug:</strong><br />
+                    Raw projects: {debug.rawProjectsCount}<br />
+                    Final projects: {debug.finalProjectsCount}<br />
+                    Has error: {debug.hasError ? 'Yes' : 'No'}<br />
+                    {debug.errorMessage && <>Error: {debug.errorMessage}</>}
+                  </p>
+                </div>
+              )}
             </div>
 
             {projects.length === 0 ? (
