@@ -9,8 +9,8 @@ async function getHomeData() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  // Fetch latest 3 active projects with owner info
-  const { data: projects } = await supabase
+  // Fetch latest 3 active projects (without owner to avoid RLS issues on landing)
+  const { data: projectsData, error: projectsError } = await supabase
     .from('projects')
     .select(`
       id,
@@ -21,11 +21,33 @@ async function getHomeData() {
       current_phase,
       is_remote_possible,
       created_at,
-      owner:owner_id(first_name, last_name)
+      owner_id
     `)
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .limit(3);
+
+  if (projectsError) {
+    console.error('[HOME] Error fetching projects:', projectsError);
+  }
+
+  console.log('[HOME] Projects fetched:', projectsData?.length, projectsData);
+
+  // For each project, try to fetch owner separately (optional, won't fail if RLS blocks)
+  const projects = await Promise.all(
+    (projectsData || []).map(async (project) => {
+      const { data: ownerData } = await supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('id', project.owner_id)
+        .maybeSingle();
+
+      return {
+        ...project,
+        owner: ownerData,
+      };
+    })
+  );
 
   // Fetch real stats
   const { count: projectsCount } = await supabase
