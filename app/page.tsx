@@ -9,7 +9,7 @@ async function getHomeData() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  // Fetch latest 3 active projects (without owner to avoid RLS issues on landing)
+  // Fetch latest 3 projects (temporarily without status filter for debugging)
   const { data: projectsData, error: projectsError } = await supabase
     .from('projects')
     .select(`
@@ -21,9 +21,10 @@ async function getHomeData() {
       current_phase,
       is_remote_possible,
       created_at,
-      owner_id
+      owner_id,
+      status
     `)
-    .eq('status', 'active')
+    // .eq('status', 'active')  // Temporarily disabled to check if projects exist
     .order('created_at', { ascending: false })
     .limit(3);
 
@@ -82,6 +83,7 @@ async function getHomeData() {
       finalProjectsCount: projects?.length || 0,
       hasError: !!projectsError,
       errorMessage: projectsError?.message || null,
+      projectStatuses: projectsData?.map(p => p.status).join(', ') || 'none',
     },
   };
 }
@@ -197,6 +199,7 @@ export default async function Home() {
                   <strong>Debug:</strong><br />
                   Raw projects: {debug.rawProjectsCount}<br />
                   Final projects: {debug.finalProjectsCount}<br />
+                  Project statuses: {debug.projectStatuses}<br />
                   Has error: {debug.hasError ? 'Yes' : 'No'}<br />
                   {debug.errorMessage && <>Error: {debug.errorMessage}</>}
                 </p>
