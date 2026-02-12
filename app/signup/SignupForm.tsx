@@ -125,21 +125,25 @@ export default function SignupForm() {
       let profileExists = false;
       for (let i = 0; i < 10; i++) {
         await new Promise(resolve => setTimeout(resolve, 300));
-        const { data: profile } = await supabase
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('id')
           .eq('id', authData.user.id)
-          .single();
+          .maybeSingle();
 
         if (profile) {
-          console.log('[SIGNUP] Profile created by trigger');
+          console.log('[SIGNUP] Profile created by trigger after', (i + 1) * 300, 'ms');
           profileExists = true;
           break;
+        }
+
+        if (error) {
+          console.error('[SIGNUP] Error checking profile:', error);
         }
       }
 
       if (!profileExists) {
-        console.error('[SIGNUP] Profile was not created by trigger');
+        console.error('[SIGNUP] Profile was not created by trigger after 3 seconds');
         setErrors({ general: 'Erreur lors de la création du profil. Veuillez réessayer.' });
         setIsLoading(false);
         return;
