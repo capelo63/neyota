@@ -119,28 +119,12 @@ export default function SignupForm() {
         return;
       }
 
-      // 2. Create profile with temporary location data (will be completed in onboarding)
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          role: role,
-          postal_code: '00000', // Temporary - will be updated in onboarding
-          city: 'À définir', // Temporary - will be updated in onboarding
-        });
+      console.log('[SIGNUP] User created, profile will be auto-created by trigger');
 
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
-        setErrors({
-          general: `Erreur lors de la création du profil: ${profileError.message}. Les permissions RLS ne sont pas configurées. Contactez l'administrateur avec ce code: ${profileError.code}`
-        });
-        setIsLoading(false);
-        return;
-      }
+      // Wait a moment for the trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      // 3. Record charter acceptance
+      // 2. Record charter acceptance
       const { error: charterError } = await supabase
         .from('user_charter_acceptances')
         .insert({
