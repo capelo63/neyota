@@ -153,13 +153,15 @@ export default function SignupForm() {
       }
 
       // 4. Check if email confirmation is required
-      if (authData.user.identities && authData.user.identities.length === 0) {
-        // Email confirmation required - show confirmation step
+      if (!authData.session) {
+        // No session = email confirmation required - show confirmation step
+        console.log('[SIGNUP] Email confirmation required');
         setUserEmail(formData.email);
         setStep('email-confirmation');
         setIsLoading(false);
       } else {
-        // No email confirmation needed - redirect to onboarding
+        // Session exists = email confirmed or confirmation disabled - redirect to onboarding
+        console.log('[SIGNUP] No email confirmation needed, redirecting to onboarding');
         router.push('/onboarding');
         router.refresh();
       }
