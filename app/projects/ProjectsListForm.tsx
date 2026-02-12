@@ -109,14 +109,24 @@ export default function ProjectsListForm() {
       if (projectsError) {
         console.error('Error loading projects:', projectsError);
       } else {
+        console.log('[PROJECTS] Raw data:', projectsData);
         // Transform the data to flatten skills and handle missing owners
         const transformedProjects = (projectsData || [])
-          .filter((project: any) => project.owner !== null) // Filtrer les projets sans propriétaire
-          .map((project: any) => ({
-            ...project,
-            owner: project.owner,
-            skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
-          }));
+          .map((project: any) => {
+            // Handle owner array (Supabase can return arrays for foreign keys)
+            const owner = Array.isArray(project.owner)
+              ? (project.owner.length > 0 ? project.owner[0] : null)
+              : project.owner;
+
+            return {
+              ...project,
+              owner,
+              skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+            };
+          })
+          .filter((project: any) => project.owner !== null); // Filtrer les projets sans propriétaire
+
+        console.log('[PROJECTS] Transformed projects:', transformedProjects.length, transformedProjects);
         setProjects(transformedProjects);
         setFilteredProjects(transformedProjects);
       }
