@@ -37,15 +37,21 @@ async function getTalents() {
     return [];
   }
 
+  console.log('[TALENTS] Raw talents fetched:', talents?.length || 0);
+
   // For each talent, fetch their skills
   const talentsWithSkills = await Promise.all(
     (talents || []).map(async (talent) => {
-      const { data: skillsData } = await supabase
+      const { data: skillsData, error: skillsError } = await supabase
         .from('user_skills')
         .select(`
           skill:skills(id, name, category)
         `)
         .eq('user_id', talent.id);
+
+      if (skillsError) {
+        console.error(`[TALENTS] Error fetching skills for ${talent.id}:`, skillsError);
+      }
 
       return {
         ...talent,
@@ -55,6 +61,8 @@ async function getTalents() {
       };
     })
   );
+
+  console.log('[TALENTS] Final talents with skills:', talentsWithSkills.length);
 
   return talentsWithSkills;
 }
