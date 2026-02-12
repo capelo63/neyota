@@ -110,57 +110,53 @@ export default function MatchingView() {
 
       setCurrentUser(user);
 
-      // Get profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+      // Get profile with coordinates using RPC function
+      const { data: profileData, error: profileError } = await supabase.rpc(
+        'get_talent_profile_with_coords',
+        { talent_id: user.id }
+      );
 
-      if (profileError || !profileData) {
+      console.log('[MATCHING] Profile data from RPC:', profileData);
+
+      if (profileError || !profileData || profileData.length === 0) {
+        console.error('[MATCHING] Profile error:', profileError);
         setError('Profil introuvable');
         setIsLoading(false);
         return;
       }
 
-      if (profileData.role !== 'talent') {
+      const profile = profileData[0]; // RPC returns array
+
+      if (profile.role !== 'talent') {
         setError('Cette page est réservée aux talents');
         setIsLoading(false);
         return;
       }
 
-      console.log('[MATCHING] Profile location data:', profileData.location);
-      console.log('[MATCHING] Location type:', typeof profileData.location);
+      console.log('[MATCHING] Profile coordinates:', { lng: profile.lng, lat: profile.lat });
 
       // Check if profile has location data
-      // PostGIS returns location in GeoJSON format with coordinates array
-      let userLng, userLat;
-
-      if (!profileData.location) {
+      if (!profile.lng || !profile.lat) {
         setError('Votre profil n\'a pas de coordonnées GPS. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
         setIsLoading(false);
         return;
       }
 
-      // Try to extract coordinates from different possible formats
-      if (profileData.location.coordinates && Array.isArray(profileData.location.coordinates)) {
-        // GeoJSON format: { type: "Point", coordinates: [lng, lat] }
-        [userLng, userLat] = profileData.location.coordinates;
-      } else if (profileData.location.lng && profileData.location.lat) {
-        // Object format: { lng: x, lat: y }
-        userLng = profileData.location.lng;
-        userLat = profileData.location.lat;
-      } else {
-        console.error('[MATCHING] Invalid location format:', profileData.location);
-        setError('Format de localisation invalide. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
-        setIsLoading(false);
-        return;
-      }
+      const userLng = profile.lng;
+      const userLat = profile.lat;
 
-      console.log('[MATCHING] Extracted coordinates:', { userLng, userLat });
+      console.log('[MATCHING] Using coordinates:', { userLng, userLat });
 
-      setProfile(profileData);
-      setMaxDistance(profileData.max_distance_km);
+      // Store profile for state (add location object for compatibility)
+      const profileWithLocation = {
+        ...profile,
+        location: {
+          type: 'Point',
+          coordinates: [userLng, userLat]
+        }
+      };
+      setProfile(profileWithLocation);
+      setMaxDistance(profile.max_distance_km);
 
       // Get user skills
       const { data: skillsData } = await supabase
