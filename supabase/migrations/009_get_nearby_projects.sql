@@ -6,7 +6,7 @@ DROP FUNCTION IF EXISTS get_nearby_projects(double precision, double precision, 
 CREATE OR REPLACE FUNCTION get_nearby_projects(
   user_lat DOUBLE PRECISION,
   user_lng DOUBLE PRECISION,
-  max_distance_km DOUBLE PRECISION
+  search_radius_km DOUBLE PRECISION
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -58,10 +58,10 @@ BEGIN
   INNER JOIN profiles pr ON pr.id = p.owner_id
   WHERE p.status = 'active'
     AND (
-      -- Project within max distance
+      -- Project within search radius
       (
         p.location IS NOT NULL
-        AND ST_DWithin(user_location, p.location, max_distance_km * 1000)
+        AND ST_DWithin(user_location, p.location, search_radius_km * 1000)
       )
       -- OR remote is possible
       OR p.is_remote_possible = TRUE
