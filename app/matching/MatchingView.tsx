@@ -129,6 +129,13 @@ export default function MatchingView() {
         return;
       }
 
+      // Check if profile has location data
+      if (!profileData.location || !profileData.location.coordinates) {
+        setError('Votre profil n\'a pas de coordonnées GPS. Veuillez mettre à jour votre code postal dans les paramètres de votre profil.');
+        setIsLoading(false);
+        return;
+      }
+
       setProfile(profileData);
       setMaxDistance(profileData.max_distance_km);
 
