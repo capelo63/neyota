@@ -1,8 +1,43 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui';
+import { createClient } from '@supabase/supabase-js';
 
-export default function AboutPage() {
+async function getStats() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { count: projectsCount } = await supabase
+    .from('projects')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'active');
+
+  const { count: talentsCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'talent');
+
+  const { count: entrepreneursCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'entrepreneur');
+
+  const { count: applicationsCount } = await supabase
+    .from('applications')
+    .select('*', { count: 'exact', head: true });
+
+  return {
+    projects: projectsCount || 0,
+    talents: talentsCount || 0,
+    entrepreneurs: entrepreneursCount || 0,
+    collaborations: applicationsCount || 0,
+  };
+}
+
+export default async function AboutPage() {
+  const stats = await getStats();
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
@@ -299,20 +334,26 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: '127', label: 'Projets créés', icon: '🚀' },
-                { value: '543', label: 'Talents engagés', icon: '🌟' },
-                { value: '284', label: 'Collaborations', icon: '🤝' },
-                { value: '89', label: 'Emplois créés', icon: '💼' }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-5xl mb-3">{stat.icon}</div>
-                  <div className="text-4xl font-bold text-primary-600 mb-2">{stat.value}</div>
-                  <div className="text-neutral-600 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            {(stats.projects > 0 || stats.talents > 0) ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {[
+                  { value: stats.projects, label: `Projet${stats.projects > 1 ? 's' : ''} actif${stats.projects > 1 ? 's' : ''}`, icon: '🚀' },
+                  { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''}`, icon: '🌟' },
+                  { value: stats.collaborations, label: `Candidature${stats.collaborations > 1 ? 's' : ''}`, icon: '🤝' },
+                  { value: stats.entrepreneurs, label: `Entrepreneur${stats.entrepreneurs > 1 ? 's' : ''}`, icon: '💼' }
+                ].map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-5xl mb-3">{stat.icon}</div>
+                    <div className="text-4xl font-bold text-primary-600 mb-2">{stat.value}</div>
+                    <div className="text-neutral-600 font-medium">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center text-neutral-600">
+                <p className="text-lg">Les statistiques apparaîtront au fur et à mesure que la communauté grandit!</p>
+              </div>
+            )}
           </div>
         </section>
 

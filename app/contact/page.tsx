@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import { Button } from '@/components/ui';
+import { Button, Input, Textarea } from '@/components/ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -25,29 +25,83 @@ export default function ContactPage() {
             </p>
           </div>
 
-          {/* Contact Options */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* For Users */}
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-neutral-200">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-semibold text-neutral-900 mb-4">
-                Vous êtes utilisateur ?
-              </h2>
-              <p className="text-neutral-600 mb-6">
-                Si vous avez une question sur votre compte, un projet ou une candidature,
-                contactez-nous directement via votre profil sur la plateforme.
-              </p>
-              <Link href="/dashboard">
-                <Button variant="primary" className="w-full">
-                  Accéder à mon profil
-                </Button>
-              </Link>
-            </div>
+          {/* Contact Form */}
+          <div className="bg-white rounded-xl shadow-sm p-8 mb-12 border border-neutral-200">
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-6">
+              Envoyez-nous un message
+            </h2>
 
+            <form action="mailto:contact@neyota.fr?subject=Contact depuis neyota.vercel.app" method="post" encType="text/plain">
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Input
+                    label="Prénom"
+                    name="prenom"
+                    required
+                    placeholder="Votre prénom"
+                  />
+                  <Input
+                    label="Nom"
+                    name="nom"
+                    required
+                    placeholder="Votre nom"
+                  />
+                </div>
+
+                <Input
+                  label="Email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="votre.email@exemple.fr"
+                />
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    Sujet
+                  </label>
+                  <select
+                    name="sujet"
+                    required
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  >
+                    <option value="">Sélectionnez un sujet</option>
+                    <option value="question">Question générale</option>
+                    <option value="support">Support technique</option>
+                    <option value="partenariat">Partenariat</option>
+                    <option value="suggestion">Suggestion</option>
+                    <option value="autre">Autre</option>
+                  </select>
+                </div>
+
+                <Textarea
+                  label="Message"
+                  name="message"
+                  required
+                  rows={6}
+                  placeholder="Décrivez votre demande..."
+                />
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button type="submit" variant="primary" size="lg" className="flex-1">
+                    Envoyer le message
+                  </Button>
+                  <Link href="/" className="flex-1">
+                    <Button type="button" variant="ghost" size="lg" className="w-full">
+                      Annuler
+                    </Button>
+                  </Link>
+                </div>
+
+                <p className="text-sm text-neutral-500 text-center">
+                  Nous nous engageons à vous répondre dans les 48h ouvrées
+                </p>
+              </div>
+            </form>
+          </div>
+
+          {/* Quick Links */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* For Partners */}
             <div className="bg-white rounded-xl shadow-sm p-8 border border-neutral-200">
               <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mb-6">
@@ -65,6 +119,27 @@ export default function ContactPage() {
               <Link href="/about">
                 <Button variant="secondary" className="w-full">
                   En savoir plus sur NEYOTA
+                </Button>
+              </Link>
+            </div>
+
+            {/* For Members */}
+            <div className="bg-white rounded-xl shadow-sm p-8 border border-neutral-200">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold text-neutral-900 mb-4">
+                Déjà membre ?
+              </h2>
+              <p className="text-neutral-600 mb-6">
+                Accédez à votre dashboard pour gérer vos projets, voir vos candidatures
+                et consulter vos notifications.
+              </p>
+              <Link href="/dashboard">
+                <Button variant="primary" className="w-full">
+                  Accéder à mon dashboard
                 </Button>
               </Link>
             </div>
@@ -126,15 +201,11 @@ export default function ContactPage() {
 
               <div>
                 <h3 className="text-lg font-semibold text-neutral-900 mb-2">
-                  Comment signaler un problème ou un abus ?
+                  J&apos;ai un problème technique, que faire ?
                 </h3>
                 <p className="text-neutral-600">
-                  Chaque profil et projet dispose d&apos;un système de signalement. En cas de
-                  comportement inapproprié ou de non-respect de notre{' '}
-                  <Link href="/charter" className="text-primary-600 hover:text-primary-700 font-medium">
-                    Charte éthique
-                  </Link>
-                  , utilisez le bouton de signalement présent sur les pages concernées.
+                  Utilisez le formulaire de contact ci-dessus en sélectionnant &quot;Support technique&quot;
+                  comme sujet. Décrivez le problème rencontré et nous vous aiderons rapidement.
                 </p>
               </div>
             </div>
