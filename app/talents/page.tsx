@@ -53,8 +53,8 @@ async function getTalentsAndSkills() {
       return {
         ...talent,
         skills: (skillsData || [])
-          .map(s => s.skill)
-          .filter(s => s !== null),
+          .map((s: any) => s.skill)
+          .filter((s: any) => s !== null) as Array<{ id: string; name: string; category: string }>,
       };
     })
   );
