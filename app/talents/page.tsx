@@ -22,7 +22,6 @@ async function getTalents() {
       city,
       postal_code,
       bio,
-      availability,
       max_distance_km,
       created_at
     `)
@@ -71,13 +70,6 @@ async function getTalents() {
 // Disable cache temporarily to force fresh data
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
-
-const AVAILABILITY_LABELS: Record<string, string> = {
-  full_time: 'Temps plein',
-  part_time: 'Temps partiel',
-  freelance: 'Freelance',
-  occasional: 'Ponctuel',
-};
 
 export default async function TalentsPage() {
   const talents = await getTalents();
@@ -158,17 +150,12 @@ export default async function TalentsPage() {
                     <h3 className="text-xl font-semibold text-neutral-900 mb-2">
                       {talent.first_name} {talent.last_name}
                     </h3>
-                    <div className="flex items-center gap-2 text-sm text-neutral-600 mb-2">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
                       <span>{talent.city}</span>
                     </div>
-                    {talent.availability && (
-                      <Badge variant="info" className="text-xs">
-                        {AVAILABILITY_LABELS[talent.availability] || talent.availability}
-                      </Badge>
-                    )}
                   </div>
                 </div>
 
