@@ -34,10 +34,14 @@ async function getTalents() {
 
   if (error) {
     console.error('[TALENTS] Error fetching:', error);
+    console.error('[TALENTS] Error details:', JSON.stringify(error, null, 2));
     return [];
   }
 
   console.log('[TALENTS] Raw talents fetched:', talents?.length || 0);
+  if (talents && talents.length > 0) {
+    console.log('[TALENTS] First talent:', JSON.stringify(talents[0], null, 2));
+  }
 
   // For each talent, fetch their skills
   const talentsWithSkills = await Promise.all(
@@ -80,9 +84,28 @@ const AVAILABILITY_LABELS: Record<string, string> = {
 export default async function TalentsPage() {
   const talents = await getTalents();
 
+  // Debug info
+  const debugInfo = {
+    totalTalents: talents.length,
+    talentIds: talents.map(t => t.id).join(', ') || 'none',
+    firstTalent: talents[0] ? {
+      name: `${talents[0].first_name} ${talents[0].last_name}`,
+      city: talents[0].city,
+      skillsCount: talents[0].skills.length
+    } : null
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
+
+      {/* Debug Info */}
+      <div className="bg-yellow-100 border border-yellow-400 p-4 m-4 rounded">
+        <h3 className="font-bold text-yellow-800">Debug Info:</h3>
+        <pre className="text-xs text-yellow-900 mt-2 overflow-auto">
+          {JSON.stringify(debugInfo, null, 2)}
+        </pre>
+      </div>
 
       <main className="container-custom py-16 px-4">
         {/* Header */}
