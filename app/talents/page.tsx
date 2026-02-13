@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { Button, Badge } from '@/components/ui';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,10 +10,7 @@ export const metadata: Metadata = {
 };
 
 async function getTalents() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = await createClient();
 
   // Fetch talents with their skills
   const { data: talents, error } = await supabase
