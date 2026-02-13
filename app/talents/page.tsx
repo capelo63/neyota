@@ -71,8 +71,9 @@ async function getTalents() {
   return talentsWithSkills;
 }
 
-// Revalidate every 60 seconds
-export const revalidate = 60;
+// Disable cache temporarily to force fresh data
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 const AVAILABILITY_LABELS: Record<string, string> = {
   full_time: 'Temps plein',
