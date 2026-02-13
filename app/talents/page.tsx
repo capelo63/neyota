@@ -1,18 +1,25 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import { Button, Badge } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
+import TalentsFilter from '@/components/TalentsFilter';
 
 export const metadata: Metadata = {
   title: 'Talents disponibles',
   description: 'Découvrez les talents locaux prêts à rejoindre votre projet entrepreneurial',
 };
 
-async function getTalents() {
+async function getTalentsAndSkills() {
   const supabase = await createClient();
 
-  // Fetch talents with their skills
+  // Fetch all available skills
+  const { data: allSkills } = await supabase
+    .from('skills')
+    .select('id, name, category')
+    .order('name');
+
+  // Fetch talents
   const { data: talents, error } = await supabase
     .from('profiles')
     .select(`
@@ -30,72 +37,43 @@ async function getTalents() {
 
   if (error) {
     console.error('[TALENTS] Error fetching:', error);
-    console.error('[TALENTS] Error details:', JSON.stringify(error, null, 2));
-    return [];
-  }
-
-  console.log('[TALENTS] Raw talents fetched:', talents?.length || 0);
-  if (talents && talents.length > 0) {
-    console.log('[TALENTS] First talent:', JSON.stringify(talents[0], null, 2));
+    return { talents: [], allSkills: [] };
   }
 
   // For each talent, fetch their skills
   const talentsWithSkills = await Promise.all(
     (talents || []).map(async (talent) => {
-      const { data: skillsData, error: skillsError } = await supabase
+      const { data: skillsData } = await supabase
         .from('user_skills')
         .select(`
           skill:skills(id, name, category)
         `)
         .eq('user_id', talent.id);
 
-      if (skillsError) {
-        console.error(`[TALENTS] Error fetching skills for ${talent.id}:`, skillsError);
-      }
-
       return {
         ...talent,
         skills: (skillsData || [])
-          .map(s => s.skill)
-          .filter(s => s !== null),
+          .map((s: any) => s.skill)
+          .filter((s: any) => s !== null) as Array<{ id: string; name: string; category: string }>,
       };
     })
   );
 
-  console.log('[TALENTS] Final talents with skills:', talentsWithSkills.length);
-
-  return talentsWithSkills;
+  return {
+    talents: talentsWithSkills,
+    allSkills: allSkills || [],
+  };
 }
 
-// Disable cache temporarily to force fresh data
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
+// Revalidate every 60 seconds
+export const revalidate = 60;
 
 export default async function TalentsPage() {
-  const talents = await getTalents();
-
-  // Debug info
-  const debugInfo = {
-    totalTalents: talents.length,
-    talentIds: talents.map(t => t.id).join(', ') || 'none',
-    firstTalent: talents[0] ? {
-      name: `${talents[0].first_name} ${talents[0].last_name}`,
-      city: talents[0].city,
-      skillsCount: talents[0].skills.length
-    } : null
-  };
+  const { talents, allSkills } = await getTalentsAndSkills();
 
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
-
-      {/* Debug Info */}
-      <div className="bg-yellow-100 border border-yellow-400 p-4 m-4 rounded">
-        <h3 className="font-bold text-yellow-800">Debug Info:</h3>
-        <pre className="text-xs text-yellow-900 mt-2 overflow-auto">
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
-      </div>
 
       <main className="container-custom py-16 px-4">
         {/* Header */}
@@ -120,7 +98,7 @@ export default async function TalentsPage() {
           </div>
         </div>
 
-        {/* Talents List */}
+        {/* Talents with Filters */}
         {talents.length === 0 ? (
           <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-12 text-center">
             <div className="text-6xl mb-4">🌟</div>
@@ -138,78 +116,7 @@ export default async function TalentsPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {talents.map((talent) => (
-              <div
-                key={talent.id}
-                className="bg-white rounded-xl shadow-sm p-6 border border-neutral-200 hover:shadow-md transition-shadow"
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                      {talent.first_name} {talent.last_name}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm text-neutral-600">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                      </svg>
-                      <span>{talent.city}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bio */}
-                {talent.bio && (
-                  <p className="text-neutral-600 text-sm mb-4 line-clamp-3">
-                    {talent.bio}
-                  </p>
-                )}
-
-                {/* Skills */}
-                {talent.skills && talent.skills.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-sm font-medium text-neutral-700 mb-2">Compétences:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {talent.skills.slice(0, 4).map((skill: any) => (
-                        <Badge key={skill.id} variant="secondary" className="text-xs">
-                          {skill.name}
-                        </Badge>
-                      ))}
-                      {talent.skills.length > 4 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{talent.skills.length - 4}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Distance */}
-                {talent.max_distance_km && (
-                  <p className="text-sm text-neutral-500 mb-4">
-                    Rayon de déplacement: {talent.max_distance_km} km
-                  </p>
-                )}
-
-                {/* CTA */}
-                <Link href={`/profile/${talent.id}`}>
-                  <Button variant="ghost" size="sm" className="w-full">
-                    Voir le profil →
-                  </Button>
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Stats */}
-        {talents.length > 0 && (
-          <div className="mt-12 text-center">
-            <p className="text-neutral-600">
-              <strong>{talents.length}</strong> talent{talents.length > 1 ? 's' : ''} disponible{talents.length > 1 ? 's' : ''} sur NEYOTA
-            </p>
-          </div>
+          <TalentsFilter talents={talents} allSkills={allSkills} />
         )}
 
         {/* CTA Section */}
