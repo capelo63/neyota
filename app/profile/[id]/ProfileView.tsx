@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
+import InviteTalentModal from '@/components/InviteTalentModal';
 
 interface Profile {
   id: string;
@@ -93,8 +94,10 @@ export default function ProfileView({ userId }: { userId: string }) {
   const [badges, setBadges] = useState<UserBadge[]>([]);
   const [impactStats, setImpactStats] = useState<ImpactStats | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserProfile, setCurrentUserProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -115,6 +118,16 @@ export default function ProfileView({ userId }: { userId: string }) {
         data: { user },
       } = await supabase.auth.getUser();
       setCurrentUserId(user?.id || null);
+
+      // Get current user profile if logged in
+      if (user) {
+        const { data: currentProfile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        setCurrentUserProfile(currentProfile);
+      }
 
       // Get profile
       const { data: profileData, error: profileError } = await supabase
@@ -344,6 +357,23 @@ export default function ProfileView({ userId }: { userId: string }) {
                 </Link>
               </div>
             )}
+
+            {/* Invite button if entrepreneur viewing talent profile */}
+            {!isOwnProfile &&
+             currentUserProfile?.role === 'entrepreneur' &&
+             profile.role === 'talent' && (
+              <div>
+                <Button
+                  variant="primary"
+                  onClick={() => setShowInviteModal(true)}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Inviter sur un projet
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Bio */}
@@ -526,6 +556,19 @@ export default function ProfileView({ userId }: { userId: string }) {
           </div>
         )}
       </div>
+
+      {/* Invite Talent Modal */}
+      {profile && (
+        <InviteTalentModal
+          talentId={userId}
+          talentName={`${profile.first_name} ${profile.last_name}`}
+          isOpen={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          onSuccess={() => {
+            alert('Invitation envoyée avec succès !');
+          }}
+        />
+      )}
     </div>
   );
 }
