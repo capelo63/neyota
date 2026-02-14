@@ -532,7 +532,7 @@ serve(async (req) => {
           body: JSON.stringify({
             sender: {
               name: 'NEYOTA',
-              email: 'notifications@neyota.fr', // Configure this in Brevo
+              email: 'notifications@neyota.com', // Configured in Brevo
             },
             to: [
               {
