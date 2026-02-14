@@ -109,7 +109,7 @@ export default function InviteTalentModal({
           talent_id: talentId,
           invited_by: user.id,
           status: 'pending',
-          message: message || `Invitation à rejoindre le projet`,
+          motivation_message: message || `Invitation à rejoindre le projet`,
         });
 
       if (inviteError) throw inviteError;
