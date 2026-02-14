@@ -30,6 +30,8 @@ async function getTalentsAndSkills() {
       postal_code,
       bio,
       max_distance_km,
+      latitude,
+      longitude,
       created_at
     `)
     .eq('role', 'talent')
