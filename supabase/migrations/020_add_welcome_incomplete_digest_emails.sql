@@ -212,8 +212,7 @@ BEGIN
         AND a.created_at > NOW() - INTERVAL '7 days'
         AND a.invited_by IS NULL; -- Candidatures (pas invitations)
 
-      SELECT COUNT(*) INTO invitations_count
-      FROM 0; -- Pas d'invitations pour entrepreneurs
+      invitations_count := 0; -- Pas d'invitations pour entrepreneurs
     ELSE
       -- Pour talents : compter les invitations reçues
       SELECT COUNT(*) INTO invitations_count
@@ -222,8 +221,7 @@ BEGIN
         AND a.invited_by IS NOT NULL
         AND a.created_at > NOW() - INTERVAL '7 days';
 
-      SELECT COUNT(*) INTO applications_count
-      FROM 0; -- Pas de candidatures reçues pour talents
+      applications_count := 0; -- Pas de candidatures reçues pour talents
     END IF;
 
     -- Si aucune activité, ne pas envoyer le digest
