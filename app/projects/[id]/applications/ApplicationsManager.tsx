@@ -11,7 +11,7 @@ interface Application {
   talent_id: string;
   project_id: string;
   status: 'pending' | 'accepted' | 'rejected';
-  message: string | null;
+  motivation_message: string | null;
   created_at: string;
   talent: {
     id: string;
@@ -112,7 +112,7 @@ export default function ApplicationsManager({ projectId }: { projectId: string }
           talent_id,
           project_id,
           status,
-          message,
+          motivation_message,
           created_at,
           talent:profiles!applications_talent_id_fkey (
             id,
@@ -375,13 +375,13 @@ export default function ApplicationsManager({ projectId }: { projectId: string }
                   </div>
 
                   {/* Message */}
-                  {application.message && (
+                  {application.motivation_message && (
                     <div className="bg-neutral-50 rounded-lg p-4 mb-4">
                       <h4 className="text-sm font-semibold text-neutral-900 mb-2">
                         Message du talent :
                       </h4>
                       <p className="text-neutral-700 whitespace-pre-wrap">
-                        {application.message}
+                        {application.motivation_message}
                       </p>
                     </div>
                   )}
