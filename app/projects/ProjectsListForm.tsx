@@ -23,6 +23,9 @@ interface Project {
     id: number;
     name: string;
   }>;
+  categories: Array<{
+    category: string;
+  }>;
 }
 
 const PHASE_LABELS: Record<string, string> = {
@@ -39,6 +42,25 @@ const PHASE_COLORS: Record<string, 'primary' | 'secondary' | 'success' | 'warnin
   launch: 'success',
   growth: 'primary',
   scaling: 'secondary',
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  agriculture: '🌾 Agriculture / Agroalimentaire',
+  mobility: '🚗 Mobilité / Transport',
+  industry: '🏭 Industrie / Manufacturing',
+  tech: '💻 Tech / Digital',
+  health: '🏥 Santé / Bien-être',
+  education: '🎓 Éducation / Formation',
+  real_estate: '🏠 Immobilier / Construction',
+  environment: '🌍 Environnement / Écologie',
+  culture: '🎨 Culture / Créatif',
+  services: '💼 Services / Consulting',
+  commerce: '🛒 Commerce / Retail',
+  hospitality: '🍽️ Restauration / Hôtellerie',
+  finance: '💰 Finance / Fintech',
+  energy: '⚡ Énergie',
+  entertainment: '🎮 Divertissement / Loisirs',
+  social: '🤝 Social / Solidaire',
 };
 
 export default function ProjectsListForm() {
@@ -59,6 +81,7 @@ export default function ProjectsListForm() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPhase, setSelectedPhase] = useState('all');
   const [selectedSkill, setSelectedSkill] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     loadData();
@@ -66,7 +89,7 @@ export default function ProjectsListForm() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, selectedPhase, selectedSkill, projects]);
+  }, [searchQuery, selectedPhase, selectedSkill, selectedCategory, projects]);
 
   const loadData = async () => {
     try {
@@ -93,15 +116,16 @@ export default function ProjectsListForm() {
 
       setProfile(profileData);
 
-      // Load projects with owner and skills
-      const { data: projectsData, error: projectsError } = await supabase
+      // Load projects with owner, skills, and categories
+      const { data: projectsData, error: projectsError} = await supabase
         .from('projects')
         .select(`
           *,
           owner:owner_id(first_name, last_name),
           skills:project_skills_needed(
             skill:skills(id, name)
-          )
+          ),
+          categories:project_categories(category)
         `)
         .eq('status', 'active')
         .order('created_at', { ascending: false });
@@ -121,6 +145,7 @@ export default function ProjectsListForm() {
               ...project,
               owner,
               skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+              categories: project.categories || [],
             };
           })
           .filter((project: any) => project.owner !== null);
@@ -167,6 +192,13 @@ export default function ProjectsListForm() {
       );
     }
 
+    // Category filter
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(project =>
+        project.categories.some(cat => cat.category === selectedCategory)
+      );
+    }
+
     setFilteredProjects(filtered);
   };
 
@@ -174,6 +206,7 @@ export default function ProjectsListForm() {
     setSearchQuery('');
     setSelectedPhase('all');
     setSelectedSkill('all');
+    setSelectedCategory('all');
   };
 
   if (isLoading) {
@@ -225,7 +258,7 @@ export default function ProjectsListForm() {
             <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-neutral-900">Filtres</h2>
-                {(searchQuery || selectedPhase !== 'all' || selectedSkill !== 'all') && (
+                {(searchQuery || selectedPhase !== 'all' || selectedSkill !== 'all' || selectedCategory !== 'all') && (
                   <button
                     onClick={resetFilters}
                     className="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -266,6 +299,19 @@ export default function ProjectsListForm() {
                     ...skills.map(skill => ({
                       value: skill.id.toString(),
                       label: skill.name,
+                    })),
+                  ]}
+                />
+
+                <Select
+                  label="Catégorie"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  options={[
+                    { value: 'all', label: 'Toutes les catégories' },
+                    ...Object.entries(CATEGORY_LABELS).map(([value, label]) => ({
+                      value,
+                      label,
                     })),
                   ]}
                 />

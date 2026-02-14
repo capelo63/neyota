@@ -62,6 +62,12 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
     return Array.from(cats);
   }, [allSkills]);
 
+  // Filter skills by selected category (cascading filter)
+  const filteredSkillsList = useMemo(() => {
+    if (!selectedCategory) return allSkills;
+    return allSkills.filter(skill => skill.category === selectedCategory);
+  }, [allSkills, selectedCategory]);
+
   // Get unique cities for location autocomplete
   const uniqueCities = useMemo(() => {
     const cities = new Set(talents.map(t => t.city));
@@ -231,12 +237,19 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Compétences
+                {selectedCategory && (
+                  <span className="ml-2 text-xs text-primary-600">
+                    ({filteredSkillsList.length} dans cette catégorie)
+                  </span>
+                )}
               </label>
               <div className="max-h-48 overflow-y-auto p-2 border border-neutral-200 rounded-lg space-y-1">
-                {allSkills.length === 0 ? (
-                  <p className="text-sm text-neutral-500">Aucune compétence</p>
+                {filteredSkillsList.length === 0 ? (
+                  <p className="text-sm text-neutral-500">
+                    {selectedCategory ? 'Aucune compétence dans cette catégorie' : 'Aucune compétence'}
+                  </p>
                 ) : (
-                  allSkills.map(skill => (
+                  filteredSkillsList.map(skill => (
                     <label
                       key={skill.id}
                       className="flex items-center gap-2 p-1 hover:bg-neutral-50 rounded cursor-pointer"

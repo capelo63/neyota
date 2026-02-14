@@ -12,6 +12,7 @@ interface ProjectData {
   fullDescription: string;
   currentPhase: string;
   phaseObjectives: string;
+  selectedCategories: string[];
   selectedSkills: number[];
   city: string;
   postalCode: string;
@@ -26,6 +27,25 @@ const PROJECT_PHASES = [
   { value: 'launch', label: '🚀 Lancement - Je lance mon produit/service' },
   { value: 'growth', label: '📈 Croissance - Je développe mon activité' },
   { value: 'scaling', label: '🌍 Structuration - Je structure et pérennise' },
+];
+
+const PROJECT_CATEGORIES = [
+  { value: 'agriculture', label: '🌾 Agriculture / Agroalimentaire' },
+  { value: 'mobility', label: '🚗 Mobilité / Transport' },
+  { value: 'industry', label: '🏭 Industrie / Manufacturing' },
+  { value: 'tech', label: '💻 Tech / Digital' },
+  { value: 'health', label: '🏥 Santé / Bien-être' },
+  { value: 'education', label: '🎓 Éducation / Formation' },
+  { value: 'real_estate', label: '🏠 Immobilier / Construction' },
+  { value: 'environment', label: '🌍 Environnement / Écologie' },
+  { value: 'culture', label: '🎨 Culture / Créatif' },
+  { value: 'services', label: '💼 Services / Consulting' },
+  { value: 'commerce', label: '🛒 Commerce / Retail' },
+  { value: 'hospitality', label: '🍽️ Restauration / Hôtellerie' },
+  { value: 'finance', label: '💰 Finance / Fintech' },
+  { value: 'energy', label: '⚡ Énergie' },
+  { value: 'entertainment', label: '🎮 Divertissement / Loisirs' },
+  { value: 'social', label: '🤝 Social / Solidaire' },
 ];
 
 export default function CreateProjectForm() {
@@ -49,6 +69,7 @@ export default function CreateProjectForm() {
     fullDescription: '',
     currentPhase: 'ideation',
     phaseObjectives: '',
+    selectedCategories: [],
     selectedSkills: [],
     city: '',
     postalCode: '',
@@ -135,6 +156,10 @@ export default function CreateProjectForm() {
       newErrors.fullDescription = 'La description doit contenir au moins 100 caractères';
     }
 
+    if (formData.selectedCategories.length === 0) {
+      newErrors.categories = 'Sélectionnez au moins une catégorie pour votre projet';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -219,6 +244,22 @@ export default function CreateProjectForm() {
         return;
       }
 
+      // Add categories to project
+      if (formData.selectedCategories.length > 0) {
+        const categoriesToInsert = formData.selectedCategories.map(category => ({
+          project_id: projectData.id,
+          category: category,
+        }));
+
+        const { error: categoriesError } = await supabase
+          .from('project_categories')
+          .insert(categoriesToInsert);
+
+        if (categoriesError) {
+          console.error('Categories insert error:', categoriesError);
+        }
+      }
+
       // Add skills to project
       if (formData.selectedSkills.length > 0) {
         const skillsToInsert = formData.selectedSkills.map(skillId => ({
@@ -251,6 +292,15 @@ export default function CreateProjectForm() {
       selectedSkills: prev.selectedSkills.includes(skillId)
         ? prev.selectedSkills.filter(id => id !== skillId)
         : [...prev.selectedSkills, skillId],
+    }));
+  };
+
+  const toggleCategory = (categoryValue: string) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedCategories: prev.selectedCategories.includes(categoryValue)
+        ? prev.selectedCategories.filter(cat => cat !== categoryValue)
+        : [...prev.selectedCategories, categoryValue],
     }));
   };
 
@@ -382,6 +432,42 @@ export default function CreateProjectForm() {
                         La description complète n'est accessible qu'aux talents qui manifestent leur intérêt.
                       </div>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-3">
+                      Catégories du projet <span className="text-error-600">*</span>
+                    </label>
+                    {errors.categories && (
+                      <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm mb-3">
+                        {errors.categories}
+                      </div>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {PROJECT_CATEGORIES.map((category) => (
+                        <label
+                          key={category.value}
+                          className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.selectedCategories.includes(category.value)
+                              ? 'border-primary-500 bg-primary-50'
+                              : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={formData.selectedCategories.includes(category.value)}
+                            onChange={() => toggleCategory(category.value)}
+                            className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                          />
+                          <span className="text-sm font-medium text-neutral-900">
+                            {category.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <p className="mt-2 text-sm text-neutral-600">
+                      {formData.selectedCategories.length} catégorie(s) sélectionnée(s)
+                    </p>
                   </div>
 
                   <Button type="submit" variant="primary" className="w-full mt-6">
