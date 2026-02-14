@@ -5,8 +5,9 @@
 -- the welcome email after the user has confirmed their email address
 
 -- Drop the old trigger that sends welcome email immediately
-DROP TRIGGER IF EXISTS send_welcome_email_trigger ON profiles;
-DROP FUNCTION IF EXISTS send_welcome_email();
+-- Must drop trigger BEFORE function (dependency)
+DROP TRIGGER IF EXISTS trigger_send_welcome_email ON profiles;
+DROP FUNCTION IF EXISTS send_welcome_email() CASCADE;
 
 -- Create a function to check and send welcome emails for confirmed users
 CREATE OR REPLACE FUNCTION check_and_send_welcome_emails()
