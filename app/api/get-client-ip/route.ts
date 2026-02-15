@@ -19,10 +19,9 @@ export async function GET(request: NextRequest) {
     clientIp = realIp;
   } else if (cfConnectingIp) {
     clientIp = cfConnectingIp;
-  } else if (request.ip) {
-    // Next.js 13+ provides request.ip
-    clientIp = request.ip;
   }
+  // Note: request.ip is not available in Next.js 16+
+  // We rely on the proxy headers above for IP detection
 
   return NextResponse.json({ ip: clientIp });
 }
