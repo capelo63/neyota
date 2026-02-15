@@ -24,7 +24,7 @@ BEGIN
   -- Loop through profiles created in the last 7 days
   -- that haven't received a welcome email yet
   FOR v_profile IN
-    SELECT p.id, p.full_name, p.role, p.created_at, au.email, au.email_confirmed_at
+    SELECT p.id, p.first_name, p.role, p.created_at, au.email, au.email_confirmed_at
     FROM profiles p
     JOIN auth.users au ON au.id = p.id
     WHERE
@@ -44,7 +44,7 @@ BEGIN
       p_email_type := 'welcome_email',
       p_subject := 'Bienvenue sur NEYOTA ! 🎉',
       p_template_params := jsonb_build_object(
-        'user_name', COALESCE(SPLIT_PART(v_profile.full_name, ' ', 1), 'nouveau membre'),
+        'user_name', COALESCE(v_profile.first_name, 'nouveau membre'),
         'user_role', v_profile.role,
         'profile_id', v_profile.id
       )
