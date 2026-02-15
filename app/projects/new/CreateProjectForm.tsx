@@ -553,7 +553,7 @@ export default function CreateProjectForm() {
                         {Object.entries(SKILL_CATEGORIES).map(([categoryKey, categoryInfo]) => {
                           const categorySkills = skillsByCategory[categoryKey] || [];
                           const isExpanded = expandedCategories.has(categoryKey);
-                          const selectedInCategory = categorySkills.filter(s => formData.selectedSkills.includes(s.id)).length;
+                          const selectedInCategory = categorySkills.filter((s: any) => formData.selectedSkills.includes(s.id)).length;
 
                           return (
                             <div key={categoryKey} className="bg-white">
