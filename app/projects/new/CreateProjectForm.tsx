@@ -48,6 +48,14 @@ const PROJECT_CATEGORIES = [
   { value: 'social', label: '🤝 Social / Solidaire' },
 ];
 
+const SKILL_CATEGORIES = {
+  technical: { label: '💻 Compétences Techniques', icon: '💻' },
+  business: { label: '💼 Compétences Business', icon: '💼' },
+  creative: { label: '🎨 Compétences Créatives', icon: '🎨' },
+  operational: { label: '⚙️ Compétences Opérationnelles', icon: '⚙️' },
+  expertise: { label: '🎓 Expertise Métier', icon: '🎓' },
+};
+
 export default function CreateProjectForm() {
   const router = useRouter();
   const supabase = createBrowserClient(
@@ -62,6 +70,7 @@ export default function CreateProjectForm() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['technical', 'business', 'creative', 'operational', 'expertise']));
 
   const [formData, setFormData] = useState<ProjectData>({
     title: '',
@@ -295,6 +304,28 @@ export default function CreateProjectForm() {
     }));
   };
 
+  const toggleSkillCategory = (category: string) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(category)) {
+        newSet.delete(category);
+      } else {
+        newSet.add(category);
+      }
+      return newSet;
+    });
+  };
+
+  // Group skills by category
+  const skillsByCategory = skills.reduce((acc, skill) => {
+    const category = skill.category || 'technical';
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(skill);
+    return acc;
+  }, {} as Record<string, any[]>);
+
   const toggleCategory = (categoryValue: string) => {
     setFormData(prev => ({
       ...prev,
@@ -517,31 +548,77 @@ export default function CreateProjectForm() {
                         {errors.skills}
                       </div>
                     )}
-                    <div className="max-h-96 overflow-y-auto border border-neutral-200 rounded-lg p-4">
-                      <div className="space-y-2">
-                        {skills.map((skill) => (
-                          <label
-                            key={skill.id}
-                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 cursor-pointer transition-colors"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={formData.selectedSkills.includes(skill.id)}
-                              onChange={() => toggleSkill(skill.id)}
-                              className="checkbox"
-                            />
-                            <div>
-                              <div className="font-medium text-neutral-900">{skill.name}</div>
-                              {skill.description && (
-                                <div className="text-sm text-neutral-600">{skill.description}</div>
+                    <div className="max-h-[600px] overflow-y-auto border border-neutral-200 rounded-lg">
+                      <div className="divide-y divide-neutral-200">
+                        {Object.entries(SKILL_CATEGORIES).map(([categoryKey, categoryInfo]) => {
+                          const categorySkills = skillsByCategory[categoryKey] || [];
+                          const isExpanded = expandedCategories.has(categoryKey);
+                          const selectedInCategory = categorySkills.filter((s: any) => formData.selectedSkills.includes(s.id)).length;
+
+                          return (
+                            <div key={categoryKey} className="bg-white">
+                              <button
+                                type="button"
+                                onClick={() => toggleSkillCategory(categoryKey)}
+                                className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 transition-colors text-left"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">{categoryInfo.icon}</span>
+                                  <div>
+                                    <div className="font-semibold text-neutral-900">{categoryInfo.label}</div>
+                                    <div className="text-sm text-neutral-600">
+                                      {categorySkills.length} compétence{categorySkills.length > 1 ? 's' : ''}
+                                      {selectedInCategory > 0 && (
+                                        <span className="text-primary-600 font-medium"> · {selectedInCategory} sélectionnée{selectedInCategory > 1 ? 's' : ''}</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <svg
+                                  className={`w-5 h-5 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+
+                              {isExpanded && (
+                                <div className="px-4 pb-4 space-y-2">
+                                  {categorySkills.map((skill: any) => (
+                                    <label
+                                      key={skill.id}
+                                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 cursor-pointer transition-colors"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={formData.selectedSkills.includes(skill.id)}
+                                        onChange={() => toggleSkill(skill.id)}
+                                        className="checkbox"
+                                      />
+                                      <div>
+                                        <div className="font-medium text-neutral-900">{skill.name}</div>
+                                        {skill.description && (
+                                          <div className="text-sm text-neutral-600">{skill.description}</div>
+                                        )}
+                                      </div>
+                                    </label>
+                                  ))}
+                                  {categorySkills.length === 0 && (
+                                    <p className="text-sm text-neutral-500 italic px-3 py-2">
+                                      Aucune compétence dans cette catégorie
+                                    </p>
+                                  )}
+                                </div>
                               )}
                             </div>
-                          </label>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-neutral-600">
-                      {formData.selectedSkills.length} compétence(s) sélectionnée(s)
+                      {formData.selectedSkills.length} compétence(s) sélectionnée(s) au total
                     </p>
                   </div>
 
