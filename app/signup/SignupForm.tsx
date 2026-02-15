@@ -32,6 +32,24 @@ export default function SignupForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [clientIp, setClientIp] = useState<string>('0.0.0.0');
+
+  // Fetch client IP on mount
+  useEffect(() => {
+    const fetchClientIp = async () => {
+      try {
+        const response = await fetch('/api/get-client-ip');
+        const data = await response.json();
+        if (data.ip) {
+          setClientIp(data.ip);
+        }
+      } catch (error) {
+        console.error('Failed to fetch client IP:', error);
+        // Keep default '0.0.0.0' if fetch fails
+      }
+    };
+    fetchClientIp();
+  }, []);
 
   // Update role when URL param changes
   useEffect(() => {
@@ -145,7 +163,7 @@ export default function SignupForm() {
           user_id: authData.user.id,
           accepted_at: new Date().toISOString(),
           charter_version: 'v1.0',
-          ip_address: '0.0.0.0', // Default IP - should be captured server-side in production
+          ip_address: clientIp, // Real client IP captured from server-side
         });
 
       if (charterError) {
