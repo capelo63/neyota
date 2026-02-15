@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { Button, Card, CardBody, Badge } from '@/components/ui';
 import { createClient } from '@supabase/supabase-js';
@@ -89,7 +90,20 @@ const PHASE_LABELS: Record<string, string> = {
   scaling: 'Structuration',
 };
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  // Handle email confirmation callback
+  const params = await searchParams;
+  const code = params.code;
+
+  if (code && typeof code === 'string') {
+    // Redirect to auth callback to exchange code for session
+    redirect(`/auth/callback?code=${code}`);
+  }
+
   const { projects, stats } = await getHomeData();
   return (
     <div className="min-h-screen bg-neutral-50">
