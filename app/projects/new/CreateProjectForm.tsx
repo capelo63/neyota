@@ -586,7 +586,7 @@ export default function CreateProjectForm() {
 
                               {isExpanded && (
                                 <div className="px-4 pb-4 space-y-2">
-                                  {categorySkills.map((skill) => (
+                                  {categorySkills.map((skill: any) => (
                                     <label
                                       key={skill.id}
                                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 cursor-pointer transition-colors"
