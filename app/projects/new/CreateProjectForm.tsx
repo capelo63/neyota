@@ -304,7 +304,7 @@ export default function CreateProjectForm() {
     }));
   };
 
-  const toggleCategory = (category: string) => {
+  const toggleSkillCategory = (category: string) => {
     setExpandedCategories(prev => {
       const newSet = new Set(prev);
       if (newSet.has(category)) {
@@ -559,7 +559,7 @@ export default function CreateProjectForm() {
                             <div key={categoryKey} className="bg-white">
                               <button
                                 type="button"
-                                onClick={() => toggleCategory(categoryKey)}
+                                onClick={() => toggleSkillCategory(categoryKey)}
                                 className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 transition-colors text-left"
                               >
                                 <div className="flex items-center gap-3">
