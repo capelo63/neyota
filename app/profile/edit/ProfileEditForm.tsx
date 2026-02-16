@@ -5,6 +5,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import AvatarUpload from '@/components/AvatarUpload';
 
 interface Profile {
   id: string;
@@ -296,21 +297,16 @@ export default function ProfileEditForm() {
           </h2>
 
           <div className="space-y-4">
-            {/* Avatar URL */}
+            {/* Avatar Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                URL de l'avatar (optionnel)
+              <label className="block text-sm font-medium text-gray-700 mb-4">
+                Photo de profil
               </label>
-              <input
-                type="url"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://exemple.com/avatar.jpg"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              <AvatarUpload
+                currentAvatarUrl={avatarUrl}
+                userId={profile.id}
+                onUploadComplete={(url) => setAvatarUrl(url)}
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Laissez vide pour utiliser vos initiales
-              </p>
             </div>
 
             {/* Bio */}

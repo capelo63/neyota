@@ -87,16 +87,20 @@ export default function InviteTalentModal({
         return;
       }
 
-      // Check if invitation already exists
-      const { data: existingInvitation } = await supabase
+      // Check if active invitation/application already exists
+      // Allow re-invitation if previous was rejected
+      const { data: existingApplication } = await supabase
         .from('applications')
-        .select('id')
+        .select('id, status, invited_by')
         .eq('project_id', selectedProjectId)
         .eq('talent_id', talentId)
+        .in('status', ['pending', 'accepted', 'more_info']) // Only block active applications
         .maybeSingle();
 
-      if (existingInvitation) {
-        setError('Ce talent a déjà été invité ou a déjà postulé à ce projet');
+      if (existingApplication) {
+        const isInvitation = existingApplication.invited_by !== null;
+        const actionType = isInvitation ? 'invité' : 'postulé';
+        setError(`Ce talent a déjà ${actionType} à ce projet et sa candidature est en cours`);
         setIsLoading(false);
         return;
       }
