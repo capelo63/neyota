@@ -350,13 +350,41 @@ export default function MatchingView() {
       <main className="container-custom py-8">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
-          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl shadow-lg p-8 mb-8 text-white">
+          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl shadow-lg p-8 mb-6 text-white">
             <h1 className="text-4xl font-bold mb-2">
               🎯 Projets suggérés pour vous
             </h1>
             <p className="text-primary-100 text-lg">
               Basé sur votre localisation ({profile.city}) et vos compétences
             </p>
+          </div>
+
+          {/* Matching Score Legend */}
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <div className="text-2xl">📊</div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-neutral-900 mb-2">Comment est calculé le % de match ?</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-blue-600">40pts</span>
+                    <span className="text-neutral-600">Distance (proximité)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-purple-600">40pts</span>
+                    <span className="text-neutral-600">Compétences communes</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-green-600">10pts</span>
+                    <span className="text-neutral-600">Travail à distance</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-orange-600">10pts</span>
+                    <span className="text-neutral-600">Projet récent</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Filters */}
@@ -459,29 +487,40 @@ export default function MatchingView() {
                 >
                   {/* Project Header */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Link href={`/projects/${project.id}`}>
-                          <h3 className="text-2xl font-bold text-neutral-900 hover:text-primary-600 transition-colors cursor-pointer">
-                            {project.title}
-                          </h3>
-                        </Link>
-                        {project.matching_score !== undefined && (
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-bold ${
-                              project.matching_score >= 70
-                                ? 'bg-success-100 text-success-800'
-                                : project.matching_score >= 40
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-neutral-100 text-neutral-800'
-                            }`}
-                          >
-                            {project.matching_score}% match
-                          </span>
-                        )}
-                      </div>
+                    <div className="flex-1 pr-4">
+                      <Link href={`/projects/${project.id}`}>
+                        <h3 className="text-2xl font-bold text-neutral-900 hover:text-primary-600 transition-colors cursor-pointer mb-2">
+                          {project.title}
+                        </h3>
+                      </Link>
                       <p className="text-neutral-700 mb-3">{project.short_pitch}</p>
                     </div>
+                    {project.matching_score !== undefined && (
+                      <div className="flex flex-col items-end gap-2 min-w-[140px]">
+                        <div
+                          className={`px-5 py-3 rounded-xl text-2xl font-bold shadow-lg transform hover:scale-105 transition-transform ${
+                            project.matching_score >= 70
+                              ? 'bg-gradient-to-br from-green-400 to-emerald-600 text-white'
+                              : project.matching_score >= 40
+                              ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white'
+                              : 'bg-gradient-to-br from-neutral-300 to-neutral-500 text-neutral-800'
+                          }`}
+                        >
+                          {project.matching_score}%
+                        </div>
+                        <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
+                          Match
+                        </span>
+                        {project.matching_skills_count !== undefined && project.matching_skills_count > 0 && (
+                          <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            {project.matching_skills_count} skill{project.matching_skills_count > 1 ? 's' : ''}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Project Info */}
