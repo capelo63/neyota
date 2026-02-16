@@ -299,6 +299,9 @@ CREATE TRIGGER trigger_check_badges_on_stats_update
 -- RLS POLICIES for user_badges
 -- ============================================
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Badges are viewable by everyone" ON user_badges;
+
 -- Everyone can view badges (public achievement)
 CREATE POLICY "Badges are viewable by everyone"
   ON user_badges FOR SELECT
