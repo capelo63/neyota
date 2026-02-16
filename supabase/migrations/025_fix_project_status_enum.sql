@@ -13,14 +13,24 @@ CREATE TYPE project_status AS ENUM (
 );
 
 -- ============================================
--- Step 2: Remove the existing DEFAULT constraint
+-- Step 2: Drop RLS policies that use the status column
+-- ============================================
+
+-- The RLS policy "Anyone can view active projects" depends on the status column
+-- We need to drop it before altering the column type, then recreate it after
+DROP POLICY IF EXISTS "Anyone can view active projects" ON projects;
+DROP POLICY IF EXISTS "Active projects are viewable by everyone" ON projects;
+DROP POLICY IF EXISTS "Public can view active projects" ON projects;
+
+-- ============================================
+-- Step 3: Remove the existing DEFAULT constraint
 -- ============================================
 
 ALTER TABLE projects
 ALTER COLUMN status DROP DEFAULT;
 
 -- ============================================
--- Step 3: Update any non-standard values to 'active'
+-- Step 4: Update any non-standard values to 'active'
 -- ============================================
 
 -- First, let's check for any values that don't match our ENUM
@@ -31,7 +41,7 @@ WHERE status NOT IN ('active', 'closed', 'archived')
    OR status IS NULL;
 
 -- ============================================
--- Step 4: Convert the column to use the ENUM
+-- Step 5: Convert the column to use the ENUM
 -- ============================================
 
 ALTER TABLE projects
@@ -39,14 +49,25 @@ ALTER COLUMN status TYPE project_status
 USING status::project_status;
 
 -- ============================================
--- Step 5: Set the new DEFAULT value with correct type
+-- Step 6: Set the new DEFAULT value with correct type
 -- ============================================
 
 ALTER TABLE projects
 ALTER COLUMN status SET DEFAULT 'active'::project_status;
 
 -- ============================================
--- Step 6: Add a comment for documentation
+-- Step 7: Recreate the RLS policy with the new ENUM type
+-- ============================================
+
+-- Recreate the policy that allows everyone (anon + authenticated) to view active projects
+CREATE POLICY "Anyone can view active projects"
+  ON projects
+  FOR SELECT
+  TO public, anon, authenticated
+  USING (status = 'active'::project_status);
+
+-- ============================================
+-- Step 8: Add comments for documentation
 -- ============================================
 
 COMMENT ON COLUMN projects.status IS 'Project status: active (visible and accepting applications), closed (no longer accepting applications), archived (historical record)';
