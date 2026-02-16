@@ -13,7 +13,14 @@ CREATE TYPE project_status AS ENUM (
 );
 
 -- ============================================
--- Step 2: Update any non-standard values to 'active'
+-- Step 2: Remove the existing DEFAULT constraint
+-- ============================================
+
+ALTER TABLE projects
+ALTER COLUMN status DROP DEFAULT;
+
+-- ============================================
+-- Step 3: Update any non-standard values to 'active'
 -- ============================================
 
 -- First, let's check for any values that don't match our ENUM
@@ -24,7 +31,7 @@ WHERE status NOT IN ('active', 'closed', 'archived')
    OR status IS NULL;
 
 -- ============================================
--- Step 3: Convert the column to use the ENUM
+-- Step 4: Convert the column to use the ENUM
 -- ============================================
 
 ALTER TABLE projects
@@ -32,14 +39,14 @@ ALTER COLUMN status TYPE project_status
 USING status::project_status;
 
 -- ============================================
--- Step 4: Ensure the default value is properly set
+-- Step 5: Set the new DEFAULT value with correct type
 -- ============================================
 
 ALTER TABLE projects
 ALTER COLUMN status SET DEFAULT 'active'::project_status;
 
 -- ============================================
--- Step 5: Add a comment for documentation
+-- Step 6: Add a comment for documentation
 -- ============================================
 
 COMMENT ON COLUMN projects.status IS 'Project status: active (visible and accepting applications), closed (no longer accepting applications), archived (historical record)';
