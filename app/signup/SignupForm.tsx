@@ -156,7 +156,7 @@ export default function SignupForm() {
 
       console.log('[SIGNUP] Profile created successfully');
 
-      // 3. Record charter acceptance
+      // 3. Record charter acceptance (CRITICAL for GDPR compliance)
       const { error: charterError } = await supabase
         .from('user_charter_acceptances')
         .insert({
@@ -167,8 +167,15 @@ export default function SignupForm() {
         });
 
       if (charterError) {
-        console.error('Charter acceptance error:', charterError);
+        console.error('[SIGNUP] Charter acceptance error (CRITICAL):', charterError);
+        setErrors({
+          general: 'Erreur lors de l\'enregistrement de votre acceptation de la charte. Veuillez réessayer.'
+        });
+        setIsLoading(false);
+        return;
       }
+
+      console.log('[SIGNUP] Charter acceptance recorded successfully');
 
       // 4. Check if email confirmation is required
       if (!authData.session) {

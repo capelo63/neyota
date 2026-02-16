@@ -99,6 +99,12 @@ export default function OnboardingForm() {
       newErrors.postalCode = 'Le code postal est requis';
     } else if (!/^\d{5}$/.test(formData.postalCode)) {
       newErrors.postalCode = 'Code postal invalide (5 chiffres)';
+    } else {
+      // Additional validation: French postal codes start with 01-95 (excluding 00, 96-99 for DOM-TOM)
+      const postalInt = parseInt(formData.postalCode.substring(0, 2));
+      if (postalInt === 0 || (postalInt > 95 && postalInt < 971)) {
+        newErrors.postalCode = 'Code postal invalide. Pour la Métropole : 01000-95999. Pour DOM-TOM : 97100+';
+      }
     }
 
     setErrors(newErrors);
@@ -163,6 +169,8 @@ export default function OnboardingForm() {
       // Get coordinates from postal code using French government API
       console.log('[ONBOARDING] Fetching coordinates for postal code:', formData.postalCode);
       let coordinates = null;
+      let geoWarning = false;
+
       try {
         const geoResponse = await fetch(
           `https://api-adresse.data.gouv.fr/search/?q=${formData.postalCode}&type=municipality&limit=1`
@@ -175,9 +183,20 @@ export default function OnboardingForm() {
           console.log('[ONBOARDING] Coordinates found:', coordinates);
         } else {
           console.warn('[ONBOARDING] No coordinates found for postal code');
+          geoWarning = true;
         }
       } catch (geoError) {
         console.error('[ONBOARDING] Geocoding error:', geoError);
+        geoWarning = true;
+      }
+
+      // Warn user if geocoding failed (impacts territorial matching)
+      if (geoWarning) {
+        setErrors({
+          general: '⚠️ Attention : Nous n\'avons pas pu localiser précisément votre code postal. Le matching territorial pourrait être limité. Veuillez vérifier votre code postal.'
+        });
+        setIsSaving(false);
+        return;
       }
 
       // Prepare update data
