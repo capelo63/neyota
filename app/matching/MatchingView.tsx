@@ -167,30 +167,21 @@ export default function MatchingView() {
         {
           user_lat: userLat,
           user_lng: userLng,
-          search_radius_km: 1000, // Large initial radius, we'll filter in frontend
+          search_radius_km: profile.max_distance_km * 2, // Use user preference * 2 for broader search
         }
       );
 
       if (projectsError) {
-        console.error('Projects error:', projectsError);
-        // Fallback to simple query without distance
-        const { data: fallbackData } = await supabase
-          .from('projects')
-          .select(`
-            *,
-            owner:profiles!projects_owner_id_fkey (
-              first_name,
-              last_name,
-              city
-            )
-          `)
-          .eq('status', 'active')
-          .order('created_at', { ascending: false });
+        console.error('[MATCHING] RPC get_nearby_projects error (CRITICAL):', projectsError);
+        setError(
+          'Impossible de calculer les distances entre votre localisation et les projets. ' +
+          'Le matching territorial ne peut pas fonctionner. Veuillez réessayer ou contacter le support.'
+        );
+        setIsLoading(false);
+        return;
+      }
 
-        if (fallbackData) {
-          await loadProjectsWithSkills(fallbackData);
-        }
-      } else if (projectsData) {
+      if (projectsData) {
         // Load project skills for matching
         await loadProjectsWithSkills(projectsData);
       }
