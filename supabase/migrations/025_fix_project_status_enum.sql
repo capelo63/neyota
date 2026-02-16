@@ -13,14 +13,17 @@ CREATE TYPE project_status AS ENUM (
 );
 
 -- ============================================
--- Step 2: Drop RLS policies that use the status column
+-- Step 2: Drop ALL RLS policies on projects table
 -- ============================================
 
--- The RLS policy "Anyone can view active projects" depends on the status column
--- We need to drop it before altering the column type, then recreate it after
+-- PostgreSQL doesn't allow altering column types used in ANY policy definition
+-- We must drop ALL policies on the table, not just those using the column
 DROP POLICY IF EXISTS "Anyone can view active projects" ON projects;
 DROP POLICY IF EXISTS "Active projects are viewable by everyone" ON projects;
 DROP POLICY IF EXISTS "Public can view active projects" ON projects;
+DROP POLICY IF EXISTS "Entrepreneurs can create projects" ON projects;
+DROP POLICY IF EXISTS "Project owners can update their projects" ON projects;
+DROP POLICY IF EXISTS "Project owners can delete their projects" ON projects;
 
 -- ============================================
 -- Step 3: Remove the existing DEFAULT constraint
@@ -56,15 +59,33 @@ ALTER TABLE projects
 ALTER COLUMN status SET DEFAULT 'active'::project_status;
 
 -- ============================================
--- Step 7: Recreate the RLS policy with the new ENUM type
+-- Step 7: Recreate ALL RLS policies with the new ENUM type
 -- ============================================
 
--- Recreate the policy that allows everyone (anon + authenticated) to view active projects
+-- Policy 1: Anyone (anon + authenticated) can view active projects
 CREATE POLICY "Anyone can view active projects"
   ON projects
   FOR SELECT
   TO public, anon, authenticated
   USING (status = 'active'::project_status);
+
+-- Policy 2: Entrepreneurs can create projects
+CREATE POLICY "Entrepreneurs can create projects"
+  ON projects
+  FOR INSERT
+  WITH CHECK (auth.uid() = owner_id);
+
+-- Policy 3: Project owners can update their projects
+CREATE POLICY "Project owners can update their projects"
+  ON projects
+  FOR UPDATE
+  USING (auth.uid() = owner_id);
+
+-- Policy 4: Project owners can delete their projects
+CREATE POLICY "Project owners can delete their projects"
+  ON projects
+  FOR DELETE
+  USING (auth.uid() = owner_id);
 
 -- ============================================
 -- Step 8: Add comments for documentation
