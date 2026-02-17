@@ -33,6 +33,9 @@ export default function OnboardingForm() {
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Store proficiency level for each skill (skillId -> level)
+  const [skillLevels, setSkillLevels] = useState<Record<number, 'beginner' | 'intermediate' | 'expert'>>({});
+
   const [formData, setFormData] = useState<OnboardingData>({
     city: '',
     postalCode: '',
@@ -266,13 +269,13 @@ export default function OnboardingForm() {
 
       console.log('[ONBOARDING] Profile update verified successfully!');
 
-      // If talent, save skills
+      // If talent, save skills with their proficiency levels
       if (profile.role === 'talent' && formData.selectedSkills.length > 0) {
         console.log('[ONBOARDING] Saving skills:', formData.selectedSkills.length);
         const skillsToInsert = formData.selectedSkills.map(skillId => ({
           user_id: user.id,
           skill_id: skillId,
-          proficiency_level: 'intermediate',
+          proficiency_level: skillLevels[skillId] || 'intermediate', // Use selected level or default
         }));
 
         const { error: skillsError } = await supabase
@@ -339,23 +342,52 @@ export default function OnboardingForm() {
         <div className="w-full max-w-2xl">
           {/* Progress */}
           <div className="mb-8">
-            <div className="flex items-center justify-center gap-2">
-              {[1, 2, 3].map((s) => (
-                <div key={s} className="flex items-center gap-2">
-                  {s > 1 && <div className="w-12 h-0.5 bg-neutral-300"></div>}
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-                      step >= s
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-neutral-200 text-neutral-400'
-                    }`}
-                  >
-                    {s}
+            {/* Progress Bar */}
+            <div className="relative mb-6">
+              <div className="overflow-hidden h-3 text-xs flex rounded-full bg-neutral-200">
+                <div
+                  style={{ width: `${(step / 3) * 100}%` }}
+                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500"
+                />
+              </div>
+              <div className="absolute -top-1 right-0 bg-white px-2 py-0.5 rounded-full border border-primary-200">
+                <span className="text-xs font-bold text-primary-600">
+                  {Math.round((step / 3) * 100)}%
+                </span>
+              </div>
+            </div>
+
+            {/* Step Indicators */}
+            <div className="flex items-center justify-between gap-2">
+              {[
+                { num: 1, label: 'Localisation', icon: '📍' },
+                { num: 2, label: profile?.role === 'talent' ? 'Compétences' : 'Info', icon: profile?.role === 'talent' ? '🎯' : '💼' },
+                { num: 3, label: 'Présentation', icon: '✨' }
+              ].map((s, idx) => (
+                <div key={s.num} className="flex-1">
+                  <div className="flex flex-col items-center gap-2">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
+                        step >= s.num
+                          ? 'bg-primary-600 text-white shadow-lg scale-110'
+                          : step === s.num - 1
+                          ? 'bg-primary-100 text-primary-600 border-2 border-primary-600'
+                          : 'bg-neutral-200 text-neutral-400'
+                      }`}
+                    >
+                      {step > s.num ? '✓' : s.icon}
+                    </div>
+                    <p className={`text-xs font-medium text-center ${
+                      step >= s.num ? 'text-primary-600' : 'text-neutral-500'
+                    }`}>
+                      {s.label}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-4">
+
+            <div className="text-center mt-6">
               <p className="text-sm text-neutral-600">
                 Étape {step} sur 3 - Complétons votre profil
               </p>
@@ -457,25 +489,65 @@ export default function OnboardingForm() {
 
                       <div className="max-h-96 overflow-y-auto border border-neutral-200 rounded-lg p-4">
                         <div className="space-y-2">
-                          {skills.map((skill) => (
-                            <label
-                              key={skill.id}
-                              className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 cursor-pointer transition-colors"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={formData.selectedSkills.includes(skill.id)}
-                                onChange={() => toggleSkill(skill.id)}
-                                className="checkbox"
-                              />
-                              <div>
-                                <div className="font-medium text-neutral-900">{skill.name}</div>
-                                {skill.description && (
-                                  <div className="text-sm text-neutral-600">{skill.description}</div>
-                                )}
+                          {skills.map((skill) => {
+                            const isSelected = formData.selectedSkills.includes(skill.id);
+                            const currentLevel = skillLevels[skill.id] || 'intermediate';
+
+                            return (
+                              <div
+                                key={skill.id}
+                                className={`p-3 rounded-lg border-2 transition-all ${
+                                  isSelected
+                                    ? 'border-primary-500 bg-primary-50'
+                                    : 'border-transparent hover:bg-neutral-50'
+                                }`}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() => toggleSkill(skill.id)}
+                                    className="checkbox mt-1"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium text-neutral-900">{skill.name}</div>
+                                    {skill.description && (
+                                      <div className="text-sm text-neutral-600 mb-2">{skill.description}</div>
+                                    )}
+
+                                    {isSelected && (
+                                      <div className="mt-2 flex items-center gap-2">
+                                        <label className="text-sm font-medium text-neutral-700">
+                                          Niveau :
+                                        </label>
+                                        <div className="flex gap-2">
+                                          {(['beginner', 'intermediate', 'expert'] as const).map((level) => (
+                                            <button
+                                              key={level}
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSkillLevels(prev => ({ ...prev, [skill.id]: level }));
+                                              }}
+                                              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                                                currentLevel === level
+                                                  ? 'bg-primary-600 text-white'
+                                                  : 'bg-neutral-200 text-neutral-700 hover:bg-neutral-300'
+                                              }`}
+                                            >
+                                              {level === 'beginner' && '🌱 Débutant'}
+                                              {level === 'intermediate' && '🔧 Intermédiaire'}
+                                              {level === 'expert' && '⭐ Expert'}
+                                            </button>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </label>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
 
