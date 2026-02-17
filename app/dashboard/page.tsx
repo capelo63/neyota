@@ -477,15 +477,34 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
+          {/* Quick navigation */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">
-              🚧 Fonctionnalités à venir
+              Explorer la plateforme
             </h2>
-            <ul className="list-disc list-inside space-y-2 text-neutral-700">
-              <li>Messagerie entre entrepreneurs et talents</li>
-              <li>Filtres avancés et recherche territoriale</li>
-              <li>Tableau de bord analytique pour les entrepreneurs</li>
-            </ul>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Link href="/projects" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">🚀</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">Projets</div>
+                  <div className="text-sm text-neutral-500">Tous les projets locaux</div>
+                </div>
+              </Link>
+              <Link href="/talents" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">🌟</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">Talents</div>
+                  <div className="text-sm text-neutral-500">La communauté locale</div>
+                </div>
+              </Link>
+              <Link href="/about" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">💡</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">À propos</div>
+                  <div className="text-sm text-neutral-500">La mission NEYOTA</div>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
