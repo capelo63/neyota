@@ -213,24 +213,26 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">N</span>
               </div>
               <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <NotificationBell />
               {profile?.id && (
                 <Link href={`/profile/${profile.id}`}>
                   <Button variant="ghost" size="sm">
-                    Mon profil
+                    <span className="hidden sm:inline">Mon profil</span>
+                    <span className="sm:hidden">Profil</span>
                   </Button>
                 </Link>
               )}
               <Button variant="ghost" size="sm" onClick={handleLogout}>
-                Déconnexion
+                <span className="hidden sm:inline">Déconnexion</span>
+                <span className="sm:hidden">←</span>
               </Button>
             </div>
           </div>
@@ -240,18 +242,18 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="container-custom py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm p-8 mb-6">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-3xl">
+          <div className="bg-white rounded-xl shadow-sm p-5 md:p-8 mb-6">
+            <div className="flex items-center gap-3 md:gap-4 mb-6">
+              <div className="w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-white font-bold text-2xl md:text-3xl">
                   {profile?.first_name?.[0]?.toUpperCase() || 'U'}
                 </span>
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-neutral-900">
+              <div className="min-w-0">
+                <h1 className="text-xl md:text-3xl font-bold text-neutral-900 truncate">
                   Bienvenue, {profile?.first_name || 'utilisateur'} !
                 </h1>
-                <p className="text-neutral-600">
+                <p className="text-neutral-600 text-sm md:text-base">
                   {profile?.role === 'entrepreneur' ? '💼 Entrepreneur' : '🌟 Talent'}
                 </p>
               </div>
@@ -430,19 +432,19 @@ export default function DashboardPage() {
           {/* Talent Actions */}
           {profile?.role === 'talent' && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-neutral-900">Projets disponibles</h2>
-                <div className="flex gap-3">
-                  <Link href="/matching">
-                    <Button variant="primary">
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-3">Projets disponibles</h2>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link href="/matching" className="flex-1">
+                    <Button variant="primary" className="w-full">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                       </svg>
                       Projets suggérés
                     </Button>
                   </Link>
-                  <Link href="/projects">
-                    <Button variant="secondary">
+                  <Link href="/projects" className="flex-1">
+                    <Button variant="secondary" className="w-full">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>

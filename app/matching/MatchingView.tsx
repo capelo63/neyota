@@ -339,7 +339,8 @@ export default function MatchingView() {
             </Link>
             <Link href="/dashboard">
               <Button variant="ghost" size="sm">
-                ← Retour au dashboard
+                <span className="hidden sm:inline">← Retour au dashboard</span>
+                <span className="sm:hidden">← Dashboard</span>
               </Button>
             </Link>
           </div>
@@ -350,11 +351,11 @@ export default function MatchingView() {
       <main className="container-custom py-8">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
-          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl shadow-lg p-8 mb-6 text-white">
-            <h1 className="text-4xl font-bold mb-2">
+          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl shadow-lg p-5 md:p-8 mb-6 text-white">
+            <h1 className="text-2xl md:text-4xl font-bold mb-2">
               🎯 Projets suggérés pour vous
             </h1>
-            <p className="text-primary-100 text-lg">
+            <p className="text-primary-100 text-sm md:text-lg">
               Basé sur votre localisation ({profile.city}) et vos compétences
             </p>
           </div>
@@ -486,17 +487,38 @@ export default function MatchingView() {
                   className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
                 >
                   {/* Project Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1 pr-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
+                    {/* Score badge on mobile: top right, on desktop: right column */}
+                    {project.matching_score !== undefined && (
+                      <div className="flex sm:hidden items-center justify-between w-full">
+                        <Link href={`/projects/${project.id}`}>
+                          <h3 className="text-xl font-bold text-neutral-900 hover:text-primary-600 transition-colors cursor-pointer">
+                            {project.title}
+                          </h3>
+                        </Link>
+                        <div
+                          className={`px-3 py-2 rounded-xl text-xl font-bold shadow-md ml-3 shrink-0 ${
+                            project.matching_score >= 70
+                              ? 'bg-gradient-to-br from-green-400 to-emerald-600 text-white'
+                              : project.matching_score >= 40
+                              ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white'
+                              : 'bg-gradient-to-br from-neutral-300 to-neutral-500 text-neutral-800'
+                          }`}
+                        >
+                          {project.matching_score}%
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex-1 sm:pr-4">
                       <Link href={`/projects/${project.id}`}>
-                        <h3 className="text-2xl font-bold text-neutral-900 hover:text-primary-600 transition-colors cursor-pointer mb-2">
+                        <h3 className="hidden sm:block text-2xl font-bold text-neutral-900 hover:text-primary-600 transition-colors cursor-pointer mb-2">
                           {project.title}
                         </h3>
                       </Link>
-                      <p className="text-neutral-700 mb-3">{project.short_pitch}</p>
+                      <p className="text-neutral-700 mb-3 mt-1">{project.short_pitch}</p>
                     </div>
                     {project.matching_score !== undefined && (
-                      <div className="flex flex-col items-end gap-2 min-w-[140px]">
+                      <div className="hidden sm:flex flex-col items-end gap-2 min-w-[140px]">
                         <div
                           className={`px-5 py-3 rounded-xl text-2xl font-bold shadow-lg transform hover:scale-105 transition-transform ${
                             project.matching_score >= 70
