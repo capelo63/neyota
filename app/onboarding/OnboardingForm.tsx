@@ -395,7 +395,7 @@ export default function OnboardingForm() {
           </div>
 
           {/* Form Card */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg p-5 md:p-8">
             {/* Step 1: Location */}
             {step === 1 && (
               <div>
@@ -516,11 +516,11 @@ export default function OnboardingForm() {
                                     )}
 
                                     {isSelected && (
-                                      <div className="mt-2 flex items-center gap-2">
-                                        <label className="text-sm font-medium text-neutral-700">
+                                      <div className="mt-2">
+                                        <label className="text-xs font-medium text-neutral-600 mb-1 block">
                                           Niveau :
                                         </label>
-                                        <div className="flex gap-2">
+                                        <div className="flex flex-wrap gap-1.5">
                                           {(['beginner', 'intermediate', 'expert'] as const).map((level) => (
                                             <button
                                               key={level}
@@ -529,14 +529,14 @@ export default function OnboardingForm() {
                                                 e.stopPropagation();
                                                 setSkillLevels(prev => ({ ...prev, [skill.id]: level }));
                                               }}
-                                              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                                              className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                                                 currentLevel === level
                                                   ? 'bg-primary-600 text-white'
                                                   : 'bg-neutral-200 text-neutral-700 hover:bg-neutral-300'
                                               }`}
                                             >
                                               {level === 'beginner' && '🌱 Débutant'}
-                                              {level === 'intermediate' && '🔧 Intermédiaire'}
+                                              {level === 'intermediate' && '🔧 Inter.'}
                                               {level === 'expert' && '⭐ Expert'}
                                             </button>
                                           ))}
