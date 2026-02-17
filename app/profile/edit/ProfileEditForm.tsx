@@ -269,12 +269,12 @@ export default function ProfileEditForm() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
             Modifier mon profil
           </h1>
-          <Link href={`/profile/${profile.id}`}>
-            <Button variant="secondary">Voir mon profil</Button>
+          <Link href={`/profile/${profile.id}`} className="shrink-0">
+            <Button variant="secondary" size="sm">Voir mon profil</Button>
           </Link>
         </div>
 

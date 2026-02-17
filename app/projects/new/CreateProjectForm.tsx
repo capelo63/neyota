@@ -401,7 +401,8 @@ export default function CreateProjectForm() {
             </Link>
             <Link href="/dashboard">
               <Button variant="ghost" size="sm">
-                ← Retour au dashboard
+                <span className="hidden sm:inline">← Retour au dashboard</span>
+                <span className="sm:hidden">← Dashboard</span>
               </Button>
             </Link>
           </div>
@@ -413,23 +414,52 @@ export default function CreateProjectForm() {
         <div className="w-full max-w-3xl">
           {/* Progress */}
           <div className="mb-8">
-            <div className="flex items-center justify-center gap-2">
-              {[1, 2, 3].map((s) => (
-                <div key={s} className="flex items-center gap-2">
-                  {s > 1 && <div className="w-12 h-0.5 bg-neutral-300"></div>}
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-                      step >= s
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-neutral-200 text-neutral-400'
-                    }`}
-                  >
-                    {s}
+            {/* Progress Bar */}
+            <div className="relative mb-6">
+              <div className="overflow-hidden h-3 text-xs flex rounded-full bg-neutral-200">
+                <div
+                  style={{ width: `${(step / 3) * 100}%` }}
+                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500"
+                />
+              </div>
+              <div className="absolute -top-1 right-0 bg-white px-2 py-0.5 rounded-full border border-primary-200">
+                <span className="text-xs font-bold text-primary-600">
+                  {Math.round((step / 3) * 100)}%
+                </span>
+              </div>
+            </div>
+
+            {/* Step Indicators */}
+            <div className="flex items-center justify-between gap-2">
+              {[
+                { num: 1, label: 'Présentation', icon: '💼' },
+                { num: 2, label: 'Compétences', icon: '🎯' },
+                { num: 3, label: 'Localisation', icon: '📍' },
+              ].map((s) => (
+                <div key={s.num} className="flex-1">
+                  <div className="flex flex-col items-center gap-2">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
+                        step > s.num
+                          ? 'bg-primary-600 text-white shadow-lg scale-110'
+                          : step === s.num
+                          ? 'bg-primary-600 text-white shadow-lg scale-110'
+                          : 'bg-neutral-200 text-neutral-400'
+                      }`}
+                    >
+                      {step > s.num ? '✓' : s.icon}
+                    </div>
+                    <p className={`text-xs font-medium text-center ${
+                      step >= s.num ? 'text-primary-600' : 'text-neutral-500'
+                    }`}>
+                      {s.label}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-4">
+
+            <div className="text-center mt-6">
               <p className="text-sm text-neutral-600">
                 Étape {step} sur 3 - Créez votre projet
               </p>
@@ -437,7 +467,7 @@ export default function CreateProjectForm() {
           </div>
 
           {/* Form Card */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg p-5 md:p-8">
             {/* Step 1: Project Info */}
             {step === 1 && (
               <div>

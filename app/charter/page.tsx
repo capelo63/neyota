@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui';
+
+export const metadata: Metadata = {
+  title: 'Charte éthique',
+  description: 'La charte éthique NEYOTA : nos engagements pour protéger les idées, garantir la transparence et promouvoir la collaboration locale responsable.',
+};
 
 export default function CharterPage() {
   return (

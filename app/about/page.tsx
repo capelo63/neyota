@@ -1,7 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui';
 import { createClient } from '@supabase/supabase-js';
+
+export const metadata: Metadata = {
+  title: 'À propos',
+  description: 'Découvrez la mission de NEYOTA : connecter les porteurs de projets et les talents locaux pour dynamiser l\'économie territoriale française.',
+};
 
 async function getStats() {
   const supabase = createClient(
