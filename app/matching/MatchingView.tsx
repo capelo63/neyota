@@ -53,7 +53,7 @@ interface UserSkill {
 
 const PHASE_LABELS: Record<string, string> = {
   ideation: 'Idéation',
-  mvp_development: 'Développement MVP',
+  mvp_development: 'En construction',
   launch: 'Lancement',
   growth: 'Croissance',
   scaling: 'Structuration',

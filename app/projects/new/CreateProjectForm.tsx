@@ -23,7 +23,7 @@ interface ProjectData {
 
 const PROJECT_PHASES = [
   { value: 'ideation', label: '💡 Idéation - Je concrétise mon idée' },
-  { value: 'mvp_development', label: '🛠️ Développement MVP - Je construis mon prototype' },
+  { value: 'mvp_development', label: '🛠️ En construction - Je construis mon prototype' },
   { value: 'launch', label: '🚀 Lancement - Je lance mon produit/service' },
   { value: 'growth', label: '📈 Croissance - Je développe mon activité' },
   { value: 'scaling', label: '🌍 Structuration - Je structure et pérennise' },

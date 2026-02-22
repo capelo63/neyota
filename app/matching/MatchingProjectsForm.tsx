@@ -8,7 +8,7 @@ import { Button, Badge } from '@/components/ui';
 
 const PHASE_LABELS: Record<string, string> = {
   ideation: '💡 Idéation',
-  mvp_development: '🛠️ Développement MVP',
+  mvp_development: '🛠️ En construction',
   launch: '🚀 Lancement',
   growth: '📈 Croissance',
   scaling: '🌍 Structuration',
@@ -33,6 +33,7 @@ export default function MatchingProjectsForm() {
   const [profile, setProfile] = useState<any>(null);
   const [matchingProjects, setMatchingProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
@@ -63,14 +64,34 @@ export default function MatchingProjectsForm() {
 
       setProfile(profileData);
 
+      // Check if profile has required data for matching
+      if (!profileData.latitude || !profileData.longitude) {
+        setError('Votre profil ne contient pas de coordonnées géographiques. Veuillez compléter votre localisation dans les paramètres.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if talent has skills
+      const { data: skillsData } = await supabase
+        .from('user_skills')
+        .select('skill_id')
+        .eq('user_id', user.id);
+
+      if (!skillsData || skillsData.length === 0) {
+        setError('Vous n\'avez pas encore ajouté de compétences à votre profil. Veuillez ajouter vos compétences pour voir les projets qui vous correspondent.');
+        setIsLoading(false);
+        return;
+      }
+
       // Load matching projects via RPC
-      const { data: matchingData, error } = await supabase.rpc('find_matching_projects', {
+      const { data: matchingData, error: matchingError } = await supabase.rpc('find_matching_projects', {
         talent_user_id: user.id,
         max_results: 20,
       });
 
-      if (error) {
-        console.error('Matching error:', error);
+      if (matchingError) {
+        console.error('Matching error:', matchingError);
+        setError(`Erreur lors de la recherche de projets : ${matchingError.message}`);
       } else {
         setMatchingProjects(matchingData || []);
       }
@@ -143,8 +164,28 @@ export default function MatchingProjectsForm() {
             </ul>
           </div>
 
+          {/* Error Display */}
+          {error && (
+            <div className="bg-error-50 border border-error-200 rounded-xl p-6 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="text-3xl">⚠️</div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-error-900 mb-2">
+                    Impossible de charger les projets suggérés
+                  </h3>
+                  <p className="text-error-700 mb-4">{error}</p>
+                  <Link href="/dashboard">
+                    <Button variant="primary" size="sm">
+                      Retour au dashboard
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Projects List */}
-          {matchingProjects.length === 0 ? (
+          {!error && matchingProjects.length === 0 && (
             <div className="bg-white rounded-xl shadow-sm p-12 text-center">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold text-neutral-900 mb-2">
@@ -167,7 +208,9 @@ export default function MatchingProjectsForm() {
                 </Button>
               </Link>
             </div>
-          ) : (
+          )}
+
+          {!error && matchingProjects.length > 0 && (
             <div className="space-y-6">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-neutral-600">

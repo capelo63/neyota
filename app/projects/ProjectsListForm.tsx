@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Select, Badge } from '@/components/ui';
+import Navigation from '@/components/Navigation';
 
 interface Project {
   id: string;
@@ -30,7 +31,7 @@ interface Project {
 
 const PHASE_LABELS: Record<string, string> = {
   ideation: '💡 Idéation',
-  mvp_development: '🛠️ Développement MVP',
+  mvp_development: '🛠️ En construction',
   launch: '🚀 Lancement',
   growth: '📈 Croissance',
   scaling: '🌍 Structuration',
@@ -93,28 +94,23 @@ export default function ProjectsListForm() {
 
   const loadData = async () => {
     try {
+      // Try to load user (optional - page is public)
       const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
-        router.push('/login');
-        return;
+      if (user) {
+        setUser(user);
+
+        // Load profile if user is logged in
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileData) {
+          setProfile(profileData);
+        }
       }
-
-      setUser(user);
-
-      // Load profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (!profileData) {
-        router.push('/login');
-        return;
-      }
-
-      setProfile(profileData);
 
       // Load projects with owner, skills, and categories
       const { data: projectsData, error: projectsError} = await supabase
@@ -222,24 +218,7 @@ export default function ProjectsListForm() {
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-neutral-200 py-4 px-4">
-        <div className="container-custom">
-          <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
-            </Link>
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">
-                ← Retour au dashboard
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       {/* Main Content */}
       <main className="flex-1 container-custom py-12">
@@ -283,7 +262,7 @@ export default function ProjectsListForm() {
                   options={[
                     { value: 'all', label: 'Toutes les phases' },
                     { value: 'ideation', label: '💡 Idéation' },
-                    { value: 'mvp_development', label: '🛠️ Développement MVP' },
+                    { value: 'mvp_development', label: '🛠️ En construction' },
                     { value: 'launch', label: '🚀 Lancement' },
                     { value: 'growth', label: '📈 Croissance' },
                     { value: 'scaling', label: '🌍 Structuration' },

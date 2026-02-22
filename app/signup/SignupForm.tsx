@@ -513,7 +513,7 @@ export default function SignupForm() {
                     isLoading={isLoading}
                     disabled={!charterAccepted || isLoading}
                   >
-                    Créer mon compte
+                    {isLoading ? 'Création en cours...' : 'Créer mon compte'}
                   </Button>
                 </div>
               </div>
