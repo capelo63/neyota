@@ -76,7 +76,7 @@ const PROFICIENCY_COLORS = {
 
 const PHASE_LABELS = {
   ideation: 'Idéation',
-  mvp_development: 'Développement MVP',
+  mvp_development: 'En construction',
   launch: 'Lancement',
   growth: 'Croissance',
   scaling: 'Structuration',

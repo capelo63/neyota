@@ -216,9 +216,9 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between gap-2">
             <Link href="/" className="flex items-center gap-2 shrink-0">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
+                <span className="text-white font-bold text-xl">T</span>
               </div>
-              <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
+              <span className="text-2xl font-bold text-neutral-900">TERRII</span>
             </Link>
             <div className="flex items-center gap-2">
               <NotificationBell />
@@ -501,7 +501,7 @@ export default function DashboardPage() {
                 <div className="text-3xl">💡</div>
                 <div>
                   <div className="font-semibold text-neutral-900 group-hover:text-primary-700">À propos</div>
-                  <div className="text-sm text-neutral-500">La mission NEYOTA</div>
+                  <div className="text-sm text-neutral-500">La mission TERRII</div>
                 </div>
               </Link>
             </div>

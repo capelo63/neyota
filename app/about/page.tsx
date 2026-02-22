@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export const metadata: Metadata = {
   title: 'À propos',
-  description: 'Découvrez la mission de NEYOTA : connecter les porteurs de projets et les talents locaux pour dynamiser l\'économie territoriale française.',
+  description: 'Découvrez la mission de TERRII : connecter les porteurs de projets et les talents locaux pour dynamiser l\'économie territoriale française.',
 };
 
 async function getStats() {
@@ -53,7 +53,7 @@ export default async function AboutPage() {
         <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50/30 py-20 px-4">
           <div className="container-custom max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 mb-4">
-              NEYOTA
+              TERRII
             </h1>
             <p className="text-2xl md:text-3xl font-medium text-primary-600 mb-6">
               Need Your Talents
@@ -77,7 +77,7 @@ export default async function AboutPage() {
 
             <div className="prose prose-lg mx-auto text-neutral-700">
               <p className="text-xl leading-relaxed mb-6">
-                NEYOTA est née d&apos;un constat simple : <strong>chaque territoire regorge de talents
+                TERRII est née d&apos;un constat simple : <strong>chaque territoire regorge de talents
                 et de porteurs de projets qui ne se rencontrent jamais</strong>. Les entrepreneurs
                 cherchent des compétences, les talents cherchent des projets qui ont du sens,
                 mais ces deux mondes restent trop souvent cloisonnés.
@@ -118,7 +118,7 @@ export default async function AboutPage() {
                 {
                   icon: '💚',
                   title: 'Accessibilité totale',
-                  description: 'NEYOTA est et restera 100% gratuit pour tous les entrepreneurs et talents. Nous ne créons pas de barrière financière à la réussite des projets locaux.'
+                  description: 'TERRII est et restera 100% gratuit pour tous les entrepreneurs et talents. Nous ne créons pas de barrière financière à la réussite des projets locaux.'
                 },
                 {
                   icon: '🎯',
@@ -271,7 +271,7 @@ export default async function AboutPage() {
           <div className="container-custom max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                Pourquoi NEYOTA est-il gratuit ?
+                Pourquoi TERRII est-il gratuit ?
               </h2>
               <div className="w-20 h-1 bg-primary-600 mx-auto mb-6"></div>
             </div>
@@ -284,7 +284,7 @@ export default async function AboutPage() {
               </p>
 
               <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-                NEYOTA génère ses revenus grâce à un <strong>modèle B2B et B2G</strong> :
+                TERRII génère ses revenus grâce à un <strong>modèle B2B et B2G</strong> :
               </p>
 
               <ul className="space-y-4 mb-6">
@@ -319,7 +319,7 @@ export default async function AboutPage() {
 
               <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
                 <p className="text-neutral-700 font-medium">
-                  💡 <strong>Notre engagement :</strong> NEYOTA restera toujours 100% gratuit
+                  💡 <strong>Notre engagement :</strong> TERRII restera toujours 100% gratuit
                   pour les entrepreneurs et les talents. C&apos;est notre ADN et notre raison d&apos;être.
                 </p>
               </div>
@@ -371,7 +371,7 @@ export default async function AboutPage() {
             </h2>
             <p className="text-xl mb-10 text-primary-100">
               Que vous portiez un projet ou que vous cherchiez à vous investir localement,
-              NEYOTA est fait pour vous.
+              TERRII est fait pour vous.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Textarea, Select, Checkbox } from '@/components/ui';
+import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
 
 type UserRole = 'entrepreneur' | 'talent';
 
@@ -100,14 +101,8 @@ export default function OnboardingForm() {
     }
     if (!formData.postalCode.trim()) {
       newErrors.postalCode = 'Le code postal est requis';
-    } else if (!/^\d{5}$/.test(formData.postalCode)) {
-      newErrors.postalCode = 'Code postal invalide (5 chiffres)';
-    } else {
-      // Additional validation: French postal codes start with 01-95 (excluding 00, 96-99 for DOM-TOM)
-      const postalInt = parseInt(formData.postalCode.substring(0, 2));
-      if (postalInt === 0 || (postalInt > 95 && postalInt < 971)) {
-        newErrors.postalCode = 'Code postal invalide. Pour la Métropole : 01000-95999. Pour DOM-TOM : 97100+';
-      }
+    } else if (!isValidFrenchPostalCode(formData.postalCode)) {
+      newErrors.postalCode = getPostalCodeErrorMessage();
     }
 
     setErrors(newErrors);
@@ -147,8 +142,14 @@ export default function OnboardingForm() {
 
   const handleStep2Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateStep2()) {
+    console.log('[ONBOARDING] Step 2 submit - selectedSkills:', formData.selectedSkills);
+    const isValid = validateStep2();
+    console.log('[ONBOARDING] Step 2 validation:', isValid);
+    if (isValid) {
+      console.log('[ONBOARDING] Moving to step 3');
       setStep(3);
+    } else {
+      console.log('[ONBOARDING] Validation failed, staying on step 2');
     }
   };
 
@@ -330,9 +331,9 @@ export default function OnboardingForm() {
         <div className="container-custom">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
+              <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
+            <span className="text-2xl font-bold text-neutral-900">TERRII</span>
           </Link>
         </div>
       </header>
@@ -405,7 +406,7 @@ export default function OnboardingForm() {
                     Votre localisation
                   </h1>
                   <p className="text-neutral-600">
-                    NEYOTA privilégie les collaborations de proximité pour dynamiser votre territoire
+                    TERRII privilégie les collaborations de proximité pour dynamiser votre territoire
                   </p>
                 </div>
 

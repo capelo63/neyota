@@ -1,6 +1,6 @@
-# 🚀 Guide de Démarrage Rapide - NEYOTA
+# 🚀 Guide de Démarrage Rapide - TERRII
 
-Bienvenue! Ce guide vous aide à démarrer rapidement avec NEYOTA.
+Bienvenue! Ce guide vous aide à démarrer rapidement avec TERRII.
 
 ---
 
@@ -61,7 +61,7 @@ npm run dev
 
 Ouvrez **http://localhost:3000** dans votre navigateur.
 
-🎉 Vous devriez voir la landing page NEYOTA!
+🎉 Vous devriez voir la landing page TERRII!
 
 ---
 
@@ -226,7 +226,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 
 ## 🎉 Tout fonctionne?
 
-Félicitations! Vous êtes prêt à développer les fonctionnalités de NEYOTA.
+Félicitations! Vous êtes prêt à développer les fonctionnalités de TERRII.
 
 **Prochaine étape recommandée**: Développer l'authentification
 
