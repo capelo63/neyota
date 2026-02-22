@@ -329,23 +329,41 @@ export default function DashboardPage() {
           {/* Skills (for talents) */}
           {profile?.role === 'talent' && skills.length > 0 && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                Mes compétences
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-neutral-900">
+                  Mes compétences
+                </h2>
+                <span className="text-sm text-neutral-500">
+                  {skills.length} compétence{skills.length > 1 ? 's' : ''}
+                </span>
+              </div>
               <div className="flex flex-wrap gap-2">
-                {skills.map((userSkill: any, index: number) => (
-                  <div
-                    key={index}
-                    className="px-4 py-2 bg-neutral-100 rounded-lg"
-                  >
-                    <div className="font-medium text-neutral-900">
-                      {userSkill.skill.name}
+                {skills.map((userSkill: any, index: number) => {
+                  const levelEmoji = userSkill.proficiency_level === 'expert'
+                    ? '⭐'
+                    : userSkill.proficiency_level === 'beginner'
+                    ? '🌱'
+                    : '🔧';
+                  const levelColor = userSkill.proficiency_level === 'expert'
+                    ? 'bg-orange-50 border-orange-200 text-orange-800'
+                    : userSkill.proficiency_level === 'beginner'
+                    ? 'bg-blue-50 border-blue-200 text-blue-800'
+                    : 'bg-purple-50 border-purple-200 text-purple-800';
+                  return (
+                    <div
+                      key={index}
+                      className={`px-3 py-1.5 rounded-lg border flex items-center gap-1.5 ${levelColor}`}
+                    >
+                      <span className="text-sm">{levelEmoji}</span>
+                      <span className="font-medium text-sm">{userSkill.skill.name}</span>
                     </div>
-                    <div className="text-xs text-neutral-500 capitalize">
-                      {userSkill.skill.category}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-4 text-xs text-neutral-500">
+                <span className="flex items-center gap-1">🌱 Débutant</span>
+                <span className="flex items-center gap-1">🔧 Intermédiaire</span>
+                <span className="flex items-center gap-1">⭐ Expert</span>
               </div>
             </div>
           )}
@@ -459,15 +477,34 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
+          {/* Quick navigation */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">
-              🚧 Fonctionnalités à venir
+              Explorer la plateforme
             </h2>
-            <ul className="list-disc list-inside space-y-2 text-neutral-700">
-              <li>Messagerie entre entrepreneurs et talents</li>
-              <li>Filtres avancés et recherche territoriale</li>
-              <li>Tableau de bord analytique pour les entrepreneurs</li>
-            </ul>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Link href="/projects" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">🚀</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">Projets</div>
+                  <div className="text-sm text-neutral-500">Tous les projets locaux</div>
+                </div>
+              </Link>
+              <Link href="/talents" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">🌟</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">Talents</div>
+                  <div className="text-sm text-neutral-500">La communauté locale</div>
+                </div>
+              </Link>
+              <Link href="/about" className="group flex items-center gap-4 p-4 rounded-xl border-2 border-neutral-200 hover:border-primary-400 hover:bg-primary-50 transition-all">
+                <div className="text-3xl">💡</div>
+                <div>
+                  <div className="font-semibold text-neutral-900 group-hover:text-primary-700">À propos</div>
+                  <div className="text-sm text-neutral-500">La mission NEYOTA</div>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </main>

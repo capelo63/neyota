@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import ProjectsListForm from './ProjectsListForm';
+
+export const metadata: Metadata = {
+  title: 'Projets locaux',
+  description: 'Découvrez tous les projets entrepreneuriaux locaux sur NEYOTA. Trouvez un projet qui correspond à vos compétences près de chez vous.',
+};
 
 export default function ProjectsPage() {
   return (

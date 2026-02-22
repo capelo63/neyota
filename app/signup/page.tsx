@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import SignupForm from './SignupForm';
+
+export const metadata: Metadata = {
+  title: 'Créer un compte',
+  description: 'Rejoignez NEYOTA gratuitement. Porteur de projet ou talent local, trouvez vos collaborateurs sur votre territoire.',
+};
 
 export default function SignupPage() {
   return (
