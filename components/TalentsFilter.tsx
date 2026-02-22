@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Button, Badge, Input, Select } from '@/components/ui';
+import { FRENCH_REGIONS } from '@/lib/constants/regions';
 
 interface Skill {
   id: string;
@@ -16,6 +17,7 @@ interface Talent {
   last_name: string;
   city: string;
   postal_code?: string;
+  region?: string | null;
   bio?: string;
   max_distance_km?: number;
   latitude?: number;
@@ -53,6 +55,7 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
   const [radiusKm, setRadiusKm] = useState(50);
 
@@ -108,6 +111,13 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
         if (!hasSkillInCategory) return false;
       }
 
+      // Region filter
+      if (selectedRegion) {
+        if (!talent.region || talent.region.toLowerCase() !== selectedRegion.toLowerCase()) {
+          return false;
+        }
+      }
+
       // Location/radius filter
       if (referenceLocation && talent.latitude && talent.longitude) {
         const distance = calculateDistance(
@@ -121,7 +131,7 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
 
       return true;
     });
-  }, [talents, searchQuery, selectedSkills, selectedCategory, referenceLocation, radiusKm]);
+  }, [talents, searchQuery, selectedSkills, selectedCategory, selectedRegion, referenceLocation, radiusKm]);
 
   // Toggle skill selection
   const toggleSkill = (skillId: string) => {
@@ -137,11 +147,12 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
     setSearchQuery('');
     setSelectedSkills([]);
     setSelectedCategory('');
+    setSelectedRegion('');
     setLocationSearch('');
     setRadiusKm(50);
   };
 
-  const hasActiveFilters = searchQuery || selectedSkills.length > 0 || selectedCategory || locationSearch;
+  const hasActiveFilters = searchQuery || selectedSkills.length > 0 || selectedCategory || selectedRegion || locationSearch;
 
   return (
     <div className="grid lg:grid-cols-4 gap-6">
@@ -229,6 +240,19 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
                 ...categories.map(cat => ({
                   value: cat,
                   label: CATEGORY_LABELS[cat] || cat,
+                })),
+              ]}
+            />
+
+            <Select
+              label="Région"
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              options={[
+                { value: '', label: 'Toutes les régions' },
+                ...FRENCH_REGIONS.map((region) => ({
+                  value: region.label,
+                  label: region.label,
                 })),
               ]}
             />

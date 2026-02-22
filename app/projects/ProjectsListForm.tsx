@@ -6,6 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Select, Badge } from '@/components/ui';
 import Navigation from '@/components/Navigation';
+import { FRENCH_REGIONS } from '@/lib/constants/regions';
 
 interface Project {
   id: string;
@@ -14,6 +15,7 @@ interface Project {
   current_phase: string;
   city: string;
   postal_code: string;
+  region: string | null;
   is_remote_possible: boolean;
   created_at: string;
   owner: {
@@ -83,6 +85,7 @@ export default function ProjectsListForm() {
   const [selectedPhase, setSelectedPhase] = useState('all');
   const [selectedSkill, setSelectedSkill] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedRegion, setSelectedRegion] = useState('all');
 
   useEffect(() => {
     loadData();
@@ -90,7 +93,7 @@ export default function ProjectsListForm() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, selectedPhase, selectedSkill, selectedCategory, projects]);
+  }, [searchQuery, selectedPhase, selectedSkill, selectedCategory, selectedRegion, projects]);
 
   const loadData = async () => {
     try {
@@ -195,6 +198,13 @@ export default function ProjectsListForm() {
       );
     }
 
+    // Region filter
+    if (selectedRegion !== 'all') {
+      filtered = filtered.filter(project =>
+        project.region && project.region.toLowerCase() === selectedRegion.toLowerCase()
+      );
+    }
+
     setFilteredProjects(filtered);
   };
 
@@ -203,6 +213,7 @@ export default function ProjectsListForm() {
     setSelectedPhase('all');
     setSelectedSkill('all');
     setSelectedCategory('all');
+    setSelectedRegion('all');
   };
 
   if (isLoading) {
@@ -237,7 +248,7 @@ export default function ProjectsListForm() {
             <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-neutral-900">Filtres</h2>
-                {(searchQuery || selectedPhase !== 'all' || selectedSkill !== 'all' || selectedCategory !== 'all') && (
+                {(searchQuery || selectedPhase !== 'all' || selectedSkill !== 'all' || selectedCategory !== 'all' || selectedRegion !== 'all') && (
                   <button
                     onClick={resetFilters}
                     className="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -291,6 +302,19 @@ export default function ProjectsListForm() {
                     ...Object.entries(CATEGORY_LABELS).map(([value, label]) => ({
                       value,
                       label,
+                    })),
+                  ]}
+                />
+
+                <Select
+                  label="Région"
+                  value={selectedRegion}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  options={[
+                    { value: 'all', label: 'Toutes les régions' },
+                    ...FRENCH_REGIONS.map((region) => ({
+                      value: region.label,
+                      label: region.label,
                     })),
                   ]}
                 />
