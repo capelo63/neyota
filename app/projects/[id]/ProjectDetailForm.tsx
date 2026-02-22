@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Badge, Modal, Textarea } from '@/components/ui';
+import ReportButton from '@/components/ReportButton';
 
 interface ProjectDetailProps {
   projectId: string;
@@ -361,6 +362,18 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                   {hasApplied ? '✓ Déjà candidaté' : 'Postuler'}
                 </Button>
               </div>
+            </div>
+          )}
+
+          {/* Report button - only visible for non-owners */}
+          {!isOwner && user && (
+            <div className="mt-4 flex justify-end">
+              <ReportButton
+                targetType="project"
+                targetId={projectId}
+                targetName={project?.title}
+                currentUserId={user.id}
+              />
             </div>
           )}
 

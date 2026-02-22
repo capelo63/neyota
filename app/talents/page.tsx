@@ -28,6 +28,7 @@ async function getTalentsAndSkills() {
       last_name,
       city,
       postal_code,
+      region,
       bio,
       max_distance_km,
       latitude,
