@@ -46,6 +46,8 @@ export async function updateSession(request: NextRequest) {
     '/terms',
     '/contact',
     '/forgot-password',
+    '/projects',
+    '/talents',
   ];
 
   const isPublicRoute = publicRoutes.some(route =>
