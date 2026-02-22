@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Conditions Générales d\'Utilisation',
-  description: 'Conditions générales d\'utilisation de la plateforme NEYOTA',
+  description: 'Conditions générales d\'utilisation de la plateforme TERRII',
 };
 
 export default function TermsPage() {
@@ -29,11 +29,11 @@ export default function TermsPage() {
               </h2>
               <p className="text-neutral-700 leading-relaxed mb-4">
                 Les présentes Conditions Générales d&apos;Utilisation (ci-après « CGU ») régissent
-                l&apos;utilisation de la plateforme NEYOTA (ci-après « la Plateforme »), accessible
+                l&apos;utilisation de la plateforme TERRII (ci-après « la Plateforme »), accessible
                 à l&apos;adresse neyota.vercel.app.
               </p>
               <p className="text-neutral-700 leading-relaxed">
-                NEYOTA est une plateforme gratuite de mise en relation entre porteurs de projets
+                TERRII est une plateforme gratuite de mise en relation entre porteurs de projets
                 entrepreneuriaux et talents locaux, dans une optique de développement territorial
                 et d&apos;économie de proximité.
               </p>
@@ -60,7 +60,7 @@ export default function TermsPage() {
                 3. Description du service
               </h2>
               <p className="text-neutral-700 leading-relaxed mb-4">
-                NEYOTA propose les services suivants :
+                TERRII propose les services suivants :
               </p>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2 mb-4">
                 <li>Création et publication de projets entrepreneuriaux</li>
@@ -104,7 +104,7 @@ export default function TermsPage() {
                 5. Obligations des utilisateurs
               </h2>
               <p className="text-neutral-700 leading-relaxed mb-4">
-                En utilisant NEYOTA, vous vous engagez à :
+                En utilisant TERRII, vous vous engagez à :
               </p>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2">
                 <li>Fournir des informations exactes et à jour</li>
@@ -129,7 +129,7 @@ export default function TermsPage() {
               </p>
               <p className="text-neutral-700 leading-relaxed">
                 Les contenus publiés par les utilisateurs (projets, profils) restent leur propriété,
-                mais vous accordez à NEYOTA une licence non exclusive pour les afficher sur la Plateforme.
+                mais vous accordez à TERRII une licence non exclusive pour les afficher sur la Plateforme.
               </p>
             </section>
 
@@ -157,7 +157,7 @@ export default function TermsPage() {
                 8. Responsabilité
               </h2>
               <p className="text-neutral-700 leading-relaxed mb-4">
-                NEYOTA est une plateforme de mise en relation et n&apos;est pas partie aux accords
+                TERRII est une plateforme de mise en relation et n&apos;est pas partie aux accords
                 conclus entre les utilisateurs. Nous ne pouvons être tenus responsables :
               </p>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2 mb-4">

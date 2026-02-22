@@ -1,4 +1,4 @@
-# 🌱 NEYOTA - Ensemble, faisons vivre nos territoires
+# 🌱 TERRII - Ensemble, faisons vivre nos territoires
 
 Plateforme de mise en relation entre porteurs de projets et talents locaux.
 
@@ -8,7 +8,7 @@ Plateforme de mise en relation entre porteurs de projets et talents locaux.
 
 ## 📋 Vue d'ensemble
 
-NEYOTA est une plateforme web qui connecte les porteurs de projets à la recherche de talents avec des personnes motivées souhaitant s'investir dans des projets locaux. L'objectif est de dynamiser les territoires en favorisant l'entrepreneuriat de proximité.
+TERRII est une plateforme web qui connecte les porteurs de projets à la recherche de talents avec des personnes motivées souhaitant s'investir dans des projets locaux. L'objectif est de dynamiser les territoires en favorisant l'entrepreneuriat de proximité.
 
 ### 🎯 Fonctionnalités principales
 
@@ -240,7 +240,7 @@ Les utilisateurs peuvent signaler :
 
 ## 📊 Modèle Économique
 
-NEYOTA est **100% gratuit** pour les porteurs de projets et les talents.
+TERRII est **100% gratuit** pour les porteurs de projets et les talents.
 
 Revenus provenant de :
 

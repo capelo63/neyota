@@ -4,7 +4,7 @@ import SignupForm from './SignupForm';
 
 export const metadata: Metadata = {
   title: 'Créer un compte',
-  description: 'Rejoignez NEYOTA gratuitement. Porteur de projet ou talent local, trouvez vos collaborateurs sur votre territoire.',
+  description: 'Rejoignez TERRII gratuitement. Porteur de projet ou talent local, trouvez vos collaborateurs sur votre territoire.',
 };
 
 export default function SignupPage() {

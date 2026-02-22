@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Politique de Confidentialité',
-  description: 'Politique de confidentialité et protection des données personnelles sur NEYOTA',
+  description: 'Politique de confidentialité et protection des données personnelles sur TERRII',
 };
 
 export default function PrivacyPage() {
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
             {/* Introduction */}
             <section className="mb-8">
               <p className="text-neutral-700 leading-relaxed mb-4">
-                La protection de vos données personnelles est une priorité pour NEYOTA. Cette
+                La protection de vos données personnelles est une priorité pour TERRII. Cette
                 politique de confidentialité explique quelles données nous collectons, pourquoi
                 nous les collectons, et comment nous les utilisons.
               </p>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
                 1. Responsable du traitement
               </h2>
               <p className="text-neutral-700 leading-relaxed">
-                Le responsable du traitement des données personnelles est NEYOTA, accessible via
+                Le responsable du traitement des données personnelles est TERRII, accessible via
                 la plateforme neyota.vercel.app.
               </p>
             </section>
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2">
                 <li><strong>Votre consentement</strong> : acceptation des CGU et de la charte éthique</li>
-                <li><strong>L&apos;exécution du contrat</strong> : fourniture des services NEYOTA</li>
+                <li><strong>L&apos;exécution du contrat</strong> : fourniture des services TERRII</li>
                 <li><strong>Notre intérêt légitime</strong> : amélioration de la plateforme et prévention des abus</li>
                 <li><strong>Obligations légales</strong> : conservation des données pour des raisons juridiques</li>
               </ul>
