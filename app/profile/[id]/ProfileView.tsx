@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
+import ReportButton from '@/components/ReportButton';
 import InviteTalentModal from '@/components/InviteTalentModal';
 
 interface Profile {
@@ -356,6 +357,18 @@ export default function ProfileView({ userId }: { userId: string }) {
                 Bio
               </h3>
               <p className="text-gray-700 whitespace-pre-wrap">{profile.bio}</p>
+            </div>
+          )}
+
+          {/* Report button - only for other users' profiles */}
+          {!isOwnProfile && (
+            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+              <ReportButton
+                targetType="profile"
+                targetId={userId}
+                targetName={`${profile.first_name} ${profile.last_name}`}
+                currentUserId={currentUserId}
+              />
             </div>
           )}
         </div>
