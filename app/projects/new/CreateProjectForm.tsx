@@ -23,7 +23,7 @@ interface ProjectData {
 
 const PROJECT_PHASES = [
   { value: 'ideation', label: '💡 Idéation - Je concrétise mon idée' },
-  { value: 'mvp_development', label: '🛠️ Développement MVP - Je construis mon prototype' },
+  { value: 'mvp_development', label: '🛠️ En construction - Je construis mon prototype' },
   { value: 'launch', label: '🚀 Lancement - Je lance mon produit/service' },
   { value: 'growth', label: '📈 Croissance - Je développe mon activité' },
   { value: 'scaling', label: '🌍 Structuration - Je structure et pérennise' },
@@ -395,9 +395,9 @@ export default function CreateProjectForm() {
           <div className="flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
+                <span className="text-white font-bold text-xl">T</span>
               </div>
-              <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
+              <span className="text-2xl font-bold text-neutral-900">TERRII</span>
             </Link>
             <Link href="/dashboard">
               <Button variant="ghost" size="sm">

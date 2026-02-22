@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Brand colors - NEYOTA territorial green
+        // Brand colors - TERRII territorial green
         primary: {
           50: '#f0fdf4',
           100: '#dcfce7',

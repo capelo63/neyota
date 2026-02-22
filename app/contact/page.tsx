@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Contactez l\'équipe NEYOTA pour toute question ou suggestion',
+  description: 'Contactez l\'équipe TERRII pour toute question ou suggestion',
 };
 
 export default function ContactPage() {
@@ -118,7 +118,7 @@ export default function ContactPage() {
               </p>
               <Link href="/about">
                 <Button variant="secondary" className="w-full">
-                  En savoir plus sur NEYOTA
+                  En savoir plus sur TERRII
                 </Button>
               </Link>
             </div>
@@ -154,10 +154,10 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-neutral-900 mb-2">
-                  Comment fonctionne NEYOTA ?
+                  Comment fonctionne TERRII ?
                 </h3>
                 <p className="text-neutral-600">
-                  NEYOTA est une plateforme gratuite qui met en relation les porteurs de projets
+                  TERRII est une plateforme gratuite qui met en relation les porteurs de projets
                   entrepreneuriaux avec des talents locaux. Le matching se fait sur la base des
                   compétences et de la proximité géographique.
                 </p>
@@ -168,7 +168,7 @@ export default function ContactPage() {
                   Est-ce vraiment gratuit ?
                 </h3>
                 <p className="text-neutral-600">
-                  Oui, NEYOTA est 100% gratuit pour les entrepreneurs et les talents. Notre modèle
+                  Oui, TERRII est 100% gratuit pour les entrepreneurs et les talents. Notre modèle
                   économique repose sur des partenariats avec des collectivités territoriales et
                   des institutions publiques.
                 </p>
@@ -179,7 +179,7 @@ export default function ContactPage() {
                   Comment mes données sont-elles protégées ?
                 </h3>
                 <p className="text-neutral-600">
-                  Nous prenons la protection de vos données très au sérieux. NEYOTA est conforme
+                  Nous prenons la protection de vos données très au sérieux. TERRII est conforme
                   au RGPD et utilise des protocoles de sécurité avancés. Consultez notre{' '}
                   <Link href="/privacy" className="text-primary-600 hover:text-primary-700 font-medium">
                     Politique de Confidentialité
@@ -193,7 +193,7 @@ export default function ContactPage() {
                   Puis-je travailler à distance avec un projet ?
                 </h3>
                 <p className="text-neutral-600">
-                  Oui ! Bien que NEYOTA privilégie les collaborations territoriales, de nombreux
+                  Oui ! Bien que TERRII privilégie les collaborations territoriales, de nombreux
                   projets acceptent le travail à distance. Cette information est clairement indiquée
                   sur chaque fiche projet.
                 </p>
@@ -214,7 +214,7 @@ export default function ContactPage() {
           {/* Social & Links */}
           <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl shadow-sm p-8 text-white text-center">
             <h2 className="text-2xl font-semibold mb-4">
-              Rejoignez la communauté NEYOTA
+              Rejoignez la communauté TERRII
             </h2>
             <p className="text-primary-100 mb-6">
               Commencez dès aujourd&apos;hui à faire vivre votre territoire

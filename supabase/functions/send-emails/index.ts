@@ -44,7 +44,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://neyota.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
@@ -94,7 +94,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://neyota.fr/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
@@ -144,7 +144,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://neyota.fr/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
@@ -196,7 +196,7 @@ const EMAIL_TEMPLATES = {
               </div>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://neyota.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
@@ -209,7 +209,7 @@ const EMAIL_TEMPLATES = {
   }),
 
   welcome_email: (params: any) => ({
-    subject: `Bienvenue sur NEYOTA ! 🎉`,
+    subject: `Bienvenue sur TERRII ! 🎉`,
     htmlContent: `
       <!DOCTYPE html>
       <html>
@@ -228,11 +228,11 @@ const EMAIL_TEMPLATES = {
         <body>
           <div class="container">
             <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">🎉 Bienvenue sur NEYOTA !</h1>
+              <h1 style="margin: 0; font-size: 28px;">🎉 Bienvenue sur TERRII !</h1>
             </div>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
-              <p>Nous sommes ravis de vous accueillir sur <strong>NEYOTA</strong>, la plateforme qui connecte les talents aux projets locaux !</p>
+              <p>Nous sommes ravis de vous accueillir sur <strong>TERRII</strong>, la plateforme qui connecte les talents aux projets locaux !</p>
 
               <h3 style="color: #10b981; margin-top: 30px;">🚀 Pour bien démarrer :</h3>
 
@@ -275,7 +275,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Ensemble, faisons vivre nos territoires</p>
+              <p>TERRII - Ensemble, faisons vivre nos territoires</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
               </p>
@@ -287,7 +287,7 @@ const EMAIL_TEMPLATES = {
   }),
 
   profile_incomplete: (params: any) => ({
-    subject: `Complétez votre profil NEYOTA pour recevoir plus d'opportunités ! 📝`,
+    subject: `Complétez votre profil TERRII pour recevoir plus d'opportunités ! 📝`,
     htmlContent: `
       <!DOCTYPE html>
       <html>
@@ -311,7 +311,7 @@ const EMAIL_TEMPLATES = {
             </div>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
-              <p>Votre profil NEYOTA est complété à <strong>${params.completion_percentage}%</strong>.</p>
+              <p>Votre profil TERRII est complété à <strong>${params.completion_percentage}%</strong>.</p>
 
               <div class="progress-bar">
                 <div class="progress-fill" style="width: ${params.completion_percentage}%;"></div>
@@ -351,7 +351,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
               </p>
@@ -363,7 +363,7 @@ const EMAIL_TEMPLATES = {
   }),
 
   weekly_digest: (params: any) => ({
-    subject: `📬 Votre résumé NEYOTA de la semaine`,
+    subject: `📬 Votre résumé TERRII de la semaine`,
     htmlContent: `
       <!DOCTYPE html>
       <html>
@@ -383,11 +383,11 @@ const EMAIL_TEMPLATES = {
         <body>
           <div class="container">
             <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">📬 Votre semaine sur NEYOTA</h1>
+              <h1 style="margin: 0; font-size: 28px;">📬 Votre semaine sur TERRII</h1>
             </div>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
-              <p>Voici un résumé de votre activité sur NEYOTA cette semaine :</p>
+              <p>Voici un résumé de votre activité sur TERRII cette semaine :</p>
 
               ${params.recommendations_count > 0 ? `
                 <div class="stat-box">
@@ -430,7 +430,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>NEYOTA - Connecter les talents aux projets locaux</p>
+              <p>TERRII - Connecter les talents aux projets locaux</p>
               <p>
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://neyota.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
@@ -531,7 +531,7 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             sender: {
-              name: 'NEYOTA',
+              name: 'TERRII',
               email: 'notifications@neyota.com', // Configured in Brevo
             },
             to: [

@@ -12,7 +12,7 @@ export const projectsMetadata: Metadata = {
     'économie locale',
   ],
   openGraph: {
-    title: 'Projets disponibles sur NEYOTA',
+    title: 'Projets disponibles sur TERRII',
     description:
       'Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.',
     type: 'website',
@@ -20,7 +20,7 @@ export const projectsMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Projets disponibles sur NEYOTA',
+    title: 'Projets disponibles sur TERRII',
     description:
       'Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.',
   },

@@ -1,5 +1,5 @@
 /**
- * Database types for NEYOTA
+ * Database types for TERRII
  *
  * These types represent the ENUM types defined in the PostgreSQL database.
  * They ensure type safety between the frontend and backend.

@@ -88,9 +88,9 @@ export default function LoginPage() {
         <div className="container-custom">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
+              <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">NEYOTA</span>
+            <span className="text-2xl font-bold text-neutral-900">TERRII</span>
           </Link>
         </div>
       </header>
@@ -165,7 +165,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-neutral-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-neutral-500">Nouveau sur NEYOTA ?</span>
+                <span className="px-4 bg-white text-neutral-500">Nouveau sur TERRII ?</span>
               </div>
             </div>
 

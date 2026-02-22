@@ -31,7 +31,7 @@ export async function geocodeAddress(
       `https://nominatim.openstreetmap.org/search?q=${encodedQuery}&format=json&limit=1&addressdetails=1`,
       {
         headers: {
-          'User-Agent': 'NEYOTA-Platform/1.0', // Required by Nominatim
+          'User-Agent': 'TERRII-Platform/1.0', // Required by Nominatim
         },
       }
     );
