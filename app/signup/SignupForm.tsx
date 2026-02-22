@@ -206,7 +206,7 @@ export default function SignupForm() {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">TERRII</span>
+            <span className="text-2xl font-bold text-neutral-900">Terrii</span>
           </Link>
         </div>
       </header>
@@ -253,7 +253,7 @@ export default function SignupForm() {
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Bienvenue sur TERRII !
+                    Bienvenue sur Terrii !
                   </h1>
                   <p className="text-neutral-600">
                     Choisissez votre profil pour commencer
@@ -414,7 +414,7 @@ export default function SignupForm() {
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Charte éthique TERRII
+                    Charte éthique Terrii
                   </h1>
                   <p className="text-neutral-600">
                     Dernière étape : accepter notre charte éthique
@@ -448,7 +448,7 @@ export default function SignupForm() {
                     <div>
                       <h4 className="font-semibold mb-2">💚 Engagement territorial</h4>
                       <p>
-                        TERRII valorise l'entrepreneuriat local et l'impact territorial. Les membres
+                        Terrii valorise l'entrepreneuriat local et l'impact territorial. Les membres
                         s'engagent à privilégier les collaborations de proximité et à contribuer
                         au dynamisme économique de leur territoire.
                       </p>
@@ -467,7 +467,7 @@ export default function SignupForm() {
                       <h4 className="font-semibold mb-2">⚠️ Signalement</h4>
                       <p>
                         En cas de comportement contraire à cette charte, les membres sont encouragés à
-                        signaler la situation. TERRII se réserve le droit de suspendre ou bannir tout
+                        signaler la situation. Terrii se réserve le droit de suspendre ou bannir tout
                         compte ne respectant pas ces principes.
                       </p>
                     </div>
@@ -485,7 +485,7 @@ export default function SignupForm() {
                     <span>
                       J'ai lu et j'accepte la{' '}
                       <Link href="/charter" target="_blank" className="text-primary-600 hover:underline">
-                        charte éthique TERRII
+                        charte éthique Terrii
                       </Link>
                     </span>
                   }
@@ -540,7 +540,7 @@ export default function SignupForm() {
                     {userEmail}
                   </p>
                   <p className="text-neutral-700">
-                    📧 <strong>Cliquez sur le lien dans l'email</strong> pour activer votre compte et accéder à TERRII.
+                    📧 <strong>Cliquez sur le lien dans l'email</strong> pour activer votre compte et accéder à Terrii.
                   </p>
                 </div>
 

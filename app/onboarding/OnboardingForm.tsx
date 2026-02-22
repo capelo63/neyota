@@ -343,7 +343,7 @@ export default function OnboardingForm() {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">TERRII</span>
+            <span className="text-2xl font-bold text-neutral-900">Terrii</span>
           </Link>
         </div>
       </header>
@@ -416,7 +416,7 @@ export default function OnboardingForm() {
                     Votre localisation
                   </h1>
                   <p className="text-neutral-600">
-                    TERRII privilégie les collaborations de proximité pour dynamiser votre territoire
+                    Terrii privilégie les collaborations de proximité pour dynamiser votre territoire
                   </p>
                 </div>
 

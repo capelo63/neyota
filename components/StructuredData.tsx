@@ -52,7 +52,7 @@ export function OrganizationStructuredData() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'TERRII',
+    name: 'Terrii',
     description:
       'Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux',
     url: 'https://neyota.vercel.app',
@@ -82,7 +82,7 @@ export function WebsiteStructuredData() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'TERRII',
+    name: 'Terrii',
     url: 'https://neyota.vercel.app',
     description:
       'Plateforme de mise en relation entre porteurs de projets et talents locaux',
