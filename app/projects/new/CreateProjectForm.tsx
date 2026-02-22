@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Textarea, Select, Checkbox } from '@/components/ui';
+import CityAutocomplete from '@/components/CityAutocomplete';
+import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
 
 interface ProjectData {
   title: string;
@@ -19,6 +21,8 @@ interface ProjectData {
   region: string;
   isRemotePossible: boolean;
   preferredRadius: number;
+  lat?: number;
+  lng?: number;
 }
 
 const PROJECT_PHASES = [
@@ -193,14 +197,8 @@ export default function CreateProjectForm() {
 
     if (!formData.postalCode.trim()) {
       newErrors.postalCode = 'Le code postal est requis';
-    } else if (!/^\d{5}$/.test(formData.postalCode)) {
-      newErrors.postalCode = 'Code postal invalide (5 chiffres)';
-    } else {
-      // Additional validation: French postal codes start with 01-95 (excluding 00, 96-99 for DOM-TOM)
-      const postalInt = parseInt(formData.postalCode.substring(0, 2));
-      if (postalInt === 0 || (postalInt > 95 && postalInt < 971)) {
-        newErrors.postalCode = 'Code postal invalide. Pour la Métropole : 01000-95999. Pour DOM-TOM : 97100+';
-      }
+    } else if (!isValidFrenchPostalCode(formData.postalCode)) {
+      newErrors.postalCode = getPostalCodeErrorMessage();
     }
 
     setErrors(newErrors);
@@ -232,28 +230,31 @@ export default function CreateProjectForm() {
     setErrors({});
 
     try {
-      // Get coordinates from postal code using French government API
-      console.log('[PROJECT] Fetching coordinates for postal code:', formData.postalCode);
-      let coordinates = null;
+      // Use pre-fetched coordinates from autocomplete, or fall back to API
+      let coordinates: { lat: number; lng: number } | null = null;
       let geoWarning = false;
 
-      try {
-        const geoResponse = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${formData.postalCode}&type=municipality&limit=1`
-        );
-        const geoData = await geoResponse.json();
+      if (formData.lat && formData.lng) {
+        coordinates = { lat: formData.lat, lng: formData.lng };
+        console.log('[PROJECT] Using autocomplete coordinates:', coordinates);
+      } else {
+        try {
+          const geoResponse = await fetch(
+            `https://api-adresse.data.gouv.fr/search/?q=${formData.postalCode}&type=municipality&limit=1`
+          );
+          const geoData = await geoResponse.json();
 
-        if (geoData.features && geoData.features.length > 0) {
-          const [lng, lat] = geoData.features[0].geometry.coordinates;
-          coordinates = { lng, lat };
-          console.log('[PROJECT] Coordinates found:', coordinates);
-        } else {
-          console.warn('[PROJECT] No coordinates found for postal code');
+          if (geoData.features && geoData.features.length > 0) {
+            const [lng, lat] = geoData.features[0].geometry.coordinates;
+            coordinates = { lng, lat };
+            console.log('[PROJECT] Coordinates fetched from API:', coordinates);
+          } else {
+            geoWarning = true;
+          }
+        } catch (geoError) {
+          console.error('[PROJECT] Geocoding error:', geoError);
           geoWarning = true;
         }
-      } catch (geoError) {
-        console.error('[PROJECT] Geocoding error:', geoError);
-        geoWarning = true;
       }
 
       // Warn user if geocoding failed (impacts territorial matching)
@@ -730,34 +731,42 @@ export default function CreateProjectForm() {
                     </div>
                   )}
 
-                  <Input
-                    type="text"
-                    label="Ville"
-                    placeholder="Paris"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    error={errors.city}
-                    required
+                  <CityAutocomplete
+                    cityValue={formData.city}
+                    postalCodeValue={formData.postalCode}
+                    cityLabel="Ville"
+                    postalLabel="Code postal"
+                    cityPlaceholder="Paris, Lyon, Marseille..."
+                    cityError={errors.city}
+                    postalError={errors.postalCode}
+                    onSelect={(suggestion) => {
+                      setFormData({
+                        ...formData,
+                        city: suggestion.city,
+                        postalCode: suggestion.postalCode,
+                        region: suggestion.region || formData.region,
+                        lat: suggestion.lat,
+                        lng: suggestion.lng,
+                      });
+                      if (errors.city || errors.postalCode) {
+                        setErrors({ ...errors, city: '', postalCode: '' });
+                      }
+                    }}
                   />
 
-                  <Input
-                    type="text"
-                    label="Code postal"
-                    placeholder="75001"
-                    value={formData.postalCode}
-                    onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-                    error={errors.postalCode}
-                    required
-                    maxLength={5}
-                  />
-
-                  <Input
-                    type="text"
-                    label="Région (optionnel)"
-                    placeholder="Île-de-France"
-                    value={formData.region}
-                    onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                      Région (optionnel)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Île-de-France (rempli automatiquement)"
+                      value={formData.region}
+                      onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">Remplie automatiquement lors de la sélection de votre ville</p>
+                  </div>
 
                   <Select
                     label="Rayon de recherche de talents"
