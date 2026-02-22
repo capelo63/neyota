@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEYOTA — Journal de bord du projet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11pt;
+      line-height: 1.7;
+      color: #1a1a2e;
+      background: #ffffff;
+    }
+
+    /* ─── COVER PAGE ─────────────────────────────────────── */
+    .cover {
+      page-break-after: always;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 50%, #f0f9ff 100%);
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .logo-box {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4f6ef7, #2563eb);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 10px 40px rgba(79, 110, 247, 0.3);
+    }
+
+    .logo-letter {
+      color: white;
+      font-size: 40px;
+      font-weight: 800;
+    }
+
+    .cover h1 {
+      font-size: 48pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .cover .tagline {
+      font-size: 14pt;
+      font-weight: 500;
+      color: #4f6ef7;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cover .subtitle {
+      font-size: 18pt;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+
+    .cover .description {
+      font-size: 12pt;
+      color: #64748b;
+      max-width: 480px;
+      margin: 0 auto 60px;
+      line-height: 1.8;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      font-size: 10pt;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 30px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .cover-meta strong { color: #475569; }
+
+    /* ─── TYPOGRAPHY ─────────────────────────────────────── */
+    h1 { font-size: 24pt; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+    h2 { font-size: 16pt; font-weight: 700; color: #1e293b; margin: 32px 0 12px; }
+    h3 { font-size: 12pt; font-weight: 600; color: #334155; margin: 20px 0 8px; }
+    p  { margin-bottom: 12px; color: #475569; }
+
+    /* ─── PAGE LAYOUT ────────────────────────────────────── */
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 50px;
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm 15mm;
+    }
+
+    /* ─── SECTION HEADERS ────────────────────────────────── */
+    .section-header {
+      page-break-before: always;
+      padding-top: 20px;
+    }
+
+    .section-number {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #4f6ef7;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-divider {
+      width: 50px;
+      height: 4px;
+      background: linear-gradient(90deg, #4f6ef7, #2563eb);
+      border-radius: 2px;
+      margin: 12px 0 28px;
+    }
+
+    /* ─── CARDS ──────────────────────────────────────────── */
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .card-primary {
+      background: linear-gradient(135deg, #eff6ff, #f0f4ff);
+      border-color: #bfdbfe;
+    }
+
+    .card-success {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .card-warning {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    /* ─── FEATURE GRID ───────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .feature-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .feature-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .feature-title {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .feature-desc {
+      font-size: 9pt;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* ─── TIMELINE ───────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+      margin: 20px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 9px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #4f6ef7, #e2e8f0);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -25px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4f6ef7;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px #4f6ef7;
+    }
+
+    .timeline-label {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #4f6ef7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content {
+      font-size: 10.5pt;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .timeline-detail {
+      font-size: 9.5pt;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* ─── STATUS BADGES ──────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+    .badge-green  { background: #dcfce7; color: #15803d; }
+    .badge-purple { background: #ede9fe; color: #7c3aed; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+
+    /* ─── TABLE ──────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    th {
+      background: #f1f5f9;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: #334155;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #475569;
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    /* ─── QUOTE ──────────────────────────────────────────── */
+    .quote {
+      border-left: 4px solid #4f6ef7;
+      padding: 12px 20px;
+      background: #f8faff;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .quote p {
+      font-style: italic;
+      color: #334155;
+      margin: 0;
+    }
+
+    /* ─── UX IMPROVEMENT CARD ────────────────────────────── */
+    .ux-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .ux-card-header {
+      background: linear-gradient(135deg, #4f6ef7, #2563eb);
+      color: white;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 10.5pt;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ux-card-body {
+      padding: 14px 18px;
+      background: #fafbff;
+    }
+
+    .ux-card-body p {
+      margin: 0;
+      font-size: 9.5pt;
+      color: #475569;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 9pt;
+      color: #94a3b8;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .pill {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 9pt;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .checkmark { color: #22c55e; font-weight: 700; margin-right: 6px; }
+    .arrow     { color: #4f6ef7; margin: 0 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     PAGE DE COUVERTURE
+════════════════════════════════════════ -->
+<div class="cover">
+  <div class="logo-box">
+    <span class="logo-letter">N</span>
+  </div>
+  <h1>NEYOTA</h1>
+  <p class="tagline">Need Your Talents</p>
+  <p class="subtitle">Journal de bord du projet</p>
+  <p class="description">
+    Ce document retrace les grandes étapes de conception et de développement
+    de la plateforme NEYOTA, de sa vision initiale jusqu'à l'état actuel du site.
+  </p>
+  <div class="cover-meta">
+    <div><strong>Version</strong><br>MVP — Phase 1</div>
+    <div><strong>Année</strong><br>2026</div>
+    <div><strong>Statut</strong><br>En développement</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — VISION & POSITIONNEMENT
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-number">Section 01</div>
+  <h1>Vision &amp; Positionnement</h1>
+  <div class="section-divider"></div>
+
+  <p>
+    NEYOTA est une plateforme de mise en relation entre <strong>porteurs de projets
+    entrepreneuriaux</strong> et <strong>talents locaux</strong>. Son objectif principal :
+    dynamiser l'économie de proximité en facilitant les collaborations au sein d'un même territoire.
+  </p>
+
+  <div class="quote">
+    <p>« Ensemble, faisons vivre nos territoires. »</p>
+  </div>
+
+  <h2>Les trois piliers fondateurs</h2>
+
+  <div class="feature-grid">
+    <div class="feature-item card-primary">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">100 % territorial</div>
+      <div class="feature-desc">Le matching privilégie systématiquement la proximité géographique. La plateforme valorise les collaborations de proximité pour maximiser l'impact local.</div>
+    </div>
+    <div class="feature-item card-primary">
+      <div class="feature-icon">🎁</div>
+      <div class="feature-title">100 % gratuit</div>
+      <div class="feature-desc">Aucune commission, aucun abonnement pour les entrepreneurs ni les talents. Le modèle économique repose sur des partenariats B2B/B2G (subventions, mécénat).</div>
+    </div>
+    <div class="feature-item card-primary">
+      <div class="feature-icon">💚</div>
+      <div class="feature-title">100 % impact</div>
+      <div class="feature-desc">La plateforme mesure et valorise la contribution de chaque membre à l'économie locale via un système de badges et un score d'impact.</div>
+    </div>
+    <div class="feature-item card-primary">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Protection des idées</div>
+      <div class="feature-desc">Charte éthique obligatoire à la création de compte. Visibilité progressive des projets : pitch public, description complète réservée aux candidats.</div>
+    </div>
+  </div>
+
+  <h2>Les deux profils utilisateurs</h2>
+
+  <table>
+    <tr>
+      <th>Profil</th>
+      <th>Qui est-ce ?</th>
+      <th>Ce qu'il cherche sur NEYOTA</th>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">💼 Entrepreneur</span></td>
+      <td>Porteur d'un projet local à un stade de développement précis</td>
+      <td>Des talents locaux avec les compétences adaptées à sa phase de projet</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">🌟 Talent</span></td>
+      <td>Professionnel ou passionné souhaitant contribuer à un projet</td>
+      <td>Des projets près de chez lui correspondant à ses compétences</td>
+    </tr>
+  </table>
+
+  <h2>Le modèle économique</h2>
+  <p>
+    La gratuité totale pour les utilisateurs est rendue possible par un modèle B2B/B2G :
+  </p>
+  <div class="pill-row">
+    <span class="pill">Subventions publiques</span>
+    <span class="pill">Collectivités territoriales</span>
+    <span class="pill">Chambres de commerce</span>
+    <span class="pill">Mécénat d'entreprise</span>
+    <span class="pill">Partenariats institutionnels</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — ARCHITECTURE DU SITE
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">Section 02</div>
+    <h1>Architecture du site</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <p>
+    Le site NEYOTA est organisé en deux espaces distincts : un espace public accessible
+    à tous les visiteurs, et un espace privé réservé aux membres connectés.
+  </p>
+
+  <h2>Espace public</h2>
+
+  <table>
+    <tr>
+      <th>Page</th>
+      <th>Rôle</th>
+    </tr>
+    <tr>
+      <td><strong>Accueil</strong> <code>/</code></td>
+      <td>Présentation de la plateforme, projets récents, statistiques en temps réel, double CTA Entrepreneur / Talent</td>
+    </tr>
+    <tr>
+      <td><strong>Projets</strong> <code>/projects</code></td>
+      <td>Liste publique de tous les projets actifs avec filtres de recherche</td>
+    </tr>
+    <tr>
+      <td><strong>Talents</strong> <code>/talents</code></td>
+      <td>Annuaire des talents disponibles sur la plateforme</td>
+    </tr>
+    <tr>
+      <td><strong>À propos</strong> <code>/about</code></td>
+      <td>Mission, valeurs et équipe NEYOTA</td>
+    </tr>
+    <tr>
+      <td><strong>Créer un compte</strong> <code>/signup</code></td>
+      <td>Inscription en 3 étapes : choix du rôle, informations personnelles, acceptation de la charte</td>
+    </tr>
+    <tr>
+      <td><strong>Connexion</strong> <code>/login</code></td>
+      <td>Authentification sécurisée</td>
+    </tr>
+    <tr>
+      <td><strong>Charte éthique</strong> <code>/charter</code></td>
+      <td>Engagements de la plateforme et des membres</td>
+    </tr>
+    <tr>
+      <td><strong>CGU</strong> <code>/terms</code></td>
+      <td>Conditions générales d'utilisation conformes au droit français</td>
+    </tr>
+    <tr>
+      <td><strong>Confidentialité</strong> <code>/privacy</code></td>
+      <td>Politique RGPD complète</td>
+    </tr>
+    <tr>
+      <td><strong>Contact</strong> <code>/contact</code></td>
+      <td>Formulaire de contact et informations</td>
+    </tr>
+  </table>
+
+  <h2>Espace privé (membres connectés)</h2>
+
+  <table>
+    <tr>
+      <th>Page</th>
+      <th>Rôle</th>
+    </tr>
+    <tr>
+      <td><strong>Onboarding</strong> <code>/onboarding</code></td>
+      <td>Complément de profil en 3 étapes après la création de compte (localisation, compétences, présentation)</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboard</strong> <code>/dashboard</code></td>
+      <td>Tableau de bord personnalisé selon le rôle (entrepreneur ou talent)</td>
+    </tr>
+    <tr>
+      <td><strong>Profil public</strong> <code>/profile/[id]</code></td>
+      <td>Page de profil visible par les autres membres</td>
+    </tr>
+    <tr>
+      <td><strong>Modifier mon profil</strong> <code>/profile/edit</code></td>
+      <td>Modification de la bio, photo, rayon de recherche, compétences</td>
+    </tr>
+    <tr>
+      <td><strong>Créer un projet</strong> <code>/projects/new</code></td>
+      <td>Formulaire de création de projet en 3 étapes (Entrepreneur uniquement)</td>
+    </tr>
+    <tr>
+      <td><strong>Détail projet</strong> <code>/projects/[id]</code></td>
+      <td>Présentation complète d'un projet et formulaire de candidature</td>
+    </tr>
+    <tr>
+      <td><strong>Candidatures</strong> <code>/projects/[id]/applications</code></td>
+      <td>Gestion des candidatures reçues (Entrepreneur uniquement)</td>
+    </tr>
+    <tr>
+      <td><strong>Matching</strong> <code>/matching</code></td>
+      <td>Projets suggérés par l'algorithme de matching (Talent uniquement)</td>
+    </tr>
+    <tr>
+      <td><strong>Notifications</strong> <code>/notifications</code></td>
+      <td>Centre de notifications (candidatures, invitations, messages)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — FONCTIONNALITÉS CLÉS
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">Section 03</div>
+    <h1>Fonctionnalités clés</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <h2>1. Inscription &amp; Charte éthique</h2>
+  <div class="card card-primary">
+    <p>
+      L'inscription se fait en trois étapes guidées. À l'étape de la charte éthique,
+      l'acceptation est <strong>obligatoire et horodatée</strong> : l'adresse IP et la date
+      d'acceptation sont enregistrées pour garantir la conformité RGPD. Sans acceptation,
+      le compte ne peut pas être créé.
+    </p>
+  </div>
+
+  <h2>2. Onboarding personnalisé (3 étapes)</h2>
+  <p>
+    Dès la première connexion, l'utilisateur est guidé à travers un parcours d'activation
+    adapté à son rôle :
+  </p>
+  <table>
+    <tr>
+      <th>Étape</th>
+      <th>Entrepreneur</th>
+      <th>Talent</th>
+    </tr>
+    <tr>
+      <td><strong>📍 Étape 1</strong></td>
+      <td>Localisation (ville, code postal, rayon de recherche)</td>
+      <td>Localisation (ville, code postal, rayon de recherche)</td>
+    </tr>
+    <tr>
+      <td><strong>🎯 Étape 2</strong></td>
+      <td>Information sur les compétences à définir lors des projets</td>
+      <td>Sélection des compétences parmi 60+ disponibles, avec niveau (🌱 Débutant / 🔧 Intermédiaire / ⭐ Expert)</td>
+    </tr>
+    <tr>
+      <td><strong>✨ Étape 3</strong></td>
+      <td>Bio et présentation personnelle</td>
+      <td>Bio et présentation personnelle</td>
+    </tr>
+  </table>
+
+  <h2>3. Les 5 phases de projet</h2>
+  <p>
+    Chaque projet est associé à une phase de maturité. Cette information est centrale
+    dans le matching : les talents peuvent cibler les projets à la phase qui leur convient.
+  </p>
+  <div class="pill-row">
+    <span class="pill">💡 Idéation</span>
+    <span class="pill">🛠️ Développement MVP</span>
+    <span class="pill">🚀 Lancement</span>
+    <span class="pill">📈 Croissance</span>
+    <span class="pill">🏢 Structuration</span>
+  </div>
+
+  <h2>4. Algorithme de matching territorial</h2>
+  <div class="card card-primary">
+    <p>
+      L'algorithme de matching est la fonctionnalité différenciante de NEYOTA.
+      Il calcule pour chaque talent un <strong>score de compatibilité sur 100 points</strong>
+      pour chaque projet dans sa zone de recherche.
+    </p>
+  </div>
+
+  <table>
+    <tr>
+      <th>Critère</th>
+      <th>Points</th>
+      <th>Logique</th>
+    </tr>
+    <tr>
+      <td>📍 Proximité géographique</td>
+      <td><strong>40 pts</strong></td>
+      <td>Calculée avec PostGIS (coordonnées GPS précises). Plus le projet est proche, plus le score est élevé.</td>
+    </tr>
+    <tr>
+      <td>🎯 Compétences communes</td>
+      <td><strong>40 pts</strong></td>
+      <td>Ratio entre les compétences du talent et celles recherchées par le projet.</td>
+    </tr>
+    <tr>
+      <td>🏠 Télétravail possible</td>
+      <td><strong>10 pts</strong></td>
+      <td>Bonus si le projet accepte le travail à distance.</td>
+    </tr>
+    <tr>
+      <td>📅 Projet récent</td>
+      <td><strong>10 pts</strong></td>
+      <td>Bonus si le projet date de moins de 7 jours (5 pts si moins de 30 jours).</td>
+    </tr>
+  </table>
+
+  <h2>5. Gamification &amp; Impact territorial</h2>
+  <p>
+    Pour encourager l'engagement, NEYOTA intègre un système de badges progressifs
+    qui récompense la participation active à l'économie locale.
+  </p>
+  <div class="pill-row">
+    <span class="pill">🏅 Ambassadeur local</span>
+    <span class="pill">🌱 Bâtisseur territorial</span>
+    <span class="pill">⭐ Pionnier local</span>
+    <span class="pill">🏆 Moteur territorial</span>
+    <span class="pill">💎 Champion local</span>
+    <span class="pill">👑 Légende locale</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — PARCOURS UTILISATEURS
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">Section 04</div>
+    <h1>Parcours utilisateurs</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <h2>Parcours Entrepreneur</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 1</div>
+      <div class="timeline-content">Création de compte</div>
+      <div class="timeline-detail">Choix du rôle entrepreneur → saisie des informations → acceptation de la charte éthique → confirmation par email.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 2</div>
+      <div class="timeline-content">Onboarding : compléter son profil</div>
+      <div class="timeline-detail">Localisation précise (géocodage automatique) → rayon de recherche → bio et présentation.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 3</div>
+      <div class="timeline-content">Création d'un projet</div>
+      <div class="timeline-detail">Titre et pitch court (public) → description complète (confidentielle, visible seulement par les candidats) → phase du projet → secteur d'activité → compétences recherchées → localisation du projet.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 4</div>
+      <div class="timeline-content">Gestion des candidatures</div>
+      <div class="timeline-detail">Consultation des profils des talents qui ont postulé → acceptation ou refus → invitation directe de talents identifiés sur la plateforme.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 5</div>
+      <div class="timeline-content">Collaboration</div>
+      <div class="timeline-detail">Mise en relation avec le talent → début de la collaboration → accumulation de badges et de score d'impact.</div>
+    </div>
+  </div>
+
+  <h2>Parcours Talent</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 1</div>
+      <div class="timeline-content">Création de compte</div>
+      <div class="timeline-detail">Choix du rôle talent → saisie des informations → acceptation de la charte éthique → confirmation par email.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 2</div>
+      <div class="timeline-content">Onboarding : définir ses compétences</div>
+      <div class="timeline-detail">Localisation → sélection parmi 60+ compétences avec niveau de maîtrise (Débutant / Intermédiaire / Expert) → bio personnelle.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 3</div>
+      <div class="timeline-content">Découverte des projets suggérés</div>
+      <div class="timeline-detail">L'algorithme présente les projets les mieux adaptés avec un score de compatibilité visible. Filtres disponibles : phase, distance, télétravail.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 4</div>
+      <div class="timeline-content">Candidature</div>
+      <div class="timeline-detail">Consultation du pitch public → décision de candidater → accès à la description complète → message de motivation → envoi de la candidature.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Étape 5</div>
+      <div class="timeline-content">Collaboration</div>
+      <div class="timeline-detail">Réponse de l'entrepreneur → début de la collaboration → accumulation de badges et de score d'impact territorial.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 5 — AMÉLIORATIONS UX
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">Section 05</div>
+    <h1>Améliorations de l'expérience utilisateur</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <p>
+    Plusieurs améliorations ont été apportées pour rendre l'expérience aussi fluide
+    et intuitive que possible sur l'ensemble des pages, en desktop comme sur mobile.
+  </p>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>📊</span> Score de compatibilité mis en valeur
+    </div>
+    <div class="ux-card-body">
+      <p>
+        Le pourcentage de matching est affiché de façon très visible avec un code couleur intuitif :
+        vert pour les meilleurs matchs (&gt;70%), jaune pour les matchs moyens (&gt;40%),
+        gris pour les autres. Une légende explicative détaille les 4 critères de calcul.
+      </p>
+    </div>
+  </div>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>🎯</span> Sélection du niveau de maîtrise des compétences
+    </div>
+    <div class="ux-card-body">
+      <p>
+        Lors de l'onboarding, le talent peut indiquer son niveau pour chaque compétence sélectionnée.
+        Ces niveaux sont mémorisés et affichés sur le dashboard et le profil public avec des codes
+        visuels : 🌱 Débutant (bleu), 🔧 Intermédiaire (violet), ⭐ Expert (orange).
+      </p>
+    </div>
+  </div>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>✅</span> Barres de progression dans les formulaires multi-étapes
+    </div>
+    <div class="ux-card-body">
+      <p>
+        Les formulaires en plusieurs étapes (onboarding, création de projet) affichent une barre
+        de progression animée avec un pourcentage de complétion, des icônes par étape et une coche ✓
+        pour les étapes terminées. L'utilisateur sait toujours où il en est.
+      </p>
+    </div>
+  </div>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>📱</span> Adaptation complète aux écrans mobiles
+    </div>
+    <div class="ux-card-body">
+      <p>
+        L'ensemble du site a fait l'objet d'un audit responsive. Les pages matching, dashboard,
+        onboarding, profil et création de projet ont été optimisées pour les petits écrans :
+        mise en page empilée, textes adaptatifs, boutons lisibles, et badge de score compact.
+      </p>
+    </div>
+  </div>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>🧭</span> Navigation enrichie dans le dashboard
+    </div>
+    <div class="ux-card-body">
+      <p>
+        Le tableau de bord donne désormais accès directement aux pages Projets, Talents et
+        À propos sans avoir à retourner sur la page d'accueil. La section "Fonctionnalités
+        à venir" a été remplacée par une navigation claire et engageante.
+      </p>
+    </div>
+  </div>
+
+  <div class="ux-card">
+    <div class="ux-card-header">
+      <span>🔍</span> Référencement naturel (SEO)
+    </div>
+    <div class="ux-card-body">
+      <p>
+        Toutes les pages publiques disposent désormais de titres et descriptions optimisés
+        pour les moteurs de recherche, avec données structurées (schema.org) pour l'organisation
+        et le site web. Les balises Open Graph et Twitter Card sont également configurées
+        pour un partage soigné sur les réseaux sociaux.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 6 — ÉTAT ACTUEL & SUITE
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">Section 06</div>
+    <h1>État actuel &amp; prochaines étapes</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <h2>Ce qui est opérationnel aujourd'hui</h2>
+
+  <table>
+    <tr>
+      <th>Fonctionnalité</th>
+      <th>Statut</th>
+    </tr>
+    <tr>
+      <td>Inscription / Connexion avec charte éthique</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Onboarding entrepreneur et talent</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Géolocalisation précise (PostGIS)</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Création de projets avec phases</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Algorithme de matching territorial</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Système de candidatures</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Badges et score d'impact</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Profils publics</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Notifications</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Pages légales (CGU, RGPD, Charte, Contact)</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>SEO &amp; référencement</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+    <tr>
+      <td>Responsive mobile complet</td>
+      <td><span class="badge badge-green"><span class="checkmark">✓</span> Opérationnel</span></td>
+    </tr>
+  </table>
+
+  <h2>Prochaines étapes (Phase 2)</h2>
+
+  <div class="card card-warning">
+    <p>
+      Les fonctionnalités suivantes sont identifiées pour la phase 2 du produit,
+      une fois que le MVP aura été validé avec les premiers utilisateurs réels.
+    </p>
+  </div>
+
+  <table>
+    <tr>
+      <th>Fonctionnalité</th>
+      <th>Priorité</th>
+    </tr>
+    <tr>
+      <td>Messagerie asynchrone entre membres</td>
+      <td><span class="badge badge-orange">Haute</span></td>
+    </tr>
+    <tr>
+      <td>Tableau de bord analytique pour entrepreneurs</td>
+      <td><span class="badge badge-orange">Haute</span></td>
+    </tr>
+    <tr>
+      <td>Filtres avancés et recherche territoriale</td>
+      <td><span class="badge badge-blue">Moyenne</span></td>
+    </tr>
+    <tr>
+      <td>Mise en relation avec les collectivités partenaires</td>
+      <td><span class="badge badge-blue">Moyenne</span></td>
+    </tr>
+    <tr>
+      <td>Application mobile native (iOS / Android)</td>
+      <td><span class="badge badge-purple">Long terme</span></td>
+    </tr>
+  </table>
+
+  <h2>Pour lancer la version de production</h2>
+  <p>Trois actions sont nécessaires de votre côté :</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Action 1</div>
+      <div class="timeline-content">Appliquer les migrations en base de données</div>
+      <div class="timeline-detail">Via la console Supabase, appliquer la migration 025 qui finalise la structure de données du projet.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Action 2</div>
+      <div class="timeline-content">Déployer sur Vercel</div>
+      <div class="timeline-detail">Merger la branche de développement vers la branche principale pour déclencher le déploiement automatique.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">Action 3</div>
+      <div class="timeline-content">Tests manuels end-to-end</div>
+      <div class="timeline-detail">Créer des comptes de test (un entrepreneur, un talent), parcourir les deux parcours complets, et tester sur mobile.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Document généré pour NEYOTA — 2026</p>
+    <p style="margin-top: 6px;">neyota.vercel.app &nbsp;•&nbsp; Need Your Talents</p>
+  </div>
+</div>
+
+</body>
+</html>
