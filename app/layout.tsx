@@ -5,8 +5,8 @@ import { OrganizationStructuredData, WebsiteStructuredData } from "@/components/
 export const metadata: Metadata = {
   metadataBase: new URL('https://neyota.vercel.app'),
   title: {
-    default: "TERRII - Ensemble, faisons vivre nos territoires",
-    template: "%s | TERRII"
+    default: "Terrii - Ensemble, faisons vivre nos territoires",
+    template: "%s | Terrii"
   },
   description: "Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux. 100% gratuit • 100% territorial • 100% impact. Trouvez les compétences près de chez vous.",
   keywords: [
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     "collaboration locale",
     "économie de proximité"
   ],
-  authors: [{ name: "TERRII" }],
-  creator: "TERRII",
-  publisher: "TERRII",
+  authors: [{ name: "Terrii" }],
+  creator: "Terrii",
+  publisher: "Terrii",
   robots: {
     index: true,
     follow: true,
@@ -39,21 +39,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'fr_FR',
     url: 'https://neyota.vercel.app',
-    siteName: 'TERRII',
-    title: 'TERRII - Ensemble, faisons vivre nos territoires',
+    siteName: 'Terrii',
+    title: 'Terrii - Ensemble, faisons vivre nos territoires',
     description: 'Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux. 100% gratuit • 100% territorial • 100% impact.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'TERRII - Plateforme territoriale',
+        alt: 'Terrii - Plateforme territoriale',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TERRII - Ensemble, faisons vivre nos territoires',
+    title: 'Terrii - Ensemble, faisons vivre nos territoires',
     description: 'Plateforme de mise en relation entre porteurs de projets et talents locaux. 100% gratuit • 100% territorial • 100% impact.',
     images: ['/og-image.png'],
     creator: '@neyota',

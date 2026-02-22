@@ -126,13 +126,13 @@ export default async function Home({
                 </span>
               </div>
 
-              {/* TERRII Brand & Tagline */}
+              {/* Terrii Brand & Tagline */}
               <div className="mb-6 animate-slide-up">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-neutral-900 mb-3">
-                  TERRII
+                  Terrii
                 </h1>
                 <p className="text-xl md:text-2xl font-medium text-primary-600 mb-8">
-                  Need Your Talents
+                  TERritoires, Initiatives, Impact
                 </p>
               </div>
 
@@ -144,7 +144,7 @@ export default async function Home({
 
               {/* Subheading */}
               <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up">
-                TERRII connecte gratuitement les porteurs de projets et les talents locaux
+                Terrii connecte gratuitement les porteurs de projets et les talents locaux
                 pour dynamiser l&apos;économie de proximité.
               </p>
 
@@ -206,7 +206,7 @@ export default async function Home({
                   Bientôt les premiers projets !
                 </h3>
                 <p className="text-neutral-600 mb-6">
-                  Soyez parmi les premiers à rejoindre TERRII et faites vivre votre territoire.
+                  Soyez parmi les premiers à rejoindre Terrii et faites vivre votre territoire.
                 </p>
                 <Link href="/signup">
                   <Button variant="primary" size="lg">
@@ -285,7 +285,7 @@ export default async function Home({
           <div className="container-custom">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                Pourquoi TERRII ?
+                Pourquoi Terrii ?
               </h2>
               <p className="text-neutral-600 text-lg">
                 Une plateforme pensée pour l&apos;entrepreneuriat territorial
@@ -385,7 +385,7 @@ export default async function Home({
                 Prêt à faire vivre votre territoire ?
               </h2>
               <p className="text-xl mb-10 text-primary-100">
-                Rejoignez la communauté TERRII et donnez vie à vos projets locaux
+                Rejoignez la communauté Terrii et donnez vie à vos projets locaux
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/signup">
@@ -416,10 +416,10 @@ export default async function Home({
                       <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-xl">T</span>
                       </div>
-                      <span className="text-2xl font-bold text-white">TERRII</span>
+                      <span className="text-2xl font-bold text-white">Terrii</span>
                     </div>
                     <p className="text-primary-400 font-medium text-sm ml-12">
-                      Need Your Talents
+                      TERritoires, Initiatives, Impact
                     </p>
                   </div>
                   <p className="text-neutral-400 mb-4">
@@ -452,7 +452,7 @@ export default async function Home({
 
               {/* Copyright */}
               <div className="pt-8 border-t border-neutral-800 text-center text-sm text-neutral-400">
-                <p>© 2026 TERRII. Tous droits réservés.</p>
+                <p>© 2026 Terrii. Tous droits réservés.</p>
               </div>
             </div>
           </div>
