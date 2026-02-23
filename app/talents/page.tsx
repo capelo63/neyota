@@ -55,6 +55,10 @@ async function getTalentsAndSkills() {
 
       return {
         ...talent,
+        // Mask precise GPS coordinates to ~1km precision (2 decimal places)
+        // to protect user privacy on public pages
+        latitude: talent.latitude != null ? Math.round(talent.latitude * 100) / 100 : null,
+        longitude: talent.longitude != null ? Math.round(talent.longitude * 100) / 100 : null,
         skills: (skillsData || [])
           .map((s: any) => s.skill)
           .filter((s: any) => s !== null) as Array<{ id: string; name: string; category: string }>,

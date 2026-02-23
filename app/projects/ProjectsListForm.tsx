@@ -116,10 +116,21 @@ export default function ProjectsListForm() {
       }
 
       // Load projects with owner, skills, and categories
+      // Only select fields needed for list view — full_description and phase_objectives
+      // are intentionally excluded to avoid exposing sensitive project details publicly
       const { data: projectsData, error: projectsError} = await supabase
         .from('projects')
         .select(`
-          *,
+          id,
+          title,
+          short_pitch,
+          current_phase,
+          city,
+          postal_code,
+          region,
+          is_remote_possible,
+          created_at,
+          owner_id,
           owner:owner_id(first_name, last_name),
           skills:project_skills_needed(
             skill:skills(id, name)
