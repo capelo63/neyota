@@ -302,7 +302,7 @@ export default function ProfileView({ userId }: { userId: string }) {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">Terrii</span>
+            <span className="text-2xl font-bold text-neutral-900">Terii</span>
           </Link>
           {!currentUserId && (
             <div className="flex items-center gap-3">
@@ -570,7 +570,7 @@ export default function ProfileView({ userId }: { userId: string }) {
                 : 'Vous souhaitez collaborer avec cet entrepreneur ?'}
             </h3>
             <p className="text-primary-100 mb-6">
-              Rejoignez Terrii gratuitement pour entrer en contact et collaborer sur des projets locaux.
+              Rejoignez Terii gratuitement pour entrer en contact et collaborer sur des projets locaux.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href={`/signup?redirect=/profile/${userId}`}>
