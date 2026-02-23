@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ProjectDetails from './ProjectDetails';
+import ProjectDetailForm from './ProjectDetailForm';
 
 export default async function ProjectPage({
   params,
@@ -19,7 +19,7 @@ export default async function ProjectPage({
         </div>
       }
     >
-      <ProjectDetails projectId={id} />
+      <ProjectDetailForm projectId={id} />
     </Suspense>
   );
 }
