@@ -46,11 +46,15 @@ export async function updateSession(request: NextRequest) {
     '/terms',
     '/contact',
     '/forgot-password',
+    '/projects',
+    '/talents',
   ];
 
   const isPublicRoute = publicRoutes.some(route =>
     request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith('/auth')
-  );
+  ) ||
+  request.nextUrl.pathname.startsWith('/projects/') ||
+  request.nextUrl.pathname.startsWith('/profile/');
 
   // Redirect to login if user is not authenticated and trying to access protected route
   if (!user && !isPublicRoute) {
