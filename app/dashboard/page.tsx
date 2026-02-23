@@ -80,109 +80,125 @@ export default function DashboardPage() {
       console.log('[DASHBOARD] Profile complete, showing dashboard');
       setProfile(profile);
 
-      // Load projects if entrepreneur
-      let projectsData: any[] = [];
-      if (profile.role === 'entrepreneur') {
-        const { data, error: projectsError } = await supabase
-          .from('projects')
-          .select('*')
-          .eq('owner_id', user.id)
-          .order('created_at', { ascending: false });
+      // Run all secondary queries in parallel to minimize total load time
+      const [
+        projectsResult,
+        skillsResult,
+        projectsCountResult,
+        applicationsCountResult,
+        acceptedCountResult,
+        badgesResult,
+        impactResult,
+      ] = await Promise.all([
+        // Projects (entrepreneur only)
+        profile.role === 'entrepreneur'
+          ? supabase
+              .from('projects')
+              .select('*')
+              .eq('owner_id', user.id)
+              .order('created_at', { ascending: false })
+          : Promise.resolve({ data: [], error: null }),
 
-        if (!projectsError && data) {
-          console.log('[DASHBOARD] Projects loaded:', data.length);
-          projectsData = data;
-          setProjects(data);
-        }
+        // Skills (talent only)
+        profile.role === 'talent'
+          ? supabase
+              .from('user_skills')
+              .select(`proficiency_level, skill:skills (id, name, category)`)
+              .eq('user_id', user.id)
+          : Promise.resolve({ data: [], error: null }),
+
+        // Projects count
+        profile.role === 'entrepreneur'
+          ? supabase
+              .from('projects')
+              .select('id', { count: 'exact', head: true })
+              .eq('owner_id', user.id)
+              .then((res) => res.count || 0)
+          : Promise.resolve(0),
+
+        // Applications count
+        profile.role === 'talent'
+          ? supabase
+              .from('applications')
+              .select('id', { count: 'exact', head: true })
+              .eq('talent_id', user.id)
+              .then((res) => res.count || 0)
+          : Promise.resolve(0),
+
+        // Accepted applications count
+        profile.role === 'talent'
+          ? supabase
+              .from('applications')
+              .select('id', { count: 'exact', head: true })
+              .eq('talent_id', user.id)
+              .eq('status', 'accepted')
+              .then((res) => res.count || 0)
+          : Promise.resolve(0),
+
+        // Badges
+        supabase
+          .from('user_badges')
+          .select('badge_type, earned_at')
+          .eq('user_id', user.id)
+          .order('earned_at', { ascending: false }),
+
+        // Impact stats
+        supabase
+          .from('user_impact_stats')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+      ]);
+
+      // Apply projects
+      if (projectsResult.data && projectsResult.data.length > 0) {
+        console.log('[DASHBOARD] Projects loaded:', projectsResult.data.length);
+        setProjects(projectsResult.data);
       }
 
-      // Load skills if talent
-      if (profile.role === 'talent') {
-        const { data: skillsData } = await supabase
-          .from('user_skills')
-          .select(`
-            proficiency_level,
-            skill:skills (
-              id,
-              name,
-              category
-            )
-          `)
-          .eq('user_id', user.id);
-
-        const transformedSkills = (skillsData || []).map((item: any) => ({
+      // Apply skills
+      if (skillsResult.data) {
+        const transformedSkills = (skillsResult.data as any[]).map((item: any) => ({
           proficiency_level: item.proficiency_level,
           skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
         }));
-
         setSkills(transformedSkills);
       }
 
-      // Load stats
-      const [projectsCount, applicationsCount, acceptedApplicationsCount] =
-        await Promise.all([
-          // Projects count
-          profile.role === 'entrepreneur'
-            ? supabase
-                .from('projects')
-                .select('id', { count: 'exact', head: true })
-                .eq('owner_id', user.id)
-                .then((res) => res.count || 0)
-            : Promise.resolve(0),
-
-          // Applications count (sent if talent, received if entrepreneur)
-          profile.role === 'talent'
-            ? supabase
-                .from('applications')
-                .select('id', { count: 'exact', head: true })
-                .eq('talent_id', user.id)
-                .then((res) => res.count || 0)
-            : supabase
-                .from('applications')
-                .select('id', { count: 'exact', head: true })
-                .in('project_id', projectsData?.map((p) => p.id) || [])
-                .then((res) => res.count || 0),
-
-          // Accepted applications count
-          profile.role === 'talent'
-            ? supabase
-                .from('applications')
-                .select('id', { count: 'exact', head: true })
-                .eq('talent_id', user.id)
-                .eq('status', 'accepted')
-                .then((res) => res.count || 0)
-            : supabase
-                .from('applications')
-                .select('id', { count: 'exact', head: true })
-                .in('project_id', projectsData?.map((p) => p.id) || [])
-                .eq('status', 'accepted')
-                .then((res) => res.count || 0),
-        ]);
+      // For entrepreneur, counts are based on their actual projects list
+      let finalAppsCount = applicationsCountResult as number;
+      let finalAcceptedCount = acceptedCountResult as number;
+      if (profile.role === 'entrepreneur') {
+        const projectIds = (projectsResult.data || []).map((p: any) => p.id);
+        if (projectIds.length > 0) {
+          const [appCount, accCount] = await Promise.all([
+            supabase
+              .from('applications')
+              .select('id', { count: 'exact', head: true })
+              .in('project_id', projectIds)
+              .then((res) => res.count || 0),
+            supabase
+              .from('applications')
+              .select('id', { count: 'exact', head: true })
+              .in('project_id', projectIds)
+              .eq('status', 'accepted')
+              .then((res) => res.count || 0),
+          ]);
+          finalAppsCount = appCount;
+          finalAcceptedCount = accCount;
+        }
+      }
 
       setStats({
-        projectsCount,
-        applicationsCount,
-        acceptedApplicationsCount,
+        projectsCount: projectsCountResult as number,
+        applicationsCount: finalAppsCount,
+        acceptedApplicationsCount: finalAcceptedCount,
       });
 
-      // Load badges
-      const { data: badgesData } = await supabase
-        .from('user_badges')
-        .select('badge_type, earned_at')
-        .eq('user_id', user.id)
-        .order('earned_at', { ascending: false });
+      setBadges((badgesResult as any).data || []);
 
-      setBadges(badgesData || []);
-
-      // Load impact stats
-      const { data: impactData } = await supabase
-        .from('user_impact_stats')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (impactData) {
-        setImpactStats(impactData);
+      if ((impactResult as any).data) {
+        setImpactStats((impactResult as any).data);
       }
 
       setIsLoading(false);

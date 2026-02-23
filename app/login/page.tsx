@@ -1,13 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import { Button, Input } from '@/components/ui';
 
-export default function LoginPage() {
+// Inner component — isolated so useSearchParams() is inside a Suspense boundary
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Redirect target after login — only allow internal paths for safety
+  const redirectTo = (() => {
+    const raw = searchParams.get('redirect') || '';
+    return raw.startsWith('/') && !raw.startsWith('//') ? raw : '/dashboard';
+  })();
+
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -22,10 +30,9 @@ export default function LoginPage() {
     setErrors({});
     setIsLoading(true);
 
-    // Basic validation
     const newErrors: typeof errors = {};
     if (!email) {
-      newErrors.email = 'L\'email est requis';
+      newErrors.email = "L'email est requis";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = 'Email invalide';
     }
@@ -40,16 +47,13 @@ export default function LoginPage() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
-        // Check for specific error types
         if (error.message.includes('Email not confirmed')) {
           setErrors({
-            general: '📧 Votre email n\'a pas encore été confirmé. Veuillez vérifier votre boîte mail et cliquer sur le lien de confirmation que nous vous avons envoyé.'
+            general:
+              "📧 Votre email n'a pas encore été confirmé. Veuillez vérifier votre boîte mail et cliquer sur le lien de confirmation que nous vous avons envoyé.",
           });
         } else if (error.message.includes('Invalid login credentials')) {
           setErrors({ general: 'Email ou mot de passe incorrect' });
@@ -67,12 +71,16 @@ export default function LoginPage() {
         .eq('id', data.user.id)
         .single();
 
-      // Redirect based on profile completion
-      if (profile && profile.postal_code && profile.postal_code !== '00000' && profile.city && profile.city !== 'À définir' && profile.first_name && profile.last_name) {
-        router.push('/dashboard');
-      } else {
-        router.push('/onboarding');
-      }
+      const isComplete =
+        profile &&
+        profile.postal_code &&
+        profile.postal_code !== '00000' &&
+        profile.city &&
+        profile.city !== 'À définir' &&
+        profile.first_name &&
+        profile.last_name;
+
+      router.push(isComplete ? redirectTo : '/onboarding');
       router.refresh();
     } catch (error) {
       console.error('Login error:', error);
@@ -82,8 +90,97 @@ export default function LoginPage() {
   };
 
   return (
+    <div className="w-full max-w-md">
+      {/* Card */}
+      <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Bon retour !</h1>
+          <p className="text-neutral-600">
+            {redirectTo !== '/dashboard'
+              ? 'Connectez-vous pour accéder au contenu complet'
+              : 'Connectez-vous pour accéder à votre compte'}
+          </p>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-5">
+          {errors.general && (
+            <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm">
+              {errors.general}
+            </div>
+          )}
+
+          <Input
+            type="email"
+            label="Email"
+            placeholder="votre@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
+            required
+            autoComplete="email"
+          />
+
+          <Input
+            type="password"
+            label="Mot de passe"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password}
+            required
+            autoComplete="current-password"
+          />
+
+          <div className="flex items-center justify-between text-sm">
+            <Link href="/forgot-password" className="text-primary-600 hover:text-primary-700 font-medium">
+              Mot de passe oublié ?
+            </Link>
+          </div>
+
+          <Button type="submit" variant="primary" className="w-full" isLoading={isLoading} disabled={isLoading}>
+            Se connecter
+          </Button>
+        </form>
+
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-neutral-200"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-4 bg-white text-neutral-500">Nouveau sur Terrii ?</span>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <Link
+            href={
+              redirectTo !== '/dashboard'
+                ? `/signup?redirect=${encodeURIComponent(redirectTo)}`
+                : '/signup'
+            }
+          >
+            <Button variant="secondary" className="w-full">
+              Créer un compte gratuitement
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-6 text-center text-sm text-neutral-600">
+        <Link href="/charter" className="hover:text-primary-600 transition-colors">Charte éthique</Link>
+        <span className="mx-2">•</span>
+        <Link href="/privacy" className="hover:text-primary-600 transition-colors">Confidentialité</Link>
+        <span className="mx-2">•</span>
+        <Link href="/terms" className="hover:text-primary-600 transition-colors">CGU</Link>
+      </div>
+    </div>
+  );
+}
+
+// Page shell — wraps the form in Suspense (required by Next.js for useSearchParams)
+export default function LoginPage() {
+  return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
-      {/* Header */}
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
           <Link href="/" className="flex items-center gap-2">
@@ -95,105 +192,18 @@ export default function LoginPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          {/* Card */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                Bon retour !
-              </h1>
-              <p className="text-neutral-600">
-                Connectez-vous pour accéder à votre compte
-              </p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-5">
-              {errors.general && (
-                <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm">
-                  {errors.general}
-                </div>
-              )}
-
-              <Input
-                type="email"
-                label="Email"
-                placeholder="votre@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                error={errors.email}
-                required
-                autoComplete="email"
-              />
-
-              <Input
-                type="password"
-                label="Mot de passe"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={errors.password}
-                required
-                autoComplete="current-password"
-              />
-
-              <div className="flex items-center justify-between text-sm">
-                <Link
-                  href="/forgot-password"
-                  className="text-primary-600 hover:text-primary-700 font-medium"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-full"
-                isLoading={isLoading}
-                disabled={isLoading}
-              >
-                Se connecter
-              </Button>
-            </form>
-
-            {/* Separator */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-neutral-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-neutral-500">Nouveau sur Terrii ?</span>
+        <Suspense
+          fallback={
+            <div className="w-full max-w-md">
+              <div className="bg-white rounded-xl shadow-lg p-8 flex items-center justify-center min-h-[400px]">
+                <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
               </div>
             </div>
-
-            {/* Signup CTA */}
-            <div className="text-center">
-              <Link href="/signup">
-                <Button variant="secondary" className="w-full">
-                  Créer un compte gratuitement
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Footer Links */}
-          <div className="mt-6 text-center text-sm text-neutral-600">
-            <Link href="/charter" className="hover:text-primary-600 transition-colors">
-              Charte éthique
-            </Link>
-            <span className="mx-2">•</span>
-            <Link href="/privacy" className="hover:text-primary-600 transition-colors">
-              Confidentialité
-            </Link>
-            <span className="mx-2">•</span>
-            <Link href="/terms" className="hover:text-primary-600 transition-colors">
-              CGU
-            </Link>
-          </div>
-        </div>
+          }
+        >
+          <LoginForm />
+        </Suspense>
       </main>
     </div>
   );
