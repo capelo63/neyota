@@ -2,12 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import { Button, Input } from '@/components/ui';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Redirect target after login — only allow internal paths for safety
+  const redirectTo = (() => {
+    const raw = searchParams.get('redirect') || '';
+    return raw.startsWith('/') && !raw.startsWith('//') ? raw : '/dashboard';
+  })();
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -68,10 +74,11 @@ export default function LoginPage() {
         .single();
 
       // Redirect based on profile completion
-      if (profile && profile.postal_code && profile.postal_code !== '00000' && profile.city && profile.city !== 'À définir' && profile.first_name && profile.last_name) {
-        router.push('/dashboard');
-      } else {
+      const isComplete = profile && profile.postal_code && profile.postal_code !== '00000' && profile.city && profile.city !== 'À définir' && profile.first_name && profile.last_name;
+      if (!isComplete) {
         router.push('/onboarding');
+      } else {
+        router.push(redirectTo);
       }
       router.refresh();
     } catch (error) {
@@ -105,7 +112,9 @@ export default function LoginPage() {
                 Bon retour !
               </h1>
               <p className="text-neutral-600">
-                Connectez-vous pour accéder à votre compte
+                {redirectTo !== '/dashboard'
+                  ? 'Connectez-vous pour accéder au contenu complet'
+                  : 'Connectez-vous pour accéder à votre compte'}
               </p>
             </div>
 
@@ -171,7 +180,7 @@ export default function LoginPage() {
 
             {/* Signup CTA */}
             <div className="text-center">
-              <Link href="/signup">
+              <Link href={redirectTo !== '/dashboard' ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : '/signup'}>
                 <Button variant="secondary" className="w-full">
                   Créer un compte gratuitement
                 </Button>

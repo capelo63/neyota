@@ -50,49 +50,31 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
   const loadData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      // Fetch user session and project data in parallel
+      const [userResult, projectResult] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase
+          .from('projects')
+          .select(`
+            *,
+            owner:profiles!owner_id(id, first_name, last_name, city, bio),
+            skills:project_skills_needed(
+              skill:skills(id, name, description)
+            )
+          `)
+          .eq('id', projectId)
+          .single(),
+      ]);
 
-      if (!user) {
-        router.push('/login');
-        return;
-      }
+      const currentUser = userResult.data.user;
 
-      setUser(user);
-
-      // Load profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (!profileData) {
-        router.push('/login');
-        return;
-      }
-
-      setProfile(profileData);
-
-      // Load project with owner and skills
-      const { data: projectData, error: projectError } = await supabase
-        .from('projects')
-        .select(`
-          *,
-          owner:profiles!owner_id(id, first_name, last_name, email, city, bio),
-          skills:project_skills_needed(
-            skill:skills(id, name, description)
-          )
-        `)
-        .eq('id', projectId)
-        .single();
-
-      if (projectError || !projectData) {
-        console.error('Error loading project:', projectError);
+      if (projectResult.error || !projectResult.data) {
+        console.error('Error loading project:', projectResult.error);
         router.push('/projects');
         return;
       }
 
-      // Transform skills
+      const projectData = projectResult.data;
       const transformedProject = {
         ...projectData,
         owner: projectData.owner,
@@ -101,16 +83,29 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
       setProject(transformedProject);
 
-      // Check if user has already applied
-      if (profileData.role === 'talent') {
-        const { data: applicationData } = await supabase
-          .from('applications')
-          .select('id')
-          .eq('project_id', projectId)
-          .eq('talent_id', user.id)
-          .maybeSingle();
+      // Load user-specific data only if authenticated
+      if (currentUser) {
+        setUser(currentUser);
 
-        setHasApplied(!!applicationData);
+        // Fetch profile and application status in parallel
+        const [profileResult, applicationResult] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', currentUser.id)
+            .single(),
+          supabase
+            .from('applications')
+            .select('id')
+            .eq('project_id', projectId)
+            .eq('talent_id', currentUser.id)
+            .maybeSingle(),
+        ]);
+
+        if (profileResult.data) {
+          setProfile(profileResult.data);
+        }
+        setHasApplied(!!applicationResult.data);
       }
 
       setIsLoading(false);
@@ -121,6 +116,10 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   };
 
   const handleApply = () => {
+    if (!user) {
+      router.push(`/login?redirect=/projects/${projectId}`);
+      return;
+    }
     setIsApplicationModalOpen(true);
     setApplicationMessage('');
     setApplicationError('');
@@ -157,7 +156,6 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         return;
       }
 
-      // Success
       setHasApplied(true);
       setIsApplicationModalOpen(false);
       setApplicationMessage('');
@@ -185,6 +183,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   }
 
   const isOwner = user?.id === project.owner_id;
+  const isTalent = profile?.role === 'talent';
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
@@ -198,14 +197,42 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               </div>
               <span className="text-2xl font-bold text-neutral-900">Terrii</span>
             </Link>
-            <Link href="/projects">
-              <Button variant="ghost" size="sm">
-                ← Retour aux projets
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              {!user && (
+                <Link href={`/login?redirect=/projects/${projectId}`}>
+                  <Button variant="primary" size="sm">Se connecter</Button>
+                </Link>
+              )}
+              <Link href="/projects">
+                <Button variant="ghost" size="sm">← Retour aux projets</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
+
+      {/* Banner for unauthenticated users */}
+      {!user && (
+        <div className="bg-primary-600 text-white px-4 py-3">
+          <div className="container-custom flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+            <span>
+              🔒 Créez un compte gratuit pour voir la description complète et postuler à ce projet.
+            </span>
+            <div className="flex gap-3 shrink-0">
+              <Link href={`/signup?redirect=/projects/${projectId}`}>
+                <button className="bg-white text-primary-600 font-semibold px-4 py-1.5 rounded-lg hover:bg-primary-50 transition-colors text-sm">
+                  Créer un compte
+                </button>
+              </Link>
+              <Link href={`/login?redirect=/projects/${projectId}`}>
+                <button className="border border-white text-white font-medium px-4 py-1.5 rounded-lg hover:bg-primary-700 transition-colors text-sm">
+                  Se connecter
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 container-custom py-12">
@@ -219,9 +246,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                     {PHASE_LABELS[project.current_phase]}
                   </Badge>
                   {project.is_remote_possible && (
-                    <Badge variant="secondary">
-                      📡 Distanciel possible
-                    </Badge>
+                    <Badge variant="secondary">📡 Distanciel possible</Badge>
                   )}
                 </div>
                 <h1 className="text-4xl font-bold text-neutral-900 mb-4">
@@ -236,44 +261,78 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                     {project.city} ({project.postal_code})
                   </span>
                   <span>•</span>
-                  <span>
-                    Publié le {new Date(project.created_at).toLocaleDateString('fr-FR')}
-                  </span>
+                  <span>Publié le {new Date(project.created_at).toLocaleDateString('fr-FR')}</span>
                 </div>
               </div>
-              {!isOwner && profile?.role === 'talent' && (
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={handleApply}
-                  disabled={hasApplied}
-                >
-                  {hasApplied ? '✓ Déjà candidaté' : 'Postuler à ce projet'}
-                </Button>
+
+              {/* Apply / Login CTA */}
+              {!isOwner && (
+                user ? (
+                  isTalent && (
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      onClick={handleApply}
+                      disabled={hasApplied}
+                    >
+                      {hasApplied ? '✓ Déjà candidaté' : 'Postuler à ce projet'}
+                    </Button>
+                  )
+                ) : (
+                  <Link href={`/login?redirect=/projects/${projectId}`}>
+                    <Button variant="primary" size="lg">
+                      Se connecter pour postuler
+                    </Button>
+                  </Link>
+                )
               )}
             </div>
 
-            {/* Short Pitch */}
+            {/* Short Pitch — always visible */}
             <div className="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
               <p className="text-lg text-neutral-800 leading-relaxed">
                 {project.short_pitch}
               </p>
             </div>
 
-            {/* Full Description */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                Description du projet
-              </h2>
-              <div className="prose prose-neutral max-w-none">
-                <p className="text-neutral-700 whitespace-pre-wrap leading-relaxed">
-                  {project.full_description}
-                </p>
+            {/* Full Description — visible only when authenticated */}
+            {user ? (
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+                  Description du projet
+                </h2>
+                <div className="prose prose-neutral max-w-none">
+                  <p className="text-neutral-700 whitespace-pre-wrap leading-relaxed">
+                    {project.full_description}
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-6 relative">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+                  Description du projet
+                </h2>
+                {/* Blurred preview */}
+                <div className="relative overflow-hidden rounded-lg">
+                  <div className="blur-sm select-none pointer-events-none text-neutral-700 leading-relaxed line-clamp-4">
+                    {project.full_description}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white flex items-end justify-center pb-4">
+                    <Link href={`/login?redirect=/projects/${projectId}`}>
+                      <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-lg font-semibold shadow hover:bg-primary-700 transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        Se connecter pour lire la suite
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
 
-            {/* Phase Objectives */}
-            {project.phase_objectives && (
+            {/* Phase Objectives — authenticated only */}
+            {user && project.phase_objectives && (
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                   Objectifs de cette phase
@@ -284,7 +343,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               </div>
             )}
 
-            {/* Skills Needed */}
+            {/* Skills Needed — always visible */}
             {project.skills.length > 0 && (
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-4">
@@ -341,8 +400,8 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             </div>
           </div>
 
-          {/* Apply CTA Bottom */}
-          {!isOwner && profile?.role === 'talent' && (
+          {/* Apply CTA Bottom — authenticated talent only */}
+          {user && !isOwner && isTalent && (
             <div className="mt-8 bg-primary-50 border border-primary-200 rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -365,8 +424,32 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             </div>
           )}
 
-          {/* Report button - only visible for non-owners */}
-          {!isOwner && user && (
+          {/* Signup CTA Bottom — unauthenticated only */}
+          {!user && (
+            <div className="mt-8 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl p-8 text-white text-center">
+              <h3 className="text-2xl font-bold mb-3">
+                Intéressé par ce projet ?
+              </h3>
+              <p className="text-primary-100 mb-6">
+                Créez votre compte gratuitement pour lire la description complète et postuler en quelques minutes.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href={`/signup?redirect=/projects/${projectId}`}>
+                  <Button variant="secondary" size="lg" className="min-w-[180px] bg-white text-primary-600 hover:bg-neutral-50">
+                    Créer un compte
+                  </Button>
+                </Link>
+                <Link href={`/login?redirect=/projects/${projectId}`}>
+                  <Button variant="ghost" size="lg" className="min-w-[180px] text-white border-white hover:bg-primary-700">
+                    Se connecter
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Report button — authenticated non-owners only */}
+          {user && !isOwner && (
             <div className="mt-4 flex justify-end">
               <ReportButton
                 targetType="project"
@@ -390,9 +473,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                   </p>
                 </div>
                 <Link href={`/projects/${projectId}/applications`}>
-                  <Button variant="secondary">
-                    Voir les candidatures
-                  </Button>
+                  <Button variant="secondary">Voir les candidatures</Button>
                 </Link>
               </div>
             </div>
@@ -409,9 +490,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
       >
         <div className="space-y-6">
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
-            <h3 className="font-semibold text-neutral-900 mb-2">
-              {project?.title}
-            </h3>
+            <h3 className="font-semibold text-neutral-900 mb-2">{project?.title}</h3>
             <p className="text-sm text-neutral-700">
               Vous postulez auprès de {project?.owner.first_name} {project?.owner.last_name}
             </p>
