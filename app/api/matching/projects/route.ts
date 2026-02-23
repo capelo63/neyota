@@ -1,8 +1,27 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  // Rate limit: 30 requests / minute per IP
+  const clientIp = getClientIp(request);
+  const { allowed, remaining, resetAt } = rateLimit(clientIp, 30, 60_000);
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(Math.ceil((resetAt - Date.now()) / 1000)),
+          'X-RateLimit-Limit': '30',
+          'X-RateLimit-Remaining': '0',
+        },
+      }
+    );
+  }
+
   try {
     const cookieStore = await cookies();
 
@@ -44,7 +63,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Matching failed' }, { status: 500 });
     }
 
-    return NextResponse.json({ projects: data || [] });
+    return NextResponse.json(
+      { projects: data || [] },
+      {
+        headers: {
+          'X-RateLimit-Limit': '30',
+          'X-RateLimit-Remaining': String(remaining),
+        },
+      }
+    );
   } catch (error) {
     console.error('API error:', error);
     return NextResponse.json(
