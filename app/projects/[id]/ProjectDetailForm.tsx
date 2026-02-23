@@ -59,7 +59,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             *,
             owner:profiles!owner_id(id, first_name, last_name, city, bio),
             skills:project_skills_needed(
-              skill:skills(id, name, description)
+              skill:skills(id, name, category)
             )
           `)
           .eq('id', projectId)
@@ -358,8 +358,8 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                       <div className="w-2 h-2 rounded-full bg-primary-600 mt-2 flex-shrink-0"></div>
                       <div>
                         <div className="font-semibold text-neutral-900">{skill.name}</div>
-                        {skill.description && (
-                          <div className="text-sm text-neutral-600 mt-1">{skill.description}</div>
+                        {skill.category && (
+                          <div className="text-sm text-neutral-600 mt-1 capitalize">{skill.category}</div>
                         )}
                       </div>
                     </div>
