@@ -5,7 +5,7 @@ import { Button } from '@/components/ui';
 
 export const metadata: Metadata = {
   title: 'Charte éthique',
-  description: 'La charte éthique Terrii : nos engagements pour protéger les idées, garantir la transparence et promouvoir la collaboration locale responsable.',
+  description: 'La charte éthique Terii : nos engagements pour protéger les idées, garantir la transparence et promouvoir la collaboration locale responsable.',
 };
 
 export default function CharterPage() {
@@ -18,7 +18,7 @@ export default function CharterPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-              Charte Éthique Terrii
+              Charte Éthique Terii
             </h1>
             <p className="text-xl text-neutral-600">
               Les valeurs et engagements qui fondent notre communauté
@@ -33,7 +33,7 @@ export default function CharterPage() {
             {/* Intro */}
             <section>
               <p className="text-lg text-neutral-700 leading-relaxed">
-                En rejoignant Terrii, vous vous engagez à respecter cette charte éthique.
+                En rejoignant Terii, vous vous engagez à respecter cette charte éthique.
                 Elle garantit un environnement sain, bienveillant et respectueux pour tous les membres
                 de notre communauté, qu'ils soient entrepreneurs ou talents.
               </p>
@@ -111,7 +111,7 @@ export default function CharterPage() {
                   <li>Privilégier les collaborations locales et territoriales</li>
                   <li>Contribuer au développement économique et social de mon territoire</li>
                   <li>Partager mes connaissances et mon expérience avec la communauté locale</li>
-                  <li>Respecter l'esprit de solidarité et d'entraide de Terrii</li>
+                  <li>Respecter l'esprit de solidarité et d'entraide de Terii</li>
                 </ul>
               </div>
             </section>
@@ -146,7 +146,7 @@ export default function CharterPage() {
                   <strong>Je m'engage à :</strong>
                 </p>
                 <ul className="list-disc list-inside space-y-2">
-                  <li>Ne pas utiliser Terrii à des fins illégales ou contraires à l'éthique</li>
+                  <li>Ne pas utiliser Terii à des fins illégales ou contraires à l'éthique</li>
                   <li>Ne pas créer de faux profils ou usurper l'identité d'autrui</li>
                   <li>Ne pas envoyer de spam ou de messages non sollicités</li>
                   <li>Ne pas tenter de contourner les systèmes de sécurité</li>
@@ -163,7 +163,7 @@ export default function CharterPage() {
               </h2>
               <div className="space-y-3 text-neutral-700 pl-12">
                 <p>
-                  Terrii se réserve le droit de :
+                  Terii se réserve le droit de :
                 </p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Enquêter sur tout signalement de non-respect de cette charte</li>
@@ -187,12 +187,12 @@ export default function CharterPage() {
                 💡 Acceptation de la charte
               </h2>
               <p className="text-neutral-700 mb-3">
-                En créant un compte sur Terrii, vous acceptez de respecter cette charte éthique
+                En créant un compte sur Terii, vous acceptez de respecter cette charte éthique
                 dans toutes vos interactions sur la plateforme.
               </p>
               <p className="text-neutral-700">
                 Cette charte peut être mise à jour. Les membres seront informés de tout changement
-                significatif et devront accepter la nouvelle version pour continuer à utiliser Terrii.
+                significatif et devront accepter la nouvelle version pour continuer à utiliser Terii.
               </p>
             </section>
           </div>
@@ -206,7 +206,7 @@ export default function CharterPage() {
             </Link>
             <Link href="/about">
               <Button variant="secondary" size="lg">
-                En savoir plus sur Terrii
+                En savoir plus sur Terii
               </Button>
             </Link>
           </div>

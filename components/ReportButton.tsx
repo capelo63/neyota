@@ -143,7 +143,7 @@ export default function ReportButton({
                   )}
                   <p className="text-sm text-neutral-600 mt-2">
                     Votre signalement sera examiné par notre équipe dans les plus brefs délais.
-                    Merci de contribuer à la sécurité de la communauté Terrii.
+                    Merci de contribuer à la sécurité de la communauté Terii.
                   </p>
                 </div>
 
