@@ -219,51 +219,50 @@ export default async function Home({
                 {projects.map((project: any) => {
                   const owner = Array.isArray(project.owner) ? project.owner[0] : project.owner;
                   return (
-                    <Card key={project.id} className="group">
-                      <CardBody>
-                        {/* Location & Phase */}
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-1 text-primary-600 text-sm font-medium">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                            </svg>
-                            <span>{project.city}</span>
-                            {project.is_remote_possible && (
-                              <span className="text-neutral-400">• Distanciel</span>
-                            )}
+                    <Link key={project.id} href={`/projects/${project.id}`} className="block">
+                      <Card className="group hover:shadow-lg transition-shadow cursor-pointer h-full">
+                        <CardBody>
+                          {/* Location & Phase */}
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-1 text-primary-600 text-sm font-medium">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              </svg>
+                              <span>{project.city}</span>
+                              {project.is_remote_possible && (
+                                <span className="text-neutral-400">• Distanciel</span>
+                              )}
+                            </div>
+                            <Badge variant="success">{PHASE_LABELS[project.current_phase]}</Badge>
                           </div>
-                          <Badge variant="success">{PHASE_LABELS[project.current_phase]}</Badge>
-                        </div>
 
-                        {/* Title */}
-                        <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
-                          {project.title}
-                        </h3>
+                          {/* Title */}
+                          <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                            {project.title}
+                          </h3>
 
-                        {/* Description */}
-                        <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
-                          {project.short_pitch}
-                        </p>
-
-                        {/* Owner */}
-                        {owner && (
-                          <p className="text-sm text-neutral-500 mb-4">
-                            Par {owner.first_name} {owner.last_name}
+                          {/* Description */}
+                          <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
+                            {project.short_pitch}
                           </p>
-                        )}
 
-                        {/* CTA */}
-                        <Link
-                          href={`/projects/${project.id}`}
-                          className="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center gap-1 group"
-                        >
-                          Voir le projet
-                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </Link>
-                      </CardBody>
-                    </Card>
+                          {/* Owner */}
+                          {owner && (
+                            <p className="text-sm text-neutral-500 mb-4">
+                              Par {owner.first_name} {owner.last_name}
+                            </p>
+                          )}
+
+                          {/* CTA */}
+                          <div className="text-primary-600 font-medium inline-flex items-center gap-1">
+                            Voir le projet
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </Link>
                   );
                 })}
               </div>
