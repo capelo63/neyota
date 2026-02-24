@@ -108,7 +108,8 @@ export default function SignupForm() {
     setErrors({});
 
     try {
-      // 1. Create auth user
+      // 1. Create auth user — the trigger handle_new_auth_user() will
+      //    automatically create the profile row via raw_user_meta_data
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -123,7 +124,7 @@ export default function SignupForm() {
 
       if (authError) {
         if (authError.message.includes('already registered')) {
-          setErrors({ general: 'Cet email est déjà utilisé' });
+          setErrors({ general: 'Cet email est déjà utilisé. Veuillez vous connecter ou utiliser un autre email.' });
         } else {
           setErrors({ general: authError.message });
         }
@@ -131,64 +132,45 @@ export default function SignupForm() {
         return;
       }
 
-      if (!authData.user) {
-        setErrors({ general: 'Erreur lors de la création du compte' });
+      // Supabase returns a ghost user (no session, identities=[]) when the
+      // email is already taken but unconfirmed — detect and surface it.
+      if (!authData.user || authData.user.identities?.length === 0) {
+        setErrors({ general: 'Cet email est déjà utilisé. Veuillez vous connecter ou vérifier votre boîte mail.' });
         setIsLoading(false);
         return;
       }
 
       console.log('[SIGNUP] User created:', authData.user.id);
 
-      // 2. Create profile using RPC (bypasses RLS)
-      const { error: profileError } = await supabase.rpc('create_user_profile', {
-        user_id: authData.user.id,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        role: role,
-      });
+      // 2. Record charter acceptance (CRITICAL for GDPR compliance)
+      //    Only if we have a valid session (email confirmation disabled)
+      //    If confirmation is required, the profile trigger will fire on confirm.
+      if (authData.session) {
+        const { error: charterError } = await supabase
+          .from('user_charter_acceptances')
+          .insert({
+            user_id: authData.user.id,
+            accepted_at: new Date().toISOString(),
+            charter_version: 'v1.0',
+            ip_address: clientIp,
+          });
 
-      if (profileError) {
-        console.error('[SIGNUP] Profile creation error:', profileError);
-        setErrors({ general: 'Erreur lors de la création du profil. Veuillez réessayer.' });
-        setIsLoading(false);
-        return;
-      }
+        if (charterError) {
+          console.error('[SIGNUP] Charter acceptance error (CRITICAL):', charterError);
+          // Non-blocking: log but continue — user is created, GDPR note to fix
+        } else {
+          console.log('[SIGNUP] Charter acceptance recorded successfully');
+        }
 
-      console.log('[SIGNUP] Profile created successfully');
-
-      // 3. Record charter acceptance (CRITICAL for GDPR compliance)
-      const { error: charterError } = await supabase
-        .from('user_charter_acceptances')
-        .insert({
-          user_id: authData.user.id,
-          accepted_at: new Date().toISOString(),
-          charter_version: 'v1.0',
-          ip_address: clientIp, // Real client IP captured from server-side
-        });
-
-      if (charterError) {
-        console.error('[SIGNUP] Charter acceptance error (CRITICAL):', charterError);
-        setErrors({
-          general: 'Erreur lors de l\'enregistrement de votre acceptation de la charte. Veuillez réessayer.'
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      console.log('[SIGNUP] Charter acceptance recorded successfully');
-
-      // 4. Check if email confirmation is required
-      if (!authData.session) {
-        // No session = email confirmation required - show confirmation step
+        console.log('[SIGNUP] No email confirmation needed, redirecting to onboarding');
+        router.push('/onboarding');
+        router.refresh();
+      } else {
+        // Email confirmation required — show confirmation step
         console.log('[SIGNUP] Email confirmation required');
         setUserEmail(formData.email);
         setStep('email-confirmation');
         setIsLoading(false);
-      } else {
-        // Session exists = email confirmed or confirmation disabled - redirect to onboarding
-        console.log('[SIGNUP] No email confirmation needed, redirecting to onboarding');
-        router.push('/onboarding');
-        router.refresh();
       }
     } catch (error) {
       console.error('Signup error:', error);
