@@ -84,6 +84,29 @@ export function getRegionLabelFromPostal(postalCode: string): string {
   return DEPT_TO_REGION[dept2] || '';
 }
 
+/** Strips diacritics and normalizes apostrophes for robust comparison. */
+function normalizeForCompare(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')   // strip accents
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u02bc]/g, "'"); // curly/modifier apostrophes → straight
+}
+
+/**
+ * Returns the region slug (e.g. 'provence-alpes-cote-azur') from a postal code.
+ * Comparison is done on normalized strings to be immune to accent/apostrophe variants.
+ * Falls back to empty string if not found.
+ */
+export function getRegionSlugFromPostal(postalCode: string): string {
+  const label = getRegionLabelFromPostal(postalCode);
+  if (!label) return '';
+  const normLabel = normalizeForCompare(label);
+  const entry = (FRENCH_REGIONS as readonly { value: string; label: string }[])
+    .find(r => normalizeForCompare(r.label) === normLabel);
+  return entry?.value ?? '';
+}
+
 // Mapping des codes postaux vers les régions d'outre-mer
 export const OVERSEAS_POSTAL_CODES = {
   '971': 'Guadeloupe',

@@ -6,7 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Select, Badge } from '@/components/ui';
 import Navigation from '@/components/Navigation';
-import { FRENCH_REGIONS, getRegionLabelFromPostal } from '@/lib/constants/regions';
+import { FRENCH_REGIONS, getRegionSlugFromPostal } from '@/lib/constants/regions';
 
 interface Project {
   id: string;
@@ -209,15 +209,12 @@ export default function ProjectsListForm() {
       );
     }
 
-    // Region filter — use stored region label if available, else derive from postal_code
+    // Region filter — compare slugs only (no accent/apostrophe issues)
+    // postal_code is always present and reliable; stored region field may be null/inconsistent
     if (selectedRegion !== 'all') {
-      const selectedLabel = FRENCH_REGIONS.find(r => r.value === selectedRegion)?.label ?? selectedRegion;
-      const normalize = (s: string) =>
-        s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/['']/g, "'");
-      filtered = filtered.filter(project => {
-        const regionLabel = project.region || getRegionLabelFromPostal(project.postal_code);
-        return regionLabel && normalize(regionLabel) === normalize(selectedLabel);
-      });
+      filtered = filtered.filter(project =>
+        getRegionSlugFromPostal(project.postal_code) === selectedRegion
+      );
     }
 
     setFilteredProjects(filtered);
