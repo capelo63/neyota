@@ -209,10 +209,12 @@ export default function ProjectsListForm() {
       );
     }
 
-    // Region filter
+    // Region filter — compare stored label with the selected slug via FRENCH_REGIONS mapping
     if (selectedRegion !== 'all') {
+      const selectedLabel = FRENCH_REGIONS.find(r => r.value === selectedRegion)?.label ?? selectedRegion;
+      const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/['']/g, "'");
       filtered = filtered.filter(project =>
-        project.region && project.region.toLowerCase() === selectedRegion.toLowerCase()
+        project.region && normalize(project.region) === normalize(selectedLabel)
       );
     }
 
@@ -324,7 +326,7 @@ export default function ProjectsListForm() {
                   options={[
                     { value: 'all', label: 'Toutes les régions' },
                     ...FRENCH_REGIONS.map((region) => ({
-                      value: region.label,
+                      value: region.value,
                       label: region.label,
                     })),
                   ]}
