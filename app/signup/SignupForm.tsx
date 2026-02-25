@@ -154,13 +154,6 @@ export default function SignupForm() {
         },
       });
 
-      // DEBUG: Log the complete response structure
-      console.log('[SIGNUP] Full authData:', JSON.stringify(authData, null, 2));
-      console.log('[SIGNUP] authData.user:', authData.user);
-      console.log('[SIGNUP] authData.session:', authData.session);
-      console.log('[SIGNUP] authData.user?.identities:', authData.user?.identities);
-      console.log('[SIGNUP] identities length:', authData.user?.identities?.length);
-
       if (authError) {
         console.log('[SIGNUP] authError:', authError);
         if (authError.message.includes('already registered')) {
@@ -172,11 +165,26 @@ export default function SignupForm() {
         return;
       }
 
-      // Supabase returns a ghost user (no session, identities=[]) when the
-      // email is already taken but unconfirmed — show pending confirmation UI
-      if (!authData.user || authData.user.identities?.length === 0) {
-        console.log('[SIGNUP] Ghost user detected - email already registered but unconfirmed');
-        setPendingEmail(formData.email);
+      // When attempting to sign up with an existing unconfirmed email, Supabase returns
+      // the existing user (with created_at in the past) but no session. Detect this by
+      // checking if the account was created more than 10 seconds ago (normal signup is instant).
+      if (authData.user && !authData.session) {
+        const createdAt = new Date(authData.user.created_at);
+        const now = new Date();
+        const ageInSeconds = (now.getTime() - createdAt.getTime()) / 1000;
+
+        console.log('[SIGNUP] User created at:', authData.user.created_at);
+        console.log('[SIGNUP] Account age:', ageInSeconds, 'seconds');
+
+        if (ageInSeconds > 10) {
+          console.log('[SIGNUP] Existing unconfirmed account detected - showing pending confirmation UI');
+          setPendingEmail(formData.email);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      if (!authData.user) {
         setIsLoading(false);
         return;
       }
@@ -435,9 +443,7 @@ export default function SignupForm() {
             )}
 
             {/* PENDING EMAIL CONFIRMATION */}
-            {pendingEmail && (() => {
-              console.log('[RENDER] Showing pending confirmation UI for:', pendingEmail);
-              return (
+            {pendingEmail && (
               <div className="text-center py-8">
                 <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,8 +495,7 @@ export default function SignupForm() {
                   </button>
                 </div>
               </div>
-              );
-            })()}
+            )}
 
             {/* STEP 3: Charter */}
             {step === 'charter' && !pendingEmail && (
@@ -603,11 +608,7 @@ export default function SignupForm() {
             )}
 
             {/* STEP 4: Email Confirmation */}
-            {step === 'email-confirmation' && !pendingEmail && (() => {
-              console.log('[RENDER] Showing standard email confirmation UI for:', userEmail);
-              console.log('[RENDER] pendingEmail is:', pendingEmail);
-              console.log('[RENDER] step is:', step);
-              return (
+            {step === 'email-confirmation' && !pendingEmail && (
               <div className="text-center py-8">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -648,8 +649,7 @@ export default function SignupForm() {
                   </Button>
                 </Link>
               </div>
-              );
-            })()}
+            )}
           </div>
 
           {/* Footer Links */}
