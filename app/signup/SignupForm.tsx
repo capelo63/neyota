@@ -32,6 +32,7 @@ export default function SignupForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null); // Email already registered but unconfirmed
   const [clientIp, setClientIp] = useState<string>('0.0.0.0');
 
   // Fetch client IP on mount
@@ -98,6 +99,35 @@ export default function SignupForm() {
     }
   };
 
+  const handleResendConfirmation = async () => {
+    if (!pendingEmail) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: pendingEmail,
+      });
+
+      if (error) {
+        console.error('[RESEND] Error:', error);
+        setErrors({ general: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.' });
+        setIsLoading(false);
+        return;
+      }
+
+      console.log('[RESEND] Confirmation email sent to:', pendingEmail);
+      setUserEmail(pendingEmail);
+      setPendingEmail(null);
+      setStep('email-confirmation');
+      setIsLoading(false);
+    } catch (error) {
+      console.error('[RESEND] Error:', error);
+      setErrors({ general: 'Une erreur est survenue. Veuillez réessayer.' });
+      setIsLoading(false);
+    }
+  };
+
   const handleFinalSubmit = async () => {
     if (!charterAccepted) {
       setErrors({ charter: 'Vous devez accepter la charte éthique pour continuer' });
@@ -135,9 +165,10 @@ export default function SignupForm() {
       }
 
       // Supabase returns a ghost user (no session, identities=[]) when the
-      // email is already taken but unconfirmed — detect and surface it.
+      // email is already taken but unconfirmed — show pending confirmation UI
       if (!authData.user || authData.user.identities?.length === 0) {
-        setErrors({ general: 'Cet email est déjà utilisé. Veuillez vous connecter ou vérifier votre boîte mail.' });
+        console.log('[SIGNUP] Ghost user detected - email already registered but unconfirmed');
+        setPendingEmail(formData.email);
         setIsLoading(false);
         return;
       }
@@ -233,7 +264,7 @@ export default function SignupForm() {
           {/* Step Content */}
           <div className="bg-white rounded-xl shadow-lg p-8">
             {/* STEP 1: Role Selection */}
-            {step === 'role' && (
+            {step === 'role' && !pendingEmail && (
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
@@ -292,7 +323,7 @@ export default function SignupForm() {
             )}
 
             {/* STEP 2: Info Form */}
-            {step === 'info' && (
+            {step === 'info' && !pendingEmail && (
               <div>
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full mb-4">
@@ -393,8 +424,63 @@ export default function SignupForm() {
               </div>
             )}
 
+            {/* PENDING EMAIL CONFIRMATION */}
+            {pendingEmail && (
+              <div className="text-center py-8">
+                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+
+                <h1 className="text-3xl font-bold text-neutral-900 mb-4">
+                  Compte en attente de confirmation
+                </h1>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left max-w-md mx-auto">
+                  <p className="text-neutral-700 mb-3">
+                    Un compte avec l'adresse <strong className="text-neutral-900">{pendingEmail}</strong> est déjà enregistré mais n'a pas encore été confirmé.
+                  </p>
+                  <p className="text-neutral-700">
+                    Vérifiez votre boîte mail (et vos spams) pour trouver l'email de confirmation, ou demandez un nouvel envoi.
+                  </p>
+                </div>
+
+                {errors.general && (
+                  <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm mb-6 max-w-md mx-auto">
+                    {errors.general}
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-4 max-w-md mx-auto">
+                  <Button
+                    variant="primary"
+                    onClick={handleResendConfirmation}
+                    isLoading={isLoading}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Envoi en cours...' : '📧 Renvoyer l\'email de confirmation'}
+                  </Button>
+
+                  <div className="text-sm text-neutral-600">
+                    Vous avez déjà confirmé votre compte ?{' '}
+                    <Link href="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                      Se connecter
+                    </Link>
+                  </div>
+
+                  <button
+                    onClick={() => setPendingEmail(null)}
+                    className="text-sm text-neutral-500 hover:text-neutral-700"
+                  >
+                    ← Utiliser une autre adresse email
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* STEP 3: Charter */}
-            {step === 'charter' && (
+            {step === 'charter' && !pendingEmail && (
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
@@ -504,7 +590,7 @@ export default function SignupForm() {
             )}
 
             {/* STEP 4: Email Confirmation */}
-            {step === 'email-confirmation' && (
+            {step === 'email-confirmation' && !pendingEmail && (
               <div className="text-center py-8">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
