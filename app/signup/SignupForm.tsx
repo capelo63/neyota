@@ -154,7 +154,15 @@ export default function SignupForm() {
         },
       });
 
+      // DEBUG: Log the complete response structure
+      console.log('[SIGNUP] Full authData:', JSON.stringify(authData, null, 2));
+      console.log('[SIGNUP] authData.user:', authData.user);
+      console.log('[SIGNUP] authData.session:', authData.session);
+      console.log('[SIGNUP] authData.user?.identities:', authData.user?.identities);
+      console.log('[SIGNUP] identities length:', authData.user?.identities?.length);
+
       if (authError) {
+        console.log('[SIGNUP] authError:', authError);
         if (authError.message.includes('already registered')) {
           setErrors({ general: 'Cet email est déjà utilisé. Veuillez vous connecter ou utiliser un autre email.' });
         } else {
@@ -200,7 +208,9 @@ export default function SignupForm() {
         router.refresh();
       } else {
         // Email confirmation required — show confirmation step
-        console.log('[SIGNUP] Email confirmation required');
+        console.log('[SIGNUP] Email confirmation required (normal new user flow)');
+        console.log('[SIGNUP] Setting userEmail to:', formData.email);
+        console.log('[SIGNUP] Setting step to: email-confirmation');
         setUserEmail(formData.email);
         setStep('email-confirmation');
         setIsLoading(false);
@@ -425,7 +435,9 @@ export default function SignupForm() {
             )}
 
             {/* PENDING EMAIL CONFIRMATION */}
-            {pendingEmail && (
+            {pendingEmail && (() => {
+              console.log('[RENDER] Showing pending confirmation UI for:', pendingEmail);
+              return (
               <div className="text-center py-8">
                 <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -477,7 +489,8 @@ export default function SignupForm() {
                   </button>
                 </div>
               </div>
-            )}
+              );
+            })()}
 
             {/* STEP 3: Charter */}
             {step === 'charter' && !pendingEmail && (
@@ -590,7 +603,11 @@ export default function SignupForm() {
             )}
 
             {/* STEP 4: Email Confirmation */}
-            {step === 'email-confirmation' && !pendingEmail && (
+            {step === 'email-confirmation' && !pendingEmail && (() => {
+              console.log('[RENDER] Showing standard email confirmation UI for:', userEmail);
+              console.log('[RENDER] pendingEmail is:', pendingEmail);
+              console.log('[RENDER] step is:', step);
+              return (
               <div className="text-center py-8">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -631,7 +648,8 @@ export default function SignupForm() {
                   </Button>
                 </Link>
               </div>
-            )}
+              );
+            })()}
           </div>
 
           {/* Footer Links */}
