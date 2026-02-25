@@ -104,6 +104,8 @@ export default function SignupForm() {
       return;
     }
 
+    // Prevent double-submission (block immediately before async call)
+    if (isLoading) return;
     setIsLoading(true);
     setErrors({});
 
