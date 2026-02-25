@@ -184,6 +184,11 @@ export default function SignupForm() {
         }
       }
 
+      if (!authData.user) {
+        setIsLoading(false);
+        return;
+      }
+
       console.log('[SIGNUP] User created:', authData.user.id);
 
       // 2. Record charter acceptance (CRITICAL for GDPR compliance)
