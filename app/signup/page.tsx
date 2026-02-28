@@ -4,7 +4,7 @@ import SignupForm from './SignupForm';
 
 export const metadata: Metadata = {
   title: 'Créer un compte',
-  description: 'Rejoignez Terii gratuitement. Porteur de projet ou talent local, trouvez vos collaborateurs sur votre territoire.',
+  description: 'Rejoignez Teriis gratuitement. Porteur de projet ou talent local, trouvez vos collaborateurs sur votre territoire.',
 };
 
 export default function SignupPage() {

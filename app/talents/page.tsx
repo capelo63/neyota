@@ -113,7 +113,7 @@ export default async function TalentsPage() {
               Les premiers talents arrivent bientôt !
             </h3>
             <p className="text-neutral-600 mb-6">
-              Soyez parmi les premiers à rejoindre Terii et mettez vos compétences
+              Soyez parmi les premiers à rejoindre Teriis et mettez vos compétences
               au service de projets locaux.
             </p>
             <Link href="/signup?role=talent">

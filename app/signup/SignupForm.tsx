@@ -239,7 +239,7 @@ export default function SignupForm() {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">Terii</span>
+            <span className="text-2xl font-bold text-neutral-900">Teriis</span>
           </Link>
         </div>
       </header>
@@ -286,7 +286,7 @@ export default function SignupForm() {
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Bienvenue sur Terii !
+                    Bienvenue sur Teriis !
                   </h1>
                   <p className="text-neutral-600">
                     Choisissez votre profil pour commencer
@@ -502,7 +502,7 @@ export default function SignupForm() {
               <div>
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Charte éthique Terii
+                    Charte éthique Teriis
                   </h1>
                   <p className="text-neutral-600">
                     Dernière étape : accepter notre charte éthique
@@ -536,7 +536,7 @@ export default function SignupForm() {
                     <div>
                       <h4 className="font-semibold mb-2">💚 Engagement territorial</h4>
                       <p>
-                        Terii valorise l'entrepreneuriat local et l'impact territorial. Les membres
+                        Teriis valorise l'entrepreneuriat local et l'impact territorial. Les membres
                         s'engagent à privilégier les collaborations de proximité et à contribuer
                         au dynamisme économique de leur territoire.
                       </p>
@@ -555,7 +555,7 @@ export default function SignupForm() {
                       <h4 className="font-semibold mb-2">⚠️ Signalement</h4>
                       <p>
                         En cas de comportement contraire à cette charte, les membres sont encouragés à
-                        signaler la situation. Terii se réserve le droit de suspendre ou bannir tout
+                        signaler la situation. Teriis se réserve le droit de suspendre ou bannir tout
                         compte ne respectant pas ces principes.
                       </p>
                     </div>
@@ -573,7 +573,7 @@ export default function SignupForm() {
                     <span>
                       J'ai lu et j'accepte la{' '}
                       <Link href="/charter" target="_blank" className="text-primary-600 hover:underline">
-                        charte éthique Terii
+                        charte éthique Teriis
                       </Link>
                     </span>
                   }
@@ -628,7 +628,7 @@ export default function SignupForm() {
                     {userEmail}
                   </p>
                   <p className="text-neutral-700">
-                    📧 <strong>Cliquez sur le lien dans l'email</strong> pour activer votre compte et accéder à Terii.
+                    📧 <strong>Cliquez sur le lien dans l'email</strong> pour activer votre compte et accéder à Teriis.
                   </p>
                 </div>
 

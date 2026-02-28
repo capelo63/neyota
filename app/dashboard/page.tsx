@@ -234,7 +234,7 @@ export default function DashboardPage() {
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">T</span>
               </div>
-              <span className="text-2xl font-bold text-neutral-900">Terii</span>
+              <span className="text-2xl font-bold text-neutral-900">Teriis</span>
             </Link>
             <div className="flex items-center gap-2">
               <NotificationBell />
@@ -517,7 +517,7 @@ export default function DashboardPage() {
                 <div className="text-3xl">💡</div>
                 <div>
                   <div className="font-semibold text-neutral-900 group-hover:text-primary-700">À propos</div>
-                  <div className="text-sm text-neutral-500">La mission Terii</div>
+                  <div className="text-sm text-neutral-500">La mission Teriis</div>
                 </div>
               </Link>
             </div>
