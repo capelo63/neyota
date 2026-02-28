@@ -147,7 +147,7 @@ function LoginForm() {
             <div className="w-full border-t border-neutral-200"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-neutral-500">Nouveau sur Terii ?</span>
+            <span className="px-4 bg-white text-neutral-500">Nouveau sur Teriis ?</span>
           </div>
         </div>
 
@@ -187,7 +187,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">T</span>
             </div>
-            <span className="text-2xl font-bold text-neutral-900">Terii</span>
+            <span className="text-2xl font-bold text-neutral-900">Teriis</span>
           </Link>
         </div>
       </header>
