@@ -765,43 +765,74 @@ Teriis crée un **cercle vertueux** :
 
 ### Pourquoi proposez-vous Teriis alors qu'il existe déjà de multiples initiatives ?
 
-Excellente question ! Il existe effectivement des plateformes (LinkedIn, Malt, Kickstarter, etc.), mais **Teriis se différencie** par :
+Excellente question ! Il existe effectivement des **incubateurs RSE territoriaux** (comme Alter'Incub, France Active, Réseau Entreprendre, etc.) et des **plateformes numériques** (LinkedIn, Malt). Teriis se positionne différemment :
+
+---
+
+#### 🆚 **Teriis vs Incubateurs territoriaux (Alter'Incub, France Active, etc.)**
+
+**1. ✅ Accessible à tous, sans sélection**
+- **Incubateurs** : Dossier de candidature, jury de sélection, taux d'acceptation 10-30%
+- **Teriis** : Inscription libre, aucun tri à l'entrée, tous les projets sont bienvenus
+
+**2. ⚡ Instantané et autonome**
+- **Incubateurs** : Appels à projets périodiques (1-2 fois/an), programme structuré sur 6-12 mois
+- **Teriis** : Publiez votre projet et trouvez des talents en quelques heures, rythme libre
+
+**3. 🎯 Focus matching talents pairs (pas experts)**
+- **Incubateurs** : Accompagnement par des **mentors experts** (seniors, consultants)
+- **Teriis** : Mise en relation avec des **talents pairs** (jeunes, actifs, investis localement)
+
+**4. 💚 100% gratuit, 0% equity**
+- **Incubateurs** : Certains prennent des frais (500-2000€) ou equity (1-5%)
+- **Teriis** : Gratuit à vie, aucune contrepartie financière ou en capital
+
+**5. 🌱 Toutes les phases, même l'idéation pure**
+- **Incubateurs** : Souvent exigent un MVP minimum ou concept validé
+- **Teriis** : Accepte les projets dès l'**idée sur papier** (phase idéation)
+
+**6. 🔄 Complémentarité**
+- Teriis **ne remplace pas** les incubateurs, il **complète** l'écosystème
+- Exemple : Vous êtes incubé chez Alter'Incub ET vous utilisez Teriis pour recruter un développeur local
+- Les incubateurs peuvent devenir **partenaires** de Teriis (sourcing, événements)
+
+---
+
+#### 🆚 **Teriis vs Plateformes numériques (LinkedIn, Malt, etc.)**
 
 **1. 🎯 Focus 100% territorial**
-- Contrairement à LinkedIn (global) ou Malt (national), Teriis privilégie la **proximité géographique**
-- Le matching intègre la **distance** comme critère principal
-- Objectif : dynamiser **votre** territoire, pas Paris ou les métropoles
+- **LinkedIn/Malt** : Portée nationale ou globale
+- **Teriis** : Matching basé sur la **proximité géographique** (votre région, pas Paris)
 
-**2. 💚 100% gratuit (vraiment)**
-- Malt, Upwork prennent 10-20% de commission → Teriis : **0%**
-- LinkedIn Premium : 30-60€/mois → Teriis : **gratuit à vie**
-- Pas de modèle freemium frustrant (fonctionnalités bridées)
+**2. 🤝 Collaboration long-terme > Prestation ponctuelle**
+- **Malt/Upwork** : Missions freelance ponctuelles, relation client-prestataire
+- **Teriis** : Co-construction de projet, vision associative/co-fondateur
 
-**3. 🤝 Collaboration > Prestation**
-- Malt/Upwork = missions freelance ponctuelles
-- Teriis = **engagement long-terme** dans des projets à impact
-- Vision : devenir co-fondateur, associé, pas juste prestataire
+**3. 🛡 Protection des idées**
+- **LinkedIn/Twitter** : Tout est public, risque de copie d'idées
+- **Teriis** : Visibilité progressive, charte éthique, NDA encouragé
 
-**4. 🌱 Toutes les phases de projet**
-- Kickstarter/Ulule = projets déjà bien avancés
-- Teriis = dès l'**idéation** (avant même d'avoir un prototype)
-- Accompagnement de A à Z
+**4. 💚 Gratuit sans commission**
+- **Malt** : 10-20% de commission sur chaque mission
+- **Teriis** : 0% de commission, 0€ de frais
 
-**5. 🛡 Protection des idées**
-- Visibilité progressive (pitch court public / détails privés)
-- Charte éthique obligatoire
-- Système de signalement
-- LinkedIn/Twitter = tout est public → risque de copie
+---
 
-**6. 🎮 Valorisation de l'engagement citoyen**
-- Badges et impact score pour reconnaître votre contribution territoriale
-- Pas de logique mercantile (likes, vues), mais d'**impact réel**
+#### 🎯 **Le positionnement unique de Teriis**
 
-**7. 🚫 Anti-métropole-centrisme**
-- Les plateformes classiques favorisent Paris, Lyon, Marseille
-- Teriis valorise **tous les territoires** (rural, périurbain, petites villes)
+Teriis est une **plateforme de matching territorial** qui :
+- **Démocratise** l'accès au réseau (pas besoin d'être sélectionné par un incubateur)
+- **Accélère** la mise en relation (pas besoin d'attendre l'appel à projets)
+- **Valorise** les talents locaux pairs (pas que des experts seniors)
+- **Complète** l'écosystème existant (incubateurs, réseaux, collectivités)
 
-**En résumé** : Teriis n'est ni LinkedIn, ni Malt, ni Kickstarter. C'est une **plateforme hybride** conçue pour l'entrepreneuriat territorial collaboratif.
+**En résumé** :
+- Vous avez besoin d'**accompagnement structuré, financement, formation** → Incubateur RSE (Alter'Incub, etc.)
+- Vous avez besoin de **trouver des talents locaux rapidement et gratuitement** → Teriis
+- Vous cherchez des **freelances pour missions ponctuelles** → Malt, Upwork
+- Vous voulez **networker professionnellement** → LinkedIn
+
+**Teriis ne concurrence personne, il comble un vide : le matching territorial instantané et gratuit entre projets et talents.**
 
 ---
 
