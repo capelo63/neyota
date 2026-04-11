@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import ValuesAccordion from '@/components/ValuesAccordion';
 import { Button } from '@/components/ui';
 import { createClient } from '@supabase/supabase-js';
 
@@ -117,50 +118,7 @@ export default async function AboutPage() {
               <div className="w-20 h-1 bg-primary-600 mx-auto mb-6"></div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: '🎯',
-                  title: 'Agir localement, créer utile',
-                  description: 'Nous croyons en la force des territoires et des initiatives de proximité. Chaque projet mérite de se développer là où il peut avoir le plus d\'impact.'
-                },
-                {
-                  icon: '🤝',
-                  title: 'Confiance et respect',
-                  description: 'Nous construisons un cadre où chacun peut partager ses idées et ses compétences en toute confiance. L\'écoute, la bienveillance et l\'engagement mutuel sont essentiels à des collaborations durables.'
-                },
-                {
-                  icon: '🌍',
-                  title: 'Accessible à tous',
-                  description: 'Nous défendons un accès ouvert à l\'accompagnement et aux compétences. Quels que soient votre parcours ou vos moyens, vous devez pouvoir être aidé ou contribuer.'
-                },
-                {
-                  icon: '✨',
-                  title: 'Des rencontres qui font avancer',
-                  description: 'Nous facilitons des mises en relation utiles et pertinentes entre personnes qui peuvent réellement s\'apporter mutuellement, pour transformer une rencontre en collaboration concrète.'
-                },
-                {
-                  icon: '🌱',
-                  title: 'Un impact concret et visible',
-                  description: 'Nous valorisons les projets qui créent de la valeur réelle : économique, sociale ou environnementale. Chaque action compte et chaque réussite mérite d\'être visible.'
-                },
-                {
-                  icon: '🚀',
-                  title: 'Donner envie d\'agir',
-                  description: 'Nous encourageons le passage à l\'action et l\'engagement dans la durée, en valorisant les contributions de chacun au service des projets et des territoires.'
-                }
-              ].map((value, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="text-5xl mb-4">{value.icon}</div>
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-3">
-                    {value.title}
-                  </h3>
-                  <p className="text-neutral-600 leading-relaxed">
-                    {value.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ValuesAccordion />
           </div>
         </section>
 
