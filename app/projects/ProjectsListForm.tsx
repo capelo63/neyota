@@ -23,9 +23,10 @@ interface Project {
     first_name: string;
     last_name: string;
   };
-  skills: Array<{
-    id: number;
+  needs: Array<{
+    id: string;
     name: string;
+    category: string;
   }>;
   categories: Array<{
     category: string;
@@ -69,13 +70,13 @@ export default function ProjectsListForm() {
   const [profile, setProfile] = useState<any>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-  const [skills, setSkills] = useState<any[]>([]);
+  const [needs, setNeeds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPhase, setSelectedPhase] = useState('all');
-  const [selectedSkill, setSelectedSkill] = useState('all');
+  const [selectedNeed, setSelectedNeed] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
 
@@ -85,7 +86,7 @@ export default function ProjectsListForm() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, selectedPhase, selectedSkill, selectedCategory, selectedRegion, projects]);
+  }, [searchQuery, selectedPhase, selectedNeed, selectedCategory, selectedRegion, projects]);
 
   const loadData = async () => {
     try {
@@ -107,7 +108,7 @@ export default function ProjectsListForm() {
         }
       }
 
-      // Load projects with owner, skills, and categories
+      // Load projects with owner, needs, and categories
       // Only select fields needed for list view — full_description and phase_objectives
       // are intentionally excluded to avoid exposing sensitive project details publicly
       const { data: projectsData, error: projectsError} = await supabase
@@ -124,8 +125,8 @@ export default function ProjectsListForm() {
           created_at,
           owner_id,
           owner:owner_id(first_name, last_name),
-          skills:project_skills_needed(
-            skill:skills(id, name)
+          needs:project_needs(
+            need:needs(id, name, category)
           ),
           categories:project_categories(category)
         `)
@@ -135,7 +136,7 @@ export default function ProjectsListForm() {
       if (projectsError) {
         console.error('Error loading projects:', projectsError);
       } else {
-        // Transform the data to flatten skills and handle missing owners
+        // Transform the data to flatten needs and handle missing owners
         const transformedProjects = (projectsData || [])
           .map((project: any) => {
             // Handle owner array (Supabase can return arrays for foreign keys)
@@ -146,7 +147,7 @@ export default function ProjectsListForm() {
             return {
               ...project,
               owner,
-              skills: project.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+              needs: project.needs.map((n: any) => n.need).filter((n: any) => n !== null),
               categories: project.categories || [],
             };
           })
@@ -156,13 +157,13 @@ export default function ProjectsListForm() {
         setFilteredProjects(transformedProjects);
       }
 
-      // Load skills for filter
-      const { data: skillsData } = await supabase
-        .from('skills')
+      // Load needs for filter
+      const { data: needsData } = await supabase
+        .from('needs')
         .select('*')
         .order('name');
 
-      setSkills(skillsData || []);
+      setNeeds(needsData || []);
       setIsLoading(false);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -187,10 +188,10 @@ export default function ProjectsListForm() {
       filtered = filtered.filter(project => project.current_phase === selectedPhase);
     }
 
-    // Skill filter
-    if (selectedSkill !== 'all') {
+    // Need filter
+    if (selectedNeed !== 'all') {
       filtered = filtered.filter(project =>
-        project.skills.some(skill => skill.id === parseInt(selectedSkill))
+        project.needs.some(need => need.id === selectedNeed)
       );
     }
 
@@ -215,7 +216,7 @@ export default function ProjectsListForm() {
   const resetFilters = () => {
     setSearchQuery('');
     setSelectedPhase('all');
-    setSelectedSkill('all');
+    setSelectedNeed('all');
     setSelectedCategory('all');
     setSelectedRegion('all');
   };
@@ -253,7 +254,7 @@ export default function ProjectsListForm() {
             <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-neutral-900">Filtres</h2>
-                {(searchQuery || selectedPhase !== 'all' || selectedSkill !== 'all' || selectedCategory !== 'all' || selectedRegion !== 'all') && (
+                {(searchQuery || selectedPhase !== 'all' || selectedNeed !== 'all' || selectedCategory !== 'all' || selectedRegion !== 'all') && (
                   <button
                     onClick={resetFilters}
                     className="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -287,13 +288,13 @@ export default function ProjectsListForm() {
 
                 <Select
                   label="Besoins"
-                  value={selectedSkill}
-                  onChange={(e) => setSelectedSkill(e.target.value)}
+                  value={selectedNeed}
+                  onChange={(e) => setSelectedNeed(e.target.value)}
                   options={[
                     { value: 'all', label: 'Tous les besoins' },
-                    ...skills.map(skill => ({
-                      value: skill.id.toString(),
-                      label: skill.name,
+                    ...needs.map(need => ({
+                      value: need.id.toString(),
+                      label: need.name,
                     })),
                   ]}
                 />
@@ -392,17 +393,17 @@ export default function ProjectsListForm() {
                         {project.short_pitch}
                       </p>
 
-                      {/* Skills */}
-                      {project.skills.length > 0 && (
+                      {/* Needs */}
+                      {project.needs.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
-                          {project.skills.slice(0, 5).map((skill) => (
-                            <Badge key={skill.id} variant="secondary">
-                              {skill.name}
+                          {project.needs.slice(0, 5).map((need) => (
+                            <Badge key={need.id} variant="secondary">
+                              {need.name}
                             </Badge>
                           ))}
-                          {project.skills.length > 5 && (
+                          {project.needs.length > 5 && (
                             <Badge variant="secondary">
-                              +{project.skills.length - 5} autres
+                              +{project.needs.length - 5} autres
                             </Badge>
                           )}
                         </div>

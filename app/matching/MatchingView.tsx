@@ -26,14 +26,15 @@ interface Project {
     last_name: string;
     city: string;
   };
-  skills: Array<{
-    id: number;
+  needs: Array<{
+    id: string;
     name: string;
     category: string;
   }>;
   distance_km?: number;
   matching_score?: number;
-  matching_skills_count?: number;
+  matching_needs_count?: number;
+  matched_need_ids?: string[];
 }
 
 interface TalentProfile {
@@ -71,7 +72,7 @@ export default function MatchingView() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [profile, setProfile] = useState<TalentProfile | null>(null);
-  const [userSkills, setUserSkills] = useState<number[]>([]);
+  const [userSkills, setUserSkills] = useState<string[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -195,14 +196,14 @@ export default function MatchingView() {
   };
 
   const loadProjectsWithSkills = async (projectsData: any[]) => {
-    // Get skills for all projects
+    // Get needs for all projects
     const projectIds = projectsData.map((p) => p.id);
-    
-    const { data: projectSkillsData } = await supabase
-      .from('project_skills_needed')
+
+    const { data: projectNeedsData } = await supabase
+      .from('project_needs')
       .select(`
         project_id,
-        skill:skills (
+        need:needs (
           id,
           name,
           category
@@ -210,27 +211,66 @@ export default function MatchingView() {
       `)
       .in('project_id', projectIds);
 
-    // Group skills by project
-    const skillsByProject: Record<string, any[]> = {};
-    (projectSkillsData || []).forEach((item: any) => {
-      const skill = Array.isArray(item.skill) ? item.skill[0] : item.skill;
-      if (!skillsByProject[item.project_id]) {
-        skillsByProject[item.project_id] = [];
+    // Group needs by project
+    const needsByProject: Record<string, any[]> = {};
+    (projectNeedsData || []).forEach((item: any) => {
+      const need = Array.isArray(item.need) ? item.need[0] : item.need;
+      if (!needsByProject[item.project_id]) {
+        needsByProject[item.project_id] = [];
       }
-      if (skill) {
-        skillsByProject[item.project_id].push(skill);
+      if (need) {
+        needsByProject[item.project_id].push(need);
       }
+    });
+
+    // Get need-skill mappings to match user skills with project needs
+    const allNeedIds = Object.values(needsByProject)
+      .flat()
+      .map((n) => n.id)
+      .filter((id, index, self) => self.indexOf(id) === index); // unique IDs
+
+    const { data: mappingData } = await supabase
+      .from('need_skill_mapping')
+      .select('need_id, skill_id, relevance_score')
+      .in('need_id', allNeedIds);
+
+    // Create a map of need_id -> array of {skill_id, relevance_score}
+    const skillsByNeed: Record<string, Array<{ skill_id: string; relevance_score: number }>> = {};
+    (mappingData || []).forEach((mapping: any) => {
+      if (!skillsByNeed[mapping.need_id]) {
+        skillsByNeed[mapping.need_id] = [];
+      }
+      skillsByNeed[mapping.need_id].push({
+        skill_id: mapping.skill_id,
+        relevance_score: mapping.relevance_score,
+      });
     });
 
     // Calculate matching score for each project
     const projectsWithScore = projectsData.map((project) => {
-      const projectSkills = skillsByProject[project.id] || [];
-      const projectSkillIds = projectSkills.map((s) => s.id);
-      
-      // Count matching skills
-      const matchingSkillsCount = projectSkillIds.filter((skillId) =>
-        userSkills.includes(skillId)
-      ).length;
+      const projectNeeds = needsByProject[project.id] || [];
+
+      // For each project need, check if user has matching skills
+      let totalRelevanceScore = 0;
+      let matchingNeedsCount = 0;
+      const matchedNeedIds: string[] = [];
+
+      projectNeeds.forEach((need) => {
+        const skillsForNeed = skillsByNeed[need.id] || [];
+
+        // Check if user has any skill that matches this need
+        const matchingSkills = skillsForNeed.filter((s) =>
+          userSkills.includes(s.skill_id)
+        );
+
+        if (matchingSkills.length > 0) {
+          matchingNeedsCount++;
+          matchedNeedIds.push(need.id);
+          // Use the highest relevance score among matching skills
+          const maxRelevance = Math.max(...matchingSkills.map((s) => s.relevance_score));
+          totalRelevanceScore += maxRelevance;
+        }
+      });
 
       // Calculate score (0-100)
       let score = 0;
@@ -241,10 +281,11 @@ export default function MatchingView() {
         score += distanceScore;
       }
 
-      // Skills match score (40 points max)
-      if (projectSkills.length > 0) {
-        const skillsScore = (matchingSkillsCount / projectSkills.length) * 40;
-        score += skillsScore;
+      // Needs match score (40 points max)
+      // Based on percentage of needs matched and weighted by relevance
+      if (projectNeeds.length > 0) {
+        const needsMatchScore = (matchingNeedsCount / projectNeeds.length) * 40;
+        score += needsMatchScore;
       }
 
       // Remote work bonus (10 points)
@@ -265,8 +306,9 @@ export default function MatchingView() {
       return {
         ...project,
         owner: Array.isArray(project.owner) ? project.owner[0] : project.owner,
-        skills: projectSkills,
-        matching_skills_count: matchingSkillsCount,
+        needs: projectNeeds,
+        matching_needs_count: matchingNeedsCount,
+        matched_need_ids: matchedNeedIds,
         matching_score: Math.min(100, Math.round(score)),
       };
     });
@@ -533,12 +575,12 @@ export default function MatchingView() {
                         <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
                           Match
                         </span>
-                        {project.matching_skills_count !== undefined && project.matching_skills_count > 0 && (
+                        {project.matching_needs_count !== undefined && project.matching_needs_count > 0 && (
                           <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded">
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
-                            {project.matching_skills_count} skill{project.matching_skills_count > 1 ? 's' : ''}
+                            {project.matching_needs_count} besoin{project.matching_needs_count > 1 ? 's' : ''} matchés
                           </div>
                         )}
                       </div>
@@ -574,25 +616,25 @@ export default function MatchingView() {
                     </div>
                   </div>
 
-                  {/* Skills */}
-                  {project.skills.length > 0 && (
+                  {/* Needs */}
+                  {project.needs.length > 0 && (
                     <div className="mb-4">
                       <p className="text-sm font-medium text-neutral-700 mb-2">
-                        Compétences recherchées
-                        {project.matching_skills_count !== undefined &&
-                          project.matching_skills_count > 0 && (
+                        Besoins du projet
+                        {project.matching_needs_count !== undefined &&
+                          project.matching_needs_count > 0 && (
                             <span className="text-success-600 ml-2">
-                              ({project.matching_skills_count} en commun avec vous)
+                              ({project.matching_needs_count} besoin{project.matching_needs_count > 1 ? 's' : ''} que vous pouvez satisfaire)
                             </span>
                           )}
                         :
                       </p>
                       <div className="flex flex-wrap gap-2">
-                        {project.skills.map((skill) => {
-                          const isMatching = userSkills.includes(skill.id);
+                        {project.needs.map((need) => {
+                          const isMatching = project.matched_need_ids?.includes(need.id);
                           return (
                             <span
-                              key={skill.id}
+                              key={need.id}
                               className={`px-3 py-1 rounded-lg text-sm font-medium ${
                                 isMatching
                                   ? 'bg-success-100 text-success-800 border-2 border-success-400'
@@ -600,7 +642,7 @@ export default function MatchingView() {
                               }`}
                             >
                               {isMatching && '✓ '}
-                              {skill.name}
+                              {need.name}
                             </span>
                           );
                         })}
