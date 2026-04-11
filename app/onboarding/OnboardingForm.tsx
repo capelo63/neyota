@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button, Textarea, Select, Checkbox } from '@/components/ui';
 import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
 import CityAutocomplete from '@/components/CityAutocomplete';
+import { SKILL_CATEGORIES, hasCustomField } from '@/lib/constants/needs-skills';
 
 type UserRole = 'entrepreneur' | 'talent';
 
@@ -16,7 +17,8 @@ interface OnboardingData {
   region: string;
   bio: string;
   maxDistance: number;
-  selectedSkills: number[];
+  selectedSkills: string[]; // Changed to string[] for UUIDs
+  customSkillDetails: Record<string, string>; // For "Autre expertise" custom fields
   availability: string;
   lat?: number;
   lng?: number;
@@ -37,9 +39,6 @@ export default function OnboardingForm() {
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Store proficiency level for each skill (skillId -> level)
-  const [skillLevels, setSkillLevels] = useState<Record<number, 'beginner' | 'intermediate' | 'expert'>>({});
-
   const [formData, setFormData] = useState<OnboardingData>({
     city: '',
     postalCode: '',
@@ -47,6 +46,7 @@ export default function OnboardingForm() {
     bio: '',
     maxDistance: 50,
     selectedSkills: [],
+    customSkillDetails: {}, // For "Autre expertise" custom descriptions
     availability: 'part_time',
   });
 
@@ -280,13 +280,13 @@ export default function OnboardingForm() {
 
       console.log('[ONBOARDING] Profile update verified successfully!');
 
-      // If talent, save skills with their proficiency levels
+      // If talent, save skills with custom details if applicable
       if (profile.role === 'talent' && formData.selectedSkills.length > 0) {
         console.log('[ONBOARDING] Saving skills:', formData.selectedSkills.length);
         const skillsToInsert = formData.selectedSkills.map(skillId => ({
           user_id: user.id,
           skill_id: skillId,
-          proficiency_level: skillLevels[skillId] || 'intermediate', // Use selected level or default
+          custom_detail: formData.customSkillDetails[skillId] || null, // Custom detail for "Autre expertise"
         }));
 
         const { error: skillsError } = await supabase
@@ -314,12 +314,34 @@ export default function OnboardingForm() {
     }
   };
 
-  const toggleSkill = (skillId: number) => {
+  const toggleSkill = (skillId: string) => {
+    setFormData(prev => {
+      const isCurrentlySelected = prev.selectedSkills.includes(skillId);
+      const newSelectedSkills = isCurrentlySelected
+        ? prev.selectedSkills.filter(id => id !== skillId)
+        : [...prev.selectedSkills, skillId];
+
+      // If deselecting, also remove custom detail
+      const newCustomDetails = { ...prev.customSkillDetails };
+      if (isCurrentlySelected) {
+        delete newCustomDetails[skillId];
+      }
+
+      return {
+        ...prev,
+        selectedSkills: newSelectedSkills,
+        customSkillDetails: newCustomDetails,
+      };
+    });
+  };
+
+  const updateCustomDetail = (skillId: string, detail: string) => {
     setFormData(prev => ({
       ...prev,
-      selectedSkills: prev.selectedSkills.includes(skillId)
-        ? prev.selectedSkills.filter(id => id !== skillId)
-        : [...prev.selectedSkills, skillId],
+      customSkillDetails: {
+        ...prev.customSkillDetails,
+        [skillId]: detail,
+      },
     }));
   };
 
@@ -372,7 +394,7 @@ export default function OnboardingForm() {
             <div className="flex items-center justify-between gap-2">
               {[
                 { num: 1, label: 'Localisation', icon: '📍' },
-                { num: 2, label: profile?.role === 'talent' ? 'Compétences' : 'Info', icon: profile?.role === 'talent' ? '🎯' : '💼' },
+                { num: 2, label: profile?.role === 'talent' ? 'Intervention' : 'Info', icon: profile?.role === 'talent' ? '🎯' : '💼' },
                 { num: 3, label: 'Présentation', icon: '✨' }
               ].map((s, idx) => (
                 <div key={s.num} className="flex-1">
@@ -493,85 +515,92 @@ export default function OnboardingForm() {
                     <div className="text-center mb-8">
                       <div className="text-5xl mb-4">🌟</div>
                       <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                        Vos compétences
+                        Vos types d'intervention
                       </h1>
                       <p className="text-neutral-600">
-                        Sélectionnez les compétences que vous pouvez apporter aux projets
+                        Sélectionnez les domaines dans lesquels vous pouvez apporter votre aide
                       </p>
                     </div>
 
                     <form onSubmit={handleStep2Submit} className="space-y-5">
                       {errors.skills && (
-                        <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm">
+                        <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm mb-4">
                           {errors.skills}
                         </div>
                       )}
 
-                      <div className="max-h-96 overflow-y-auto border border-neutral-200 rounded-lg p-4">
-                        <div className="space-y-2">
-                          {skills.map((skill) => {
-                            const isSelected = formData.selectedSkills.includes(skill.id);
-                            const currentLevel = skillLevels[skill.id] || 'intermediate';
+                      <div className="space-y-3">
+                        {skills.map((skill) => {
+                          const isSelected = formData.selectedSkills.includes(skill.id);
+                          const skillCategory = SKILL_CATEGORIES[skill.category as keyof typeof SKILL_CATEGORIES];
+                          const needsCustomField = hasCustomField(skill.category);
 
-                            return (
-                              <div
-                                key={skill.id}
-                                className={`p-3 rounded-lg border-2 transition-all ${
-                                  isSelected
-                                    ? 'border-primary-500 bg-primary-50'
-                                    : 'border-transparent hover:bg-neutral-50'
-                                }`}
-                              >
-                                <div className="flex items-start gap-3">
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    onChange={() => toggleSkill(skill.id)}
-                                    className="checkbox mt-1"
-                                  />
-                                  <div className="flex-1">
-                                    <div className="font-medium text-neutral-900">{skill.name}</div>
-                                    {skill.description && (
-                                      <div className="text-sm text-neutral-600 mb-2">{skill.description}</div>
-                                    )}
-
-                                    {isSelected && (
-                                      <div className="mt-2">
-                                        <label className="text-xs font-medium text-neutral-600 mb-1 block">
-                                          Niveau :
-                                        </label>
-                                        <div className="flex flex-wrap gap-1.5">
-                                          {(['beginner', 'intermediate', 'expert'] as const).map((level) => (
-                                            <button
-                                              key={level}
-                                              type="button"
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSkillLevels(prev => ({ ...prev, [skill.id]: level }));
-                                              }}
-                                              className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
-                                                currentLevel === level
-                                                  ? 'bg-primary-600 text-white'
-                                                  : 'bg-neutral-200 text-neutral-700 hover:bg-neutral-300'
-                                              }`}
-                                            >
-                                              {level === 'beginner' && '🌱 Débutant'}
-                                              {level === 'intermediate' && '🔧 Inter.'}
-                                              {level === 'expert' && '⭐ Expert'}
-                                            </button>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
+                          return (
+                            <div
+                              key={skill.id}
+                              className={`p-4 rounded-lg border-2 transition-all ${
+                                isSelected
+                                  ? 'border-primary-500 bg-primary-50'
+                                  : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
+                              }`}
+                            >
+                              <label className="flex items-start gap-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => toggleSkill(skill.id)}
+                                  className="mt-1 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                />
+                                <div className="flex-1">
+                                  <div className="font-semibold text-neutral-900">
+                                    {skillCategory?.label || skill.name}
                                   </div>
+                                  {skillCategory?.description && (
+                                    <div className="text-sm text-neutral-600 mt-1">
+                                      {skillCategory.description}
+                                    </div>
+                                  )}
+
+                                  {/* Custom field for "Autre expertise" */}
+                                  {isSelected && needsCustomField && (
+                                    <div className="mt-3">
+                                      <label className="block text-sm font-medium text-neutral-700 mb-1">
+                                        Précisez votre domaine d'expertise :
+                                      </label>
+                                      <input
+                                        type="text"
+                                        placeholder="Ex: Architecture, Design industriel, Photographie..."
+                                        value={formData.customSkillDetails[skill.id] || ''}
+                                        onChange={(e) => updateCustomDetail(skill.id, e.target.value)}
+                                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                        onClick={(e) => e.stopPropagation()}
+                                      />
+                                    </div>
+                                  )}
                                 </div>
-                              </div>
-                            );
-                          })}
+                              </label>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mt-4">
+                        <div className="flex gap-2">
+                          <svg className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                          <div className="text-sm text-neutral-700">
+                            <strong>Astuce :</strong> Sélectionnez tous les domaines dans lesquels vous pouvez apporter de la valeur.
+                            Cela augmentera vos chances de matching avec des projets intéressants.
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex gap-4">
+                      <div className="text-sm text-neutral-600 bg-neutral-50 p-3 rounded-lg">
+                        <strong>{formData.selectedSkills.length}</strong> type{formData.selectedSkills.length > 1 ? 's' : ''} d'intervention sélectionné{formData.selectedSkills.length > 1 ? 's' : ''}
+                      </div>
+
+                      <div className="flex gap-4 pt-2">
                         <Button
                           type="button"
                           variant="ghost"
