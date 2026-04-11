@@ -72,7 +72,7 @@ export default function MatchingView() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [profile, setProfile] = useState<TalentProfile | null>(null);
-  const [userSkills, setUserSkills] = useState<number[]>([]);
+  const [userSkills, setUserSkills] = useState<string[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
