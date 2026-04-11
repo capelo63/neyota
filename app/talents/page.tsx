@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
@@ -89,7 +90,7 @@ export default async function TalentsPage() {
             Talents disponibles
           </h1>
           <p className="text-xl text-neutral-600 mb-6">
-            Découvrez les talents locaux prêts à rejoindre votre projet
+            Découvrez les talents locaux prêts à s&apos;investir dans une aventure collective et à faire avancer votre projet avec vous
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup?role=talent">
@@ -162,6 +163,8 @@ export default async function TalentsPage() {
           </Link>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

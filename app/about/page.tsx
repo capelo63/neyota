@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui';
 import { createClient } from '@supabase/supabase-js';
 
@@ -56,7 +57,7 @@ export default async function AboutPage() {
               Teriis
             </h1>
             <p className="text-2xl md:text-3xl font-medium text-primary-600 mb-6">
-              TERritoires, Impact et Innovation sociale
+              TERritoires, Initiatives et Innovation sociale
             </p>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
               La plateforme qui reconnecte les territoires à leurs talents
@@ -161,14 +162,14 @@ export default async function AboutPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-12">
-              {/* For Entrepreneurs */}
+              {/* For Project Holders */}
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-2xl">💼</span>
                   </div>
                   <h3 className="text-2xl font-bold text-neutral-900">
-                    Pour les entrepreneurs
+                    Pour les porteurs d&apos;initiative
                   </h3>
                 </div>
 
@@ -346,7 +347,7 @@ export default async function AboutPage() {
                   { value: stats.projects, label: `Projet${stats.projects > 1 ? 's' : ''} actif${stats.projects > 1 ? 's' : ''}`, icon: '🚀' },
                   { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''}`, icon: '🌟' },
                   { value: stats.collaborations, label: `Candidature${stats.collaborations > 1 ? 's' : ''}`, icon: '🤝' },
-                  { value: stats.entrepreneurs, label: `Entrepreneur${stats.entrepreneurs > 1 ? 's' : ''}`, icon: '💼' }
+                  { value: stats.entrepreneurs, label: `Porteur${stats.entrepreneurs > 1 ? 's' : ''} d'initiative`, icon: '💼' }
                 ].map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="text-5xl mb-3">{stat.icon}</div>
@@ -388,6 +389,8 @@ export default async function AboutPage() {
           </div>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

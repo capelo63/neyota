@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button, Input, Textarea, Select, Checkbox } from '@/components/ui';
 import CityAutocomplete from '@/components/CityAutocomplete';
 import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
+import { NEED_CATEGORIES, NEEDS_BY_CATEGORY, type NeedCategoryId } from '@/lib/constants/needs-skills';
 
 interface ProjectData {
   title: string;
@@ -15,7 +16,7 @@ interface ProjectData {
   currentPhase: string;
   phaseObjectives: string;
   selectedCategories: string[];
-  selectedSkills: number[];
+  selectedNeeds: string[]; // Changed from selectedSkills to selectedNeeds
   city: string;
   postalCode: string;
   region: string;
@@ -52,13 +53,7 @@ const PROJECT_CATEGORIES = [
   { value: 'social', label: '🤝 Social / Solidaire' },
 ];
 
-const SKILL_CATEGORIES = {
-  technical: { label: '💻 Compétences Techniques', icon: '💻' },
-  business: { label: '💼 Compétences Business', icon: '💼' },
-  creative: { label: '🎨 Compétences Créatives', icon: '🎨' },
-  operational: { label: '⚙️ Compétences Opérationnelles', icon: '⚙️' },
-  expertise: { label: '🎓 Expertise Métier', icon: '🎓' },
-};
+// NEED_CATEGORIES is now imported from lib/constants/needs-skills.ts
 
 export default function CreateProjectForm() {
   const router = useRouter();
@@ -69,12 +64,14 @@ export default function CreateProjectForm() {
 
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
-  const [skills, setSkills] = useState<any[]>([]);
+  const [needs, setNeeds] = useState<any[]>([]); // Changed from skills to needs
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['technical', 'business', 'creative', 'operational', 'expertise']));
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
+    new Set(Object.keys(NEED_CATEGORIES)) // All need categories expanded by default
+  );
 
   const [formData, setFormData] = useState<ProjectData>({
     title: '',
@@ -83,7 +80,7 @@ export default function CreateProjectForm() {
     currentPhase: 'ideation',
     phaseObjectives: '',
     selectedCategories: [],
-    selectedSkills: [],
+    selectedNeeds: [], // Changed from selectedSkills
     city: '',
     postalCode: '',
     region: '',
@@ -134,13 +131,13 @@ export default function CreateProjectForm() {
         region: profileData.region || '',
       }));
 
-      // Load skills
-      const { data: skillsData } = await supabase
-        .from('skills')
+      // Load needs
+      const { data: needsData } = await supabase
+        .from('needs')
         .select('*')
-        .order('name');
+        .order('category, sort_order');
 
-      setSkills(skillsData || []);
+      setNeeds(needsData || []);
       setIsLoading(false);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -180,8 +177,8 @@ export default function CreateProjectForm() {
   const validateStep2 = () => {
     const newErrors: Record<string, string> = {};
 
-    if (formData.selectedSkills.length === 0) {
-      newErrors.skills = 'Sélectionnez au moins une compétence recherchée';
+    if (formData.selectedNeeds.length === 0) {
+      newErrors.needs = 'Sélectionnez au moins un besoin pour votre projet';
     }
 
     setErrors(newErrors);
@@ -311,19 +308,20 @@ export default function CreateProjectForm() {
         }
       }
 
-      // Add skills to project
-      if (formData.selectedSkills.length > 0) {
-        const skillsToInsert = formData.selectedSkills.map(skillId => ({
+      // Add needs to project
+      if (formData.selectedNeeds.length > 0) {
+        const needsToInsert = formData.selectedNeeds.map(needId => ({
           project_id: projectData.id,
-          skill_id: skillId,
+          need_id: needId,
+          priority: 'essential', // Default priority, could be made selectable
         }));
 
-        const { error: skillsError } = await supabase
-          .from('project_skills_needed')
-          .insert(skillsToInsert);
+        const { error: needsError } = await supabase
+          .from('project_needs')
+          .insert(needsToInsert);
 
-        if (skillsError) {
-          console.error('Skills insert error:', skillsError);
+        if (needsError) {
+          console.error('Needs insert error:', needsError);
         }
       }
 
@@ -337,16 +335,16 @@ export default function CreateProjectForm() {
     }
   };
 
-  const toggleSkill = (skillId: number) => {
+  const toggleNeed = (needId: string) => {
     setFormData(prev => ({
       ...prev,
-      selectedSkills: prev.selectedSkills.includes(skillId)
-        ? prev.selectedSkills.filter(id => id !== skillId)
-        : [...prev.selectedSkills, skillId],
+      selectedNeeds: prev.selectedNeeds.includes(needId)
+        ? prev.selectedNeeds.filter(id => id !== needId)
+        : [...prev.selectedNeeds, needId],
     }));
   };
 
-  const toggleSkillCategory = (category: string) => {
+  const toggleNeedCategory = (category: string) => {
     setExpandedCategories(prev => {
       const newSet = new Set(prev);
       if (newSet.has(category)) {
@@ -358,13 +356,13 @@ export default function CreateProjectForm() {
     });
   };
 
-  // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    const category = skill.category || 'technical';
+  // Group needs by category
+  const needsByCategory = needs.reduce((acc, need) => {
+    const category = need.category;
     if (!acc[category]) {
       acc[category] = [];
     }
-    acc[category].push(skill);
+    acc[category].push(need);
     return acc;
   }, {} as Record<string, any[]>);
 
@@ -434,7 +432,7 @@ export default function CreateProjectForm() {
             <div className="flex items-center justify-between gap-2">
               {[
                 { num: 1, label: 'Présentation', icon: '💼' },
-                { num: 2, label: 'Compétences', icon: '🎯' },
+                { num: 2, label: 'Besoins', icon: '🎯' },
                 { num: 3, label: 'Localisation', icon: '📍' },
               ].map((s) => (
                 <div key={s.num} className="flex-1">
@@ -580,16 +578,16 @@ export default function CreateProjectForm() {
               </div>
             )}
 
-            {/* Step 2: Phase & Skills */}
+            {/* Step 2: Phase & Needs */}
             {step === 2 && (
               <div>
                 <div className="text-center mb-8">
                   <div className="text-5xl mb-4">🎯</div>
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Phase et compétences
+                    Phase et besoins
                   </h1>
                   <p className="text-neutral-600">
-                    Précisez où vous en êtes et les talents dont vous avez besoin
+                    Précisez où vous en êtes et ce dont vous avez besoin pour avancer
                   </p>
                 </div>
 
@@ -613,25 +611,25 @@ export default function CreateProjectForm() {
 
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-3">
-                      Compétences recherchées <span className="text-error-600">*</span>
+                      De quoi avez-vous besoin ? <span className="text-error-600">*</span>
                     </label>
-                    {errors.skills && (
+                    {errors.needs && (
                       <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm mb-4">
-                        {errors.skills}
+                        {errors.needs}
                       </div>
                     )}
                     <div className="max-h-[600px] overflow-y-auto border border-neutral-200 rounded-lg">
                       <div className="divide-y divide-neutral-200">
-                        {Object.entries(SKILL_CATEGORIES).map(([categoryKey, categoryInfo]) => {
-                          const categorySkills = skillsByCategory[categoryKey] || [];
+                        {Object.entries(NEED_CATEGORIES).map(([categoryKey, categoryInfo]) => {
+                          const categoryNeeds = needsByCategory[categoryKey] || [];
                           const isExpanded = expandedCategories.has(categoryKey);
-                          const selectedInCategory = categorySkills.filter((s: any) => formData.selectedSkills.includes(s.id)).length;
+                          const selectedInCategory = categoryNeeds.filter((n: any) => formData.selectedNeeds.includes(n.id)).length;
 
                           return (
                             <div key={categoryKey} className="bg-white">
                               <button
                                 type="button"
-                                onClick={() => toggleSkillCategory(categoryKey)}
+                                onClick={() => toggleNeedCategory(categoryKey)}
                                 className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 transition-colors text-left"
                               >
                                 <div className="flex items-center gap-3">
@@ -639,9 +637,9 @@ export default function CreateProjectForm() {
                                   <div>
                                     <div className="font-semibold text-neutral-900">{categoryInfo.label}</div>
                                     <div className="text-sm text-neutral-600">
-                                      {categorySkills.length} compétence{categorySkills.length > 1 ? 's' : ''}
+                                      {categoryNeeds.length} besoin{categoryNeeds.length > 1 ? 's' : ''}
                                       {selectedInCategory > 0 && (
-                                        <span className="text-primary-600 font-medium"> · {selectedInCategory} sélectionnée{selectedInCategory > 1 ? 's' : ''}</span>
+                                        <span className="text-primary-600 font-medium"> · {selectedInCategory} sélectionné{selectedInCategory > 1 ? 's' : ''}</span>
                                       )}
                                     </div>
                                   </div>
@@ -658,28 +656,28 @@ export default function CreateProjectForm() {
 
                               {isExpanded && (
                                 <div className="px-4 pb-4 space-y-2">
-                                  {categorySkills.map((skill: any) => (
+                                  {categoryNeeds.map((need: any) => (
                                     <label
-                                      key={skill.id}
+                                      key={need.id}
                                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 cursor-pointer transition-colors"
                                     >
                                       <input
                                         type="checkbox"
-                                        checked={formData.selectedSkills.includes(skill.id)}
-                                        onChange={() => toggleSkill(skill.id)}
-                                        className="checkbox"
+                                        checked={formData.selectedNeeds.includes(need.id)}
+                                        onChange={() => toggleNeed(need.id)}
+                                        className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                                       />
                                       <div>
-                                        <div className="font-medium text-neutral-900">{skill.name}</div>
-                                        {skill.description && (
-                                          <div className="text-sm text-neutral-600">{skill.description}</div>
+                                        <div className="font-medium text-neutral-900">{need.name}</div>
+                                        {need.description && (
+                                          <div className="text-sm text-neutral-600">{need.description}</div>
                                         )}
                                       </div>
                                     </label>
                                   ))}
-                                  {categorySkills.length === 0 && (
+                                  {categoryNeeds.length === 0 && (
                                     <p className="text-sm text-neutral-500 italic px-3 py-2">
-                                      Aucune compétence dans cette catégorie
+                                      Aucun besoin dans cette catégorie
                                     </p>
                                   )}
                                 </div>
@@ -690,7 +688,7 @@ export default function CreateProjectForm() {
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-neutral-600">
-                      {formData.selectedSkills.length} compétence(s) sélectionnée(s) au total
+                      {formData.selectedNeeds.length} besoin(s) sélectionné(s) au total
                     </p>
                   </div>
 

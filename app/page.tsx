@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button, Card, CardBody, Badge } from '@/components/ui';
 import { createClient } from '@supabase/supabase-js';
 
@@ -132,7 +133,7 @@ export default async function Home({
                   Teriis
                 </h1>
                 <p className="text-xl md:text-2xl font-medium text-primary-600 mb-8">
-                  TERritoires, Impact et Innovation sociale
+                  TERritoires, Initiatives et Innovation sociale
                 </p>
               </div>
 
@@ -144,8 +145,7 @@ export default async function Home({
 
               {/* Subheading */}
               <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-up">
-                Teriis connecte gratuitement les porteurs de projets et les talents locaux
-                pour dynamiser l&apos;économie de proximité.
+                Teriis connecte gratuitement les porteurs de projets et les talents pour développer des projets en commun et construire ensemble des initiatives locales.
               </p>
 
               {/* Value Props */}
@@ -166,7 +166,7 @@ export default async function Home({
                   <svg className="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span className="font-medium text-neutral-700">100% impact</span>
+                  <span className="font-medium text-neutral-700">100% initiatives</span>
                 </div>
               </div>
 
@@ -287,26 +287,26 @@ export default async function Home({
                 Pourquoi Teriis ?
               </h2>
               <p className="text-neutral-600 text-lg">
-                Une plateforme pensée pour l&apos;entrepreneuriat territorial
+                Une plateforme pensée pour l&apos;entrepreneuriat et les projets collectifs territoriaux
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               {[
                 {
-                  icon: '⚡',
-                  title: 'Rapide',
-                  description: 'Trouvez les bons talents ou projets près de chez vous en quelques clics grâce à notre matching intelligent.'
+                  icon: '🤝',
+                  title: 'Se rapprocher',
+                  description: 'Identifiez les bons talents et les bons projets autour de vous grâce à un matching pertinent et humain'
                 },
                 {
-                  icon: '🎯',
-                  title: 'Ciblé',
-                  description: 'Algorithme basé sur vos compétences, votre localisation, vos valeurs et la phase du projet.'
+                  icon: '🌱',
+                  title: 'Co-construire',
+                  description: 'Faites émerger des collaborations alignées, basées sur vos compétences, vos valeurs et les besoins réels des projets'
                 },
                 {
-                  icon: '💚',
-                  title: 'Humain',
-                  description: 'Focus sur la compatibilité humaine, l&apos;engagement territorial et la création de valeur locale.'
+                  icon: '✨',
+                  title: 'Réussir ensemble',
+                  description: 'Transformez ces rencontres en réussites concrètes, au service de l&apos;engagement et du dynamisme local'
                 }
               ].map((benefit, index) => (
                 <div key={index} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
@@ -324,10 +324,10 @@ export default async function Home({
           <div className="container-custom">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                Notre impact territorial
+                Ça bouge près de chez vous !
               </h2>
               <p className="text-neutral-600 text-lg">
-                Des chiffres qui témoignent de la dynamique locale
+                Des projets émergent, des talents s&apos;engagent, des rencontres se créent
               </p>
             </div>
 
@@ -338,7 +338,7 @@ export default async function Home({
                     {stats.projects}
                   </div>
                   <div className="text-neutral-600 font-medium">
-                    Projet{stats.projects > 1 ? 's' : ''} actif{stats.projects > 1 ? 's' : ''}
+                    Projet{stats.projects > 1 ? 's' : ''} en cours
                   </div>
                 </div>
                 <div className="text-center">
@@ -346,7 +346,7 @@ export default async function Home({
                     {stats.talents}
                   </div>
                   <div className="text-neutral-600 font-medium">
-                    Talent{stats.talents > 1 ? 's' : ''}
+                    Talent{stats.talents > 1 ? 's' : ''} engagé{stats.talents > 1 ? 's' : ''}
                   </div>
                 </div>
                 <div className="text-center">
@@ -354,7 +354,7 @@ export default async function Home({
                     {stats.entrepreneurs}
                   </div>
                   <div className="text-neutral-600 font-medium">
-                    Entrepreneur{stats.entrepreneurs > 1 ? 's' : ''}
+                    Porteur{stats.entrepreneurs > 1 ? 's' : ''} de projet
                   </div>
                 </div>
                 <div className="text-center">
@@ -362,7 +362,7 @@ export default async function Home({
                     {stats.applications}
                   </div>
                   <div className="text-neutral-600 font-medium">
-                    Candidature{stats.applications > 1 ? 's' : ''}
+                    Mise{stats.applications > 1 ? 's' : ''} en relation
                   </div>
                 </div>
               </div>
@@ -384,7 +384,7 @@ export default async function Home({
                 Prêt à faire vivre votre territoire ?
               </h2>
               <p className="text-xl mb-10 text-primary-100">
-                Rejoignez la communauté Teriis et donnez vie à vos projets locaux
+                Rejoignez la communauté Teriis et passez à l&apos;action, près de chez vous
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/signup">
@@ -402,60 +402,7 @@ export default async function Home({
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-neutral-900 text-neutral-300 py-12 px-4">
-          <div className="container-custom">
-            <div className="max-w-6xl mx-auto">
-              {/* Footer Grid */}
-              <div className="grid md:grid-cols-4 gap-8 mb-8">
-                {/* Brand */}
-                <div className="md:col-span-2">
-                  <div className="mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">T</span>
-                      </div>
-                      <span className="text-2xl font-bold text-white">Teriis</span>
-                    </div>
-                    <p className="text-primary-400 font-medium text-sm ml-12">
-                      TERritoires, Impact et Innovation sociale
-                    </p>
-                  </div>
-                  <p className="text-neutral-400 mb-4">
-                    La plateforme qui connecte les projets aux talents locaux.<br />
-                    100% gratuite, 100% locale, 100% impact.
-                  </p>
-                </div>
-
-                {/* Links */}
-                <div>
-                  <h4 className="font-semibold text-white mb-3">Plateforme</h4>
-                  <ul className="space-y-2">
-                    <li><Link href="/projects" className="hover:text-white transition-colors">Projets</Link></li>
-                    <li><Link href="/talents" className="hover:text-white transition-colors">Talents</Link></li>
-                    <li><Link href="/about" className="hover:text-white transition-colors">À propos</Link></li>
-                  </ul>
-                </div>
-
-                {/* Legal */}
-                <div>
-                  <h4 className="font-semibold text-white mb-3">Légal</h4>
-                  <ul className="space-y-2">
-                    <li><Link href="/charter" className="hover:text-white transition-colors">Charte éthique</Link></li>
-                    <li><Link href="/privacy" className="hover:text-white transition-colors">Confidentialité</Link></li>
-                    <li><Link href="/terms" className="hover:text-white transition-colors">CGU</Link></li>
-                    <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Copyright */}
-              <div className="pt-8 border-t border-neutral-800 text-center text-sm text-neutral-400">
-                <p>© 2026 Teriis. Tous droits réservés.</p>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </div>
   );

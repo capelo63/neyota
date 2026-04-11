@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -227,6 +228,8 @@ export default function TermsPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
