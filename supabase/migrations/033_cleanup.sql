@@ -1,18 +1,43 @@
 -- ============================================
--- SCRIPT DE NETTOYAGE pour Migration 033
+-- SCRIPT DE NETTOYAGE pour Migration 033 (VERSION SAFE)
 -- ============================================
 -- À exécuter AVANT la migration safe si vous avez des erreurs
 -- Ce script supprime tous les objets créés par la migration 033
+-- VERSION SAFE: Vérifie l'existence des objets avant de les supprimer
 
--- Désactiver RLS et supprimer les policies
-DROP POLICY IF EXISTS "Users can manage their own skills" ON user_skills;
-DROP POLICY IF EXISTS "Users can view all user skills" ON user_skills;
-DROP POLICY IF EXISTS "Project owners can manage project needs" ON project_needs;
-DROP POLICY IF EXISTS "Everyone can view project needs" ON project_needs;
-DROP POLICY IF EXISTS "Need-skill mapping is viewable by everyone" ON need_skill_mapping;
-DROP POLICY IF EXISTS "Authenticated users can create custom skills" ON skills;
-DROP POLICY IF EXISTS "Skills are viewable by everyone" ON skills;
-DROP POLICY IF EXISTS "Needs are viewable by everyone" ON needs;
+-- Désactiver RLS et supprimer les policies (seulement si les tables existent)
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_skills' AND table_schema = 'public') THEN
+    DROP POLICY IF EXISTS "Users can manage their own skills" ON user_skills;
+    DROP POLICY IF EXISTS "Users can view all user skills" ON user_skills;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'project_needs' AND table_schema = 'public') THEN
+    DROP POLICY IF EXISTS "Project owners can manage project needs" ON project_needs;
+    DROP POLICY IF EXISTS "Everyone can view project needs" ON project_needs;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'need_skill_mapping' AND table_schema = 'public') THEN
+    DROP POLICY IF EXISTS "Need-skill mapping is viewable by everyone" ON need_skill_mapping;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'skills' AND table_schema = 'public') THEN
+    DROP POLICY IF EXISTS "Authenticated users can create custom skills" ON skills;
+    DROP POLICY IF EXISTS "Skills are viewable by everyone" ON skills;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'needs' AND table_schema = 'public') THEN
+    DROP POLICY IF EXISTS "Needs are viewable by everyone" ON needs;
+  END IF;
+END $$;
 
 -- Supprimer les fonctions
 DROP FUNCTION IF EXISTS get_needs_for_skill(UUID);
