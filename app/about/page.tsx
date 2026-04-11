@@ -60,8 +60,8 @@ export default async function AboutPage() {
               TERritoires, Initiatives et Innovation sociale
             </p>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
-              La plateforme qui reconnecte les territoires à leurs talents
-              pour donner vie aux projets locaux.
+              La plateforme qui réunit les énergies d&apos;un même territoire
+              pour faire naître des initiatives locales
             </p>
           </div>
         </section>
@@ -78,17 +78,30 @@ export default async function AboutPage() {
 
             <div className="prose prose-lg mx-auto text-neutral-700">
               <p className="text-xl leading-relaxed mb-6">
-                Teriis est née d&apos;un constat simple : <strong>chaque territoire regorge de talents
-                et de porteurs de projets qui ne se rencontrent jamais</strong>. Les entrepreneurs
-                cherchent des compétences, les talents cherchent des projets qui ont du sens,
-                mais ces deux mondes restent trop souvent cloisonnés.
+                Teriis est née d&apos;un constat simple : <strong>partout, des talents et des porteurs
+                de projets existent... mais se rencontrent trop peu</strong>. Les uns cherchent à s&apos;engager
+                dans des projets utiles, les autres ont besoin de compétences pour avancer. Pourtant,
+                ces dynamiques restent souvent séparées.
               </p>
 
               <p className="text-xl leading-relaxed mb-6">
-                Notre mission est de <strong>créer des rencontres locales</strong> qui transforment
-                les idées en réalité. En mettant l&apos;accent sur la <strong>proximité géographique</strong>,
-                nous favorisons l&apos;émergence d&apos;une économie de territoire plus humaine,
-                plus solidaire, et plus durable.
+                Notre mission est de <strong>simplifier la mise en relation entre porteurs de projets
+                et experts</strong>, en identifiant pour chacun les personnes les plus pertinentes, au
+                bon moment et sur leur territoire. Nous permettons ainsi de transformer plus rapidement
+                les idées en projets concrets, utiles et ancrés localement. Et, dans le même temps, de
+                mobiliser des personnes éloignées des opportunités.
+              </p>
+
+              <p className="text-xl leading-relaxed mb-6">
+                Créer des liens simples, humains, pour permettre à des projets de voir le jour et de
+                grandir, là où les gens vivent. L&apos;objectif n&apos;est pas d&apos;enfermer mais de
+                permettre à chacun de participer, ponctuellement ou durablement, à des projets qui font sens.
+              </p>
+
+              <p className="text-xl leading-relaxed mb-6">
+                En favorisant la proximité, Teriis contribue à faire émerger des initiatives plus ancrées,
+                plus solidaires, et plus durables. <strong>Chaque projet est une opportunité de faire vivre
+                son territoire, à son échelle.</strong>
               </p>
             </div>
           </div>
@@ -107,34 +120,34 @@ export default async function AboutPage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  icon: '🌍',
-                  title: 'Ancrage territorial',
-                  description: 'Nous croyons en la force des territoires. Chaque projet doit contribuer à dynamiser son écosystème local et créer de la valeur là où elle est la plus utile.'
+                  icon: '🎯',
+                  title: 'Agir localement, créer utile',
+                  description: 'Nous croyons en la force des territoires et des initiatives de proximité. Chaque projet mérite de se développer là où il peut avoir le plus d\'impact.'
                 },
                 {
                   icon: '🤝',
-                  title: 'Éthique et confiance',
-                  description: 'La protection des idées est au cœur de notre plateforme. Chaque membre s\'engage à respecter une charte éthique pour garantir un environnement sain et bienveillant.'
+                  title: 'Confiance et respect',
+                  description: 'Nous construisons un cadre où chacun peut partager ses idées et ses compétences en toute confiance. L\'écoute, la bienveillance et l\'engagement mutuel sont essentiels à des collaborations durables.'
                 },
                 {
-                  icon: '💚',
-                  title: 'Accessibilité totale',
-                  description: 'Teriis est et restera 100% gratuit pour tous les entrepreneurs et talents. Nous ne créons pas de barrière financière à la réussite des projets locaux.'
-                },
-                {
-                  icon: '🎯',
-                  title: 'Matching intelligent',
-                  description: 'Notre algorithme prend en compte vos compétences, votre localisation, vos valeurs et la phase du projet pour créer des connexions pertinentes et durables.'
-                },
-                {
-                  icon: '🌱',
-                  title: 'Impact mesurable',
-                  description: 'Chaque collaboration, chaque projet lancé, chaque emploi créé contribue à l\'impact territorial. Nous rendons cet impact visible et célébrons les réussites locales.'
+                  icon: '🌍',
+                  title: 'Accessible à tous',
+                  description: 'Nous défendons un accès ouvert à l\'accompagnement et aux compétences. Quels que soient votre parcours ou vos moyens, vous devez pouvoir être aidé ou contribuer.'
                 },
                 {
                   icon: '✨',
-                  title: 'Gamification positive',
-                  description: 'Les badges et le système de reconnaissance valorisent l\'engagement territorial et encouragent les membres à s\'investir durablement dans leur communauté.'
+                  title: 'Des rencontres qui font avancer',
+                  description: 'Nous facilitons des mises en relation utiles et pertinentes entre personnes qui peuvent réellement s\'apporter mutuellement, pour transformer une rencontre en collaboration concrète.'
+                },
+                {
+                  icon: '🌱',
+                  title: 'Un impact concret et visible',
+                  description: 'Nous valorisons les projets qui créent de la valeur réelle : économique, sociale ou environnementale. Chaque action compte et chaque réussite mérite d\'être visible.'
+                },
+                {
+                  icon: '🚀',
+                  title: 'Donner envie d\'agir',
+                  description: 'Nous encourageons le passage à l\'action et l\'engagement dans la durée, en valorisant les contributions de chacun au service des projets et des territoires.'
                 }
               ].map((value, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -169,7 +182,7 @@ export default async function AboutPage() {
                     <span className="text-2xl">💼</span>
                   </div>
                   <h3 className="text-2xl font-bold text-neutral-900">
-                    Pour les porteurs d&apos;initiative
+                    Pour les porteurs de projet
                   </h3>
                 </div>
 
@@ -178,22 +191,22 @@ export default async function AboutPage() {
                     {
                       step: '1',
                       title: 'Créez votre profil',
-                      description: 'Présentez-vous, indiquez votre localisation et acceptez notre charte éthique.'
+                      description: 'Présentez votre projet, précisez votre localisation et ce que vous recherchez. En quelques minutes, vous êtes prêt à être mis en relation.'
                     },
                     {
                       step: '2',
-                      title: 'Publiez votre projet',
-                      description: 'Décrivez votre idée, la phase actuelle, et les compétences dont vous avez besoin.'
+                      title: 'Dites-nous de quoi vous avez besoin',
+                      description: 'Décrivez simplement ce dont vous avez besoin pour avancer : compétences, stade du projet, objectifs.'
                     },
                     {
                       step: '3',
-                      title: 'Recevez des candidatures',
-                      description: 'Les talents locaux qui correspondent à vos besoins vous contactent directement.'
+                      title: 'Rencontrez les bons talents',
+                      description: 'Recevez rapidement des profils pertinents, proches de vous et alignés avec votre projet.'
                     },
                     {
                       step: '4',
-                      title: 'Construisez votre équipe',
-                      description: 'Échangez, sélectionnez vos talents, et lancez votre projet ensemble !'
+                      title: 'Lancez la collaboration',
+                      description: 'Échangez, choisissez les personnes qui vous correspondent et faites avancer votre projet ensemble.'
                     }
                   ].map((item) => (
                     <li key={item.step} className="flex gap-4">
@@ -229,22 +242,22 @@ export default async function AboutPage() {
                     {
                       step: '1',
                       title: 'Créez votre profil',
-                      description: 'Indiquez vos compétences, votre localisation et le rayon dans lequel vous souhaitez intervenir.'
+                      description: 'Mettez en avant vos compétences, vos expériences et les projets qui vous motivent, et engagez-vous à respecter notre charte éthique.'
                     },
                     {
                       step: '2',
-                      title: 'Découvrez les projets',
-                      description: 'Notre algorithme vous suggère des projets qui correspondent à votre profil et votre zone géographique.'
+                      title: 'Découvrez des projets qui comptent',
+                      description: 'Accédez à des projets proches de vous, sélectionnés en fonction de votre profil et de vos envies.'
                     },
                     {
                       step: '3',
-                      title: 'Postulez facilement',
-                      description: 'Envoyez votre candidature avec un message personnalisé pour expliquer votre motivation.'
+                      title: 'Proposez votre aide',
+                      description: 'Contactez facilement les porteurs de projet qui vous inspirent et expliquez comment vous pouvez contribuer.'
                     },
                     {
                       step: '4',
-                      title: 'Contribuez localement',
-                      description: 'Rejoignez des projets à impact près de chez vous et développez le territoire !'
+                      title: 'Engagez-vous concrètement',
+                      description: 'Participez à des projets utiles et contribuez au développement de votre territoire.'
                     }
                   ].map((item) => (
                     <li key={item.step} className="flex gap-4">
@@ -279,49 +292,26 @@ export default async function AboutPage() {
 
             <div className="bg-white rounded-xl p-8 md:p-10 shadow-sm">
               <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-                Nous croyons que <strong>l&apos;accès aux opportunités ne doit jamais être une question d&apos;argent</strong>.
-                Un entrepreneur avec une idée brillante ou un talent avec des compétences rares
-                ne doivent pas être freinés par une barrière financière.
+                Nous croyons que <strong>l&apos;accès aux opportunités ne doit jamais dépendre de moyens financiers</strong>.
               </p>
 
               <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-                Teriis génère ses revenus grâce à un <strong>modèle B2B et B2G</strong> :
+                Un projet utile ou une compétence engagée méritent de trouver leur place, sans barrière.
               </p>
 
-              <ul className="space-y-4 mb-6">
-                <li className="flex gap-3">
-                  <svg className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <strong className="text-neutral-900">Partenariats territoriaux</strong>
-                    <p className="text-neutral-600">Collectivités locales, régions et métropoles qui souhaitent dynamiser leur écosystème entrepreneurial</p>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <svg className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <strong className="text-neutral-900">Subventions publiques</strong>
-                    <p className="text-neutral-600">Programmes de soutien à l&apos;innovation et au développement économique local</p>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <svg className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <strong className="text-neutral-900">Mécénat d&apos;entreprises</strong>
-                    <p className="text-neutral-600">Entreprises engagées dans le développement territorial et l&apos;impact social</p>
-                  </div>
-                </li>
-              </ul>
+              <p className="text-lg text-neutral-700 leading-relaxed mb-6">
+                Teriis est soutenu par des acteurs publics et privés engagés dans le développement des territoires.
+                Ce modèle nous permet de rester 100% gratuit pour les porteurs de projet et les talents.
+              </p>
+
+              <p className="text-lg text-neutral-700 leading-relaxed mb-6">
+                Teriis a vocation à s&apos;appuyer sur des acteurs engagés dans le développement des territoires,
+                afin de rester accessible à tous.
+              </p>
 
               <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
                 <p className="text-neutral-700 font-medium">
-                  💡 <strong>Notre engagement :</strong> Teriis restera toujours 100% gratuit
-                  pour les entrepreneurs et les talents. C&apos;est notre ADN et notre raison d&apos;être.
+                  💡 <strong>C&apos;est un choix fort, et nous nous engageons à le préserver.</strong>
                 </p>
               </div>
             </div>
@@ -337,7 +327,7 @@ export default async function AboutPage() {
               </h2>
               <div className="w-20 h-1 bg-primary-600 mx-auto mb-6"></div>
               <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-                Ensemble, nous construisons une économie locale plus dynamique et plus solidaire
+                Ensemble, nous faisons grandir des projets qui renforcent nos territoires
               </p>
             </div>
 
@@ -371,8 +361,7 @@ export default async function AboutPage() {
               Prêt à rejoindre la communauté ?
             </h2>
             <p className="text-xl mb-10 text-primary-100">
-              Que vous portiez un projet ou que vous cherchiez à vous investir localement,
-              Teriis est fait pour vous.
+              Vous avez un projet ou l&apos;envie de vous engager ? Rejoignez Teriis et passez à l&apos;action.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">

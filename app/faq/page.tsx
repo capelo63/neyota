@@ -19,374 +19,197 @@ interface FAQSection {
 
 const faqData: FAQSection[] = [
   {
-    title: "Fonctionnement général",
-    icon: "🎯",
-    items: [
-      {
-        question: "Qu'est-ce que Teriis ?",
-        answer: (
-          <div>
-            <p>Teriis est une plateforme gratuite de mise en relation entre porteurs de projets (entrepreneurs, créateurs) et talents locaux (développeurs, designers, marketeurs, etc.) souhaitant s'investir dans des initiatives à impact territorial.</p>
-            <p className="mt-3">Notre mission : dynamiser les territoires en favorisant l'entrepreneuriat de proximité et la collaboration locale.</p>
-          </div>
-        )
-      },
-      {
-        question: "Comment fonctionne la plateforme ?",
-        answer: (
-          <div>
-            <p className="mb-3">Le fonctionnement de Teriis est simple et intuitif :</p>
-            <ol className="list-decimal list-inside space-y-2">
-              <li>Les porteurs de projets publient leurs projets avec les compétences recherchées</li>
-              <li>Les talents créent leur profil et indiquent leurs compétences</li>
-              <li>Notre algorithme suggère automatiquement des matchs basés sur la proximité géographique, les compétences et la phase du projet</li>
-              <li>Les talents candidatent aux projets qui les intéressent</li>
-              <li>Les porteurs de projets sélectionnent les talents et démarrent la collaboration</li>
-            </ol>
-          </div>
-        )
-      },
-      {
-        question: "Qui peut utiliser Teriis ?",
-        answer: (
-          <div>
-            <p className="mb-3">Teriis est ouvert à tous !</p>
-            <p className="mb-2"><strong>Porteurs de projets :</strong> entrepreneurs, créateurs, associatifs, indépendants</p>
-            <p className="mb-2"><strong>Talents :</strong> salariés en quête de sens, freelances, étudiants, retraités actifs, experts bénévoles</p>
-            <p className="mb-2"><strong>Toutes les phases :</strong> de l'idée sur papier au projet en croissance</p>
-            <p><strong>Tous les secteurs :</strong> tech, social, environnemental, artisanat, services, etc.</p>
-          </div>
-        )
-      },
-      {
-        question: "Est-ce que Teriis est vraiment 100% gratuit ?",
-        answer: (
-          <div>
-            <p className="mb-3">Oui, absolument ! Teriis est et restera 100% gratuit pour les porteurs de projets et les talents.</p>
-            <p className="mb-3">Cela inclut :</p>
-            <ul className="list-disc list-inside space-y-1 mb-3">
-              <li>La création et publication de projets (illimité)</li>
-              <li>Les candidatures (illimitées)</li>
-              <li>Toutes les fonctionnalités principales</li>
-            </ul>
-            <p>Notre modèle repose sur des subventions publiques, du mécénat d'entreprise et des partenariats avec des incubateurs et écoles, pas sur les utilisateurs.</p>
-          </div>
-        )
-      }
-    ]
-  },
-  {
-    title: "Pour les porteurs de projets",
+    title: "À propos de Teriis",
     icon: "💡",
     items: [
       {
-        question: "Comment créer mon premier projet sur Teriis ?",
+        question: "Que signifie Teriis ?",
         answer: (
           <div>
-            <p className="mb-3">Créer votre projet est simple :</p>
-            <ol className="list-decimal list-inside space-y-2">
-              <li>Connectez-vous à votre compte</li>
-              <li>Allez dans "Mes projets" puis "Créer un projet"</li>
-              <li>Remplissez les informations : titre, pitch court, description complète, phase du projet, compétences recherchées, localisation</li>
-              <li>Publiez votre projet</li>
-              <li>Les talents correspondant à votre recherche recevront une notification</li>
-            </ol>
+            <p className="mb-3">Teriis signifie <strong>TERritoires, Initiatives et Innovation sociale</strong>.</p>
+            <p className="mb-3">La plateforme est née d'une conviction simple : les projets qui font bouger les lignes émergent souvent au cœur des territoires, portés par des personnes engagées et des compétences prêtes à s'impliquer.</p>
+            <p>Teriis facilite ces rencontres pour faire émerger des initiatives utiles, concrètes et positives.</p>
           </div>
         )
       },
       {
-        question: "À quelle phase de mon projet puis-je utiliser la plateforme ?",
+        question: "Quel est le but de Teriis ?",
         answer: (
           <div>
-            <p className="mb-3">Teriis accompagne votre projet à toutes les phases :</p>
-            <ul className="space-y-2">
-              <li><strong>💭 Idéation :</strong> Vous avez une idée et cherchez des co-fondateurs</li>
-              <li><strong>🛠 MVP :</strong> Vous développez votre prototype</li>
-              <li><strong>🚀 Lancement :</strong> Vous êtes prêt à lancer</li>
-              <li><strong>📈 Croissance :</strong> Vous scalez votre activité</li>
-              <li><strong>🏗 Structuration :</strong> Vous professionnalisez votre organisation</li>
-            </ul>
-          </div>
-        )
-      },
-      {
-        question: "Comment trouver les bons talents pour mon projet ?",
-        answer: (
-          <div>
-            <p className="mb-3">Notre algorithme travaille pour vous de trois manières :</p>
-            <p className="mb-2"><strong>Matching automatique :</strong> Les talents avec les compétences recherchées reçoivent une notification de votre projet</p>
-            <p className="mb-2"><strong>Recherche manuelle :</strong> Vous pouvez chercher des talents par compétences et localisation</p>
-            <p className="mb-3"><strong>Candidatures spontanées :</strong> Les talents peuvent candidater même s'ils ne matchent pas à 100%</p>
-            <p className="text-sm italic">Astuce : Plus votre description est précise, plus vous attirerez les bons profils.</p>
+            <p className="mb-3">Teriis facilite la mise en relation entre des porteurs de projet et des talents qui souhaitent s'engager.</p>
+            <p><strong>L'objectif :</strong> permettre à chacun de trouver simplement les bonnes personnes pour donner vie à une idée, faire avancer un projet, partager ses compétences et contribuer à des initiatives locales.</p>
           </div>
         )
       }
     ]
   },
   {
-    title: "Pour les talents",
-    icon: "🚀",
+    title: "Accès et modèle",
+    icon: "🆓",
     items: [
       {
-        question: "Quelles compétences puis-je proposer ?",
+        question: "L'inscription est-elle gratuite ?",
         answer: (
           <div>
-            <p className="mb-3">Toutes les compétences sont bienvenues ! Voici quelques exemples par catégorie :</p>
-            <p className="mb-1"><strong>💻 Tech & Digital :</strong> Développement web/mobile, Design UI/UX, Data science, DevOps</p>
-            <p className="mb-1"><strong>📣 Marketing & Communication :</strong> Community management, Content marketing, SEO</p>
-            <p className="mb-1"><strong>💼 Business & Stratégie :</strong> Business development, Levée de fonds, Juridique</p>
-            <p className="mb-1"><strong>🎨 Créatif & Contenu :</strong> Vidéo, photo, Rédaction, Illustration</p>
-            <p className="mt-3">Vous pouvez également ajouter des compétences personnalisées si elles n'apparaissent pas dans notre liste.</p>
-          </div>
-        )
-      },
-      {
-        question: "Comment candidater à un projet ?",
-        answer: (
-          <div>
-            <p className="mb-3">Le processus de candidature est simple :</p>
-            <ol className="list-decimal list-inside space-y-2">
-              <li>Explorez les projets suggérés ou utilisez la recherche</li>
-              <li>Cliquez sur un projet pour voir le pitch court</li>
-              <li>Si cela vous intéresse, cliquez sur "Candidater"</li>
-              <li>Acceptez la charte éthique (respect de la confidentialité)</li>
-              <li>Rédigez une lettre de motivation courte</li>
-              <li>Validez votre candidature</li>
-            </ol>
-            <p className="mt-3">Le porteur de projet recevra une notification et pourra consulter votre profil.</p>
-          </div>
-        )
-      },
-      {
-        question: "Les missions sont-elles rémunérées ?",
-        answer: (
-          <div>
-            <p className="mb-3">Cela dépend du projet ! Teriis accueille tous les types de collaboration :</p>
-            <ul className="list-disc list-inside space-y-1 mb-3">
-              <li><strong>Bénévolat / Pro bono :</strong> Vous aidez par passion ou pour l'impact</li>
-              <li><strong>Rémunération :</strong> Salaire ou honoraires</li>
-              <li><strong>Equity / Parts :</strong> Vous devenez associé(e)</li>
-              <li><strong>Mixte :</strong> Petit salaire + equity</li>
-              <li><strong>Troc de compétences :</strong> Échange de services</li>
-            </ul>
-            <p>Les modalités sont négociées librement entre vous et le porteur de projet.</p>
+            <p className="mb-3">Oui, l'inscription et l'utilisation de Teriis sont <strong>100% gratuites</strong> pour les porteurs de projet et les talents.</p>
+            <p className="mb-3">Nous faisons le choix de rendre les opportunités accessibles à tous, sans barrière financière.</p>
+            <p>La plateforme repose sur un modèle solide, en lien avec des acteurs engagés dans le développement des territoires, afin de garantir cet accès dans la durée.</p>
           </div>
         )
       }
     ]
   },
   {
-    title: "Protection des idées et sécurité",
-    icon: "🔒",
-    items: [
-      {
-        question: "Comment mes idées de projet sont-elles protégées ?",
-        answer: (
-          <div>
-            <p className="mb-3">La protection de vos idées est une priorité absolue. Nous avons mis en place plusieurs mécanismes :</p>
-            <p className="mb-2"><strong>Visibilité progressive :</strong> Seul un pitch court (2-3 lignes) est visible publiquement. La description complète n'est accessible qu'aux talents ayant candidaté ET accepté la charte éthique.</p>
-            <p className="mb-2"><strong>Charte éthique obligatoire :</strong> Avant de voir les détails d'un projet, les talents doivent s'engager au respect de la confidentialité, à l'interdiction de copier ou voler des idées, et à un engagement de bonne foi.</p>
-            <p className="mb-2"><strong>Système de signalement :</strong> Si vous constatez un vol d'idée ou un comportement malveillant, vous pouvez signaler l'utilisateur.</p>
-            <p><strong>NDA optionnel :</strong> Vous pouvez demander aux talents sélectionnés de signer un NDA avant d'échanger des informations sensibles.</p>
-          </div>
-        )
-      },
-      {
-        question: "Qu'est-ce que la charte éthique ?",
-        answer: (
-          <div>
-            <p className="mb-3">La charte éthique est un engagement moral que tous les utilisateurs acceptent.</p>
-            <p className="mb-3"><strong>Pour les talents :</strong> Respect de la confidentialité des projets consultés, interdiction de copier ou détourner des idées, engagement de bonne foi dans les collaborations, professionnalisme et respect.</p>
-            <p className="mb-3"><strong>Pour les porteurs de projets :</strong> Transparence sur les conditions de collaboration, respect des talents, reconnaissance du travail fourni.</p>
-            <p>Teriis repose sur la confiance. Sans cette charte, la plateforme ne pourrait pas fonctionner sainement.</p>
-          </div>
-        )
-      },
-      {
-        question: "Mes données personnelles sont-elles sécurisées ?",
-        answer: (
-          <div>
-            <p className="mb-3">Absolument. Teriis respecte le RGPD et protège vos données avec soin.</p>
-            <p className="mb-3"><strong>Sécurité technique :</strong> Hébergement sécurisé (Supabase + Vercel), chiffrement des données sensibles, authentification sécurisée, sauvegardes quotidiennes.</p>
-            <p className="mb-3"><strong>Vos droits :</strong> Vous pouvez consulter, modifier, supprimer ou exporter vos données à tout moment.</p>
-            <p className="font-semibold">Nous ne vendons JAMAIS vos données à des tiers.</p>
-          </div>
-        )
-      }
-    ]
-  },
-  {
-    title: "Géolocalisation et territoire",
-    icon: "📍",
-    items: [
-      {
-        question: "Comment fonctionne le matching géographique ?",
-        answer: (
-          <div>
-            <p className="mb-3">Notre système de géolocalisation repose sur trois éléments :</p>
-            <p className="mb-2"><strong>Votre localisation :</strong> Ville ou région renseignée dans votre profil</p>
-            <p className="mb-2"><strong>Rayon de recherche :</strong> Vous choisissez la distance maximale (10 km, 50 km, 100 km, région, France entière)</p>
-            <p className="mb-3"><strong>Calcul de distance :</strong> Notre algorithme calcule la distance "à vol d'oiseau" entre vous et les projets ou talents</p>
-            <p className="text-sm italic">Exemple : Vous êtes à Lyon et cherchez dans un rayon de 50 km → Les talents de Lyon, Villeurbanne et Vénissieux verront votre projet en priorité.</p>
-          </div>
-        )
-      },
-      {
-        question: "Puis-je chercher des talents en dehors de ma région ?",
-        answer: (
-          <div>
-            <p className="mb-3">Oui ! Vous avez le choix entre trois options :</p>
-            <ul className="list-disc list-inside space-y-1 mb-3">
-              <li><strong>Local strict :</strong> Votre ville/agglomération (10-30 km)</li>
-              <li><strong>Régional :</strong> Votre région administrative</li>
-              <li><strong>National :</strong> Toute la France</li>
-            </ul>
-            <p>Privilégier le local facilite les rencontres physiques, favorise l'ancrage territorial et maximise l'impact local. Cependant, si vous cherchez une compétence rare, élargir géographiquement peut être pertinent (le télétravail est possible !).</p>
-          </div>
-        )
-      }
-    ]
-  },
-  {
-    title: "Positionnement",
-    icon: "🆚",
-    items: [
-      {
-        question: "Pourquoi Teriis alors qu'il existe déjà des incubateurs comme Alter'Incub ?",
-        answer: (
-          <div>
-            <p className="mb-4">Excellente question ! Teriis ne cherche pas à concurrencer les incubateurs RSE territoriaux, mais à combler un vide spécifique.</p>
-
-            <p className="font-semibold mb-2">Ce qui différencie Teriis des incubateurs :</p>
-            <ul className="space-y-2 mb-4">
-              <li><strong>✅ Accessible sans sélection :</strong> Pas de dossier, pas de jury. Inscription libre pour tous les projets.</li>
-              <li><strong>⚡ Instantané :</strong> Trouvez des talents en quelques heures, sans attendre les appels à projets semestriels.</li>
-              <li><strong>🎯 Matching de talents pairs :</strong> Mise en relation avec des talents locaux engagés, pas uniquement des mentors experts.</li>
-              <li><strong>💚 100% gratuit, 0% equity :</strong> Aucuns frais, aucune prise de capital.</li>
-              <li><strong>🌱 Dès l'idéation :</strong> Accepte les projets dès l'idée sur papier, sans exiger de MVP.</li>
-            </ul>
-
-            <p className="font-semibold mb-2">Complémentarité :</p>
-            <p className="mb-3">Teriis ne remplace pas les incubateurs, il complète l'écosystème. Vous pouvez être incubé chez Alter'Incub ET utiliser Teriis pour recruter un développeur local. Les incubateurs peuvent d'ailleurs devenir partenaires de Teriis.</p>
-
-            <p className="bg-primary-50 border-l-4 border-primary-600 p-3 italic">
-              "Teriis ne concurrence personne, il comble un vide : le matching territorial instantané et gratuit entre projets et talents."
-            </p>
-          </div>
-        )
-      }
-    ]
-  },
-  {
-    title: "Modèle économique",
-    icon: "💰",
-    items: [
-      {
-        question: "Comment Teriis se finance-t-il ?",
-        answer: (
-          <div>
-            <p className="mb-3">Teriis repose sur un modèle économique vertueux, sans faire payer les utilisateurs :</p>
-            <ul className="list-disc list-inside space-y-1 mb-3">
-              <li><strong>60%</strong> Subventions publiques (Régions, BPI, fonds européens)</li>
-              <li><strong>25%</strong> Partenariats B2B (Incubateurs, écoles, cabinets)</li>
-              <li><strong>10%</strong> Mécénat d'entreprise (RSE, fondations)</li>
-              <li><strong>5%</strong> Services premium optionnels (boost visibilité, analytics)</li>
-            </ul>
-            <p>Les utilisateurs ne paient jamais pour les fonctionnalités essentielles.</p>
-          </div>
-        )
-      },
-      {
-        question: "Pourquoi créer une plateforme gratuite ?",
-        answer: (
-          <div>
-            <p className="mb-3">Parce que l'argent ne doit pas être un frein à l'entrepreneuriat et à l'engagement local.</p>
-            <p className="mb-3">Notre conviction : Les talents ont des compétences, pas forcément de budget. Les porteurs de projets en phase idéation n'ont souvent pas de trésorerie. L'impact territorial bénéficie à tous, pas seulement aux utilisateurs.</p>
-            <p>Notre modèle : Les bénéficiaires indirects (Régions, incubateurs, entreprises) financent la plateforme. Les utilisateurs en profitent gratuitement. Tout le monde y gagne.</p>
-          </div>
-        )
-      }
-    ]
-  },
-  {
-    title: "Utilisation pratique",
+    title: "Fonctionnement de la plateforme",
     icon: "⚙️",
     items: [
       {
-        question: "Comment modifier mon profil ?",
+        question: "Pourquoi faut-il s'inscrire pour accéder aux projets en détail ?",
         answer: (
           <div>
-            <ol className="list-decimal list-inside space-y-2">
-              <li>Connectez-vous à votre compte</li>
-              <li>Cliquez sur votre avatar (en haut à droite) puis "Mon profil"</li>
-              <li>Cliquez sur "Modifier"</li>
-              <li>Changez les informations souhaitées : bio, compétences, localisation, photo, disponibilité</li>
-              <li>Enregistrez les modifications</li>
-            </ol>
-            <p className="mt-3">Vos modifications sont instantanées et visibles par les autres utilisateurs.</p>
+            <p className="mb-3">L'inscription permet de garantir un cadre de confiance pour tous les membres.</p>
+            <p className="mb-3">Elle protège les projets et les informations partagées, tout en s'assurant que chaque personne s'inscrit dans une démarche sincère et respectueuse.</p>
+            <p>Elle permet aussi de vous proposer des contenus et des mises en relation adaptés à votre profil.</p>
           </div>
         )
       },
       {
-        question: "Puis-je supprimer mon compte ?",
+        question: "Comment Teriis peut m'aider en tant que porteur de projet ?",
         answer: (
           <div>
-            <p className="mb-3">Oui, vous avez un droit à l'oubli (RGPD).</p>
-            <p className="mb-3"><strong>Procédure :</strong> Allez dans "Paramètres" → "Mon compte" → "Supprimer mon compte". Cette action est irréversible.</p>
-            <p className="mb-3"><strong>Conséquences :</strong> Votre profil sera supprimé, vos projets archivés (ou transférés si vous avez des co-fondateurs), vos candidatures annulées, et vos données personnelles effacées sous 30 jours.</p>
-            <p><strong>Alternative :</strong> Vous pouvez désactiver temporairement votre compte (réactivable à tout moment).</p>
+            <p className="mb-3">Teriis vous permet de :</p>
+            <ul className="list-disc list-inside space-y-1 mb-3">
+              <li>Trouver des compétences adaptées à vos besoins</li>
+              <li>Gagner du temps dans votre recherche</li>
+              <li>Rencontrer des personnes proches de vous et engagées</li>
+            </ul>
+            <p>Quel que soit votre stade d'avancement, vous pouvez trouver un accompagnement concret pour faire avancer votre projet.</p>
           </div>
         )
       },
       {
-        question: "Teriis est-il disponible sur mobile ?",
+        question: "Comment Teriis peut m'aider en tant que talent ?",
         answer: (
           <div>
-            <p className="mb-3"><strong>Actuellement :</strong> Teriis est une application web responsive, optimisée pour les navigateurs mobiles.</p>
-            <p className="mb-3"><strong>Bientôt (Phase 2) :</strong> Application mobile native pour iOS et Android avec notifications push, mode hors ligne et géolocalisation automatique.</p>
-            <p>En attendant, vous pouvez ajouter Teriis à votre écran d'accueil comme une PWA (Progressive Web App).</p>
+            <p className="mb-3">Teriis vous permet de :</p>
+            <ul className="list-disc list-inside space-y-1 mb-3">
+              <li>Vous engager sur des projets qui ont du sens ou qui vous tiennent à cœur</li>
+              <li>Mettre vos compétences au service d'initiatives locales</li>
+              <li>Choisir les projets qui vous motivent, près de chez vous</li>
+            </ul>
+            <p>C'est une manière concrète de contribuer et de s'impliquer.</p>
+          </div>
+        )
+      },
+      {
+        question: "Suis-je obligé de m'engager si je prends contact ?",
+        answer: (
+          <div>
+            <p className="mb-3">Non. Teriis facilite les rencontres mais chacun reste libre de ses engagements.</p>
+            <p className="mb-3">En revanche, nous encourageons des échanges respectueux, honnêtes et engagés.</p>
+            <p>Prendre contact implique une forme de considération envers l'autre.</p>
+          </div>
+        )
+      },
+      {
+        question: "Puis-je participer à plusieurs projets ?",
+        answer: (
+          <div>
+            <p>Oui, vous êtes libre de vous engager dans un ou plusieurs projets, selon votre disponibilité et vos envies.</p>
+          </div>
+        )
+      },
+      {
+        question: "Puis-je modifier mon profil ou mes besoins ?",
+        answer: (
+          <div>
+            <p>Oui, votre profil et vos besoins peuvent être mis à jour à tout moment, afin de rester en phase avec votre situation et vos objectifs.</p>
+          </div>
+        )
+      },
+      {
+        question: "Comment sont proposés les profils et les projets ?",
+        answer: (
+          <div>
+            <p className="mb-3">Teriis met en relation des personnes en fonction de plusieurs critères : besoins, compétences, localisation et affinités.</p>
+            <p>L'objectif est de vous faire gagner du temps en vous proposant des mises en relation pertinentes et utiles, sans recherche complexe.</p>
+          </div>
+        )
+      },
+      {
+        question: "Pourquoi définir un territoire lors de l'inscription ?",
+        answer: (
+          <div>
+            <p className="mb-3">Teriis repose sur une logique de proximité.</p>
+            <p className="mb-3">En définissant votre zone d'action, vous :</p>
+            <ul className="list-disc list-inside space-y-1 mb-3">
+              <li>Recevez des projets et profils proches de vous</li>
+              <li>Facilitez les échanges et les collaborations concrètes</li>
+              <li>Contribuez au développement de votre territoire</li>
+            </ul>
+            <p>Vous pouvez ajuster ce périmètre à tout moment.</p>
           </div>
         )
       }
     ]
   },
   {
-    title: "Aide et support",
-    icon: "❓",
+    title: "Confiance et éthique",
+    icon: "🤝",
     items: [
       {
-        question: "J'ai un problème technique, qui contacter ?",
+        question: "Pourquoi existe-t-il une charte éthique ?",
         answer: (
           <div>
-            <p className="mb-3"><strong>Support technique :</strong></p>
+            <p className="mb-3">La charte éthique permet de garantir un cadre sain et respectueux pour tous.</p>
+            <p className="mb-3">Elle repose sur des principes essentiels :</p>
             <ul className="list-disc list-inside space-y-1 mb-3">
-              <li><strong>Email :</strong> support@teriis.fr</li>
-              <li><strong>Chat :</strong> Bulle de chat en bas à droite (heures ouvrées 9h-18h)</li>
+              <li>Respect des personnes</li>
+              <li>Transparence</li>
+              <li>Engagement sincère</li>
             </ul>
-            <p className="mb-2"><strong>Délai de réponse :</strong></p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Chat : 5-10 minutes (pendant les heures ouvrées)</li>
-              <li>Email : 24-48h</li>
-            </ul>
+            <p>Elle contribue à créer un environnement de confiance, indispensable à des collaborations de qualité.</p>
           </div>
         )
       },
       {
-        question: "Comment proposer une nouvelle fonctionnalité ?",
+        question: "Pourquoi dois-je accepter la charte éthique ?",
         answer: (
           <div>
-            <p className="mb-3">Nous adorons vos idées !</p>
-            <p className="mb-3"><strong>Méthodes pour nous faire part de vos suggestions :</strong></p>
-            <ul className="list-disc list-inside space-y-1 mb-3">
-              <li>Email : idees@teriis.fr</li>
-              <li>Sondages réguliers où nous vous sollicitons pour co-construire la roadmap</li>
+            <p className="mb-3">En rejoignant Teriis, vous faites partie d'une communauté.</p>
+            <p className="mb-3">Accepter la charte, c'est :</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>S'engager à respecter les autres</li>
+              <li>Partager des intentions honnêtes</li>
+              <li>Contribuer à une dynamique positive</li>
             </ul>
-            <p className="italic">Votre avis compte : Teriis se construit avec vous !</p>
           </div>
         )
       }
     ]
-  }
+  },
+  {
+    title: "À qui s'adresse Teriis ?",
+    icon: "👥",
+    items: [
+      {
+        question: "Porteur de projet",
+        answer: (
+          <div>
+            <p>Vous avez une idée ou un projet et vous cherchez à passer à l'étape suivante : être conseillé, structurer votre activité ou trouver les bonnes personnes pour avancer et concrétiser votre concept.</p>
+          </div>
+        )
+      },
+      {
+        question: "Talent",
+        answer: (
+          <div>
+            <p>Vous avez de l'expérience ou des compétences et vous voulez les transmettre : aider un projet à se lancer, apporter un regard extérieur ou vous engager concrètement près de chez vous.</p>
+          </div>
+        )
+      }
+    ]
+  },
 ];
 
 function AccordionItem({ question, answer, isOpen, onClick }: {
@@ -452,7 +275,7 @@ export default function FAQPage() {
               Foire Aux Questions
             </h1>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto mb-8">
-              Toutes les réponses sur Teriis, le matching territorial entre projets et talents
+              Toutes les réponses sur Teriis, le matching territorial efficace entre projets et talents
             </p>
 
             {/* Search Bar */}
