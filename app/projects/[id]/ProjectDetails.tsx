@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
+import ReportButton from '@/components/ReportButton';
 
 interface Project {
   id: string;
@@ -286,6 +287,14 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
                   {project.short_pitch}
                 </p>
               </div>
+              {!isOwner && (
+                <ReportButton
+                  targetType="project"
+                  targetId={project.id}
+                  targetName={project.title}
+                  currentUserId={currentUser?.id || null}
+                />
+              )}
             </div>
 
             {/* Project Info */}
