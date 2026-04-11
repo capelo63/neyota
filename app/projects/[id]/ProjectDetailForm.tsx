@@ -58,8 +58,8 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
           .select(`
             *,
             owner:profiles!owner_id(id, first_name, last_name, city, bio),
-            skills:project_skills_needed(
-              skill:skills(id, name, category)
+            needs:project_needs(
+              need:needs(id, name, category)
             )
           `)
           .eq('id', projectId)
@@ -78,7 +78,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
       const transformedProject = {
         ...projectData,
         owner: projectData.owner,
-        skills: projectData.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+        needs: projectData.needs.map((n: any) => n.need).filter((n: any) => n !== null),
       };
 
       setProject(transformedProject);
@@ -343,23 +343,23 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               </div>
             )}
 
-            {/* Skills Needed — always visible */}
-            {project.skills.length > 0 && (
+            {/* Needs — always visible */}
+            {project.needs.length > 0 && (
               <div>
                 <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                  Compétences recherchées
+                  Besoins du projet
                 </h2>
                 <div className="grid md:grid-cols-2 gap-3">
-                  {project.skills.map((skill: any) => (
+                  {project.needs.map((need: any) => (
                     <div
-                      key={skill.id}
+                      key={need.id}
                       className="flex items-start gap-3 p-4 bg-neutral-50 rounded-lg border border-neutral-200"
                     >
                       <div className="w-2 h-2 rounded-full bg-primary-600 mt-2 flex-shrink-0"></div>
                       <div>
-                        <div className="font-semibold text-neutral-900">{skill.name}</div>
-                        {skill.category && (
-                          <div className="text-sm text-neutral-600 mt-1 capitalize">{skill.category}</div>
+                        <div className="font-semibold text-neutral-900">{need.name}</div>
+                        {need.category && (
+                          <div className="text-sm text-neutral-600 mt-1 capitalize">{need.category}</div>
                         )}
                       </div>
                     </div>

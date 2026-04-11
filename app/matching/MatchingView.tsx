@@ -26,14 +26,14 @@ interface Project {
     last_name: string;
     city: string;
   };
-  skills: Array<{
-    id: number;
+  needs: Array<{
+    id: string;
     name: string;
     category: string;
   }>;
   distance_km?: number;
   matching_score?: number;
-  matching_skills_count?: number;
+  matching_needs_count?: number;
 }
 
 interface TalentProfile {

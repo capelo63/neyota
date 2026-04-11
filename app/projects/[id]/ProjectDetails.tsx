@@ -23,8 +23,8 @@ interface Project {
   owner_id: string;
 }
 
-interface Skill {
-  id: number;
+interface Need {
+  id: string;
   name: string;
   category: string;
 }
@@ -58,7 +58,7 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [owner, setOwner] = useState<Owner | null>(null);
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [needs, setNeeds] = useState<Need[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [currentUserProfile, setCurrentUserProfile] = useState<any>(null);
   const [hasApplied, setHasApplied] = useState(false);
@@ -122,11 +122,11 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
 
       setOwner(ownerData);
 
-      // Get skills
-      const { data: skillsData } = await supabase
-        .from('project_skills_needed')
+      // Get needs
+      const { data: needsData } = await supabase
+        .from('project_needs')
         .select(`
-          skill:skills (
+          need:needs (
             id,
             name,
             category
@@ -134,11 +134,11 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
         `)
         .eq('project_id', projectId);
 
-      const transformedSkills = (skillsData || [])
-        .map((item: any) => (Array.isArray(item.skill) ? item.skill[0] : item.skill))
+      const transformedNeeds = (needsData || [])
+        .map((item: any) => (Array.isArray(item.need) ? item.need[0] : item.need))
         .filter(Boolean);
 
-      setSkills(transformedSkills);
+      setNeeds(transformedNeeds);
 
       // Get applications count
       const { count } = await supabase
@@ -392,25 +392,25 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
             </div>
           )}
 
-          {/* Skills Needed */}
+          {/* Needs */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-              Compétences recherchées
+              Besoins du projet
             </h2>
-            {skills.length === 0 ? (
+            {needs.length === 0 ? (
               <p className="text-neutral-600">
-                Aucune compétence spécifique requise
+                Aucun besoin spécifique
               </p>
             ) : (
               <div className="flex flex-wrap gap-3">
-                {skills.map((skill) => (
+                {needs.map((need) => (
                   <div
-                    key={skill.id}
+                    key={need.id}
                     className="px-4 py-2 bg-primary-100 text-primary-800 rounded-lg font-medium"
                   >
-                    {skill.name}
+                    {need.name}
                     <span className="text-xs text-primary-600 ml-2 capitalize">
-                      ({skill.category})
+                      ({need.category})
                     </span>
                   </div>
                 ))}
