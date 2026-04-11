@@ -1,66 +1,52 @@
 -- ============================================
--- MIGRATION 033 (VERSION SAFE): Refonte complète du système Besoins/Compétences
+-- MIGRATION 033: Refonte complète du système Besoins/Compétences
 -- ============================================
 -- Cette migration remplace le système skills par un système dual:
 -- - NEEDS (Besoins) pour les porteurs de projets
 -- - SKILLS (Compétences) pour les talents
 -- - Mapping automatique entre les deux pour le matching
---
--- VERSION SAFE: Peut être réexécutée sans erreur
 
 -- ============================================
 -- STEP 1: Créer les nouveaux ENUMs
 -- ============================================
 
 -- Catégories de besoins (11 catégories)
-DO $$ BEGIN
-  CREATE TYPE need_category AS ENUM (
-    'structuring',           -- Structurer le projet
-    'launching',             -- Lancer le projet
-    'finding_clients',       -- Trouver des clients / bénéficiaires
-    'branding',              -- Créer une image
-    'digital_tools',         -- Développer des outils digitaux
-    'finance',               -- Gérer les finances
-    'legal',                 -- Cadre légal et administratif
-    'organization',          -- Organisation et collaboration
-    'growth',                -- Développer le projet
-    'impact',                -- Renforcer l'impact du projet
-    'mentoring'              -- Accompagnement du projet
-  );
-EXCEPTION
-  WHEN duplicate_object THEN null;
-END $$;
+CREATE TYPE need_category AS ENUM (
+  'structuring',           -- Structurer le projet
+  'launching',             -- Lancer le projet
+  'finding_clients',       -- Trouver des clients / bénéficiaires
+  'branding',              -- Créer une image
+  'digital_tools',         -- Développer des outils digitaux
+  'finance',               -- Gérer les finances
+  'legal',                 -- Cadre légal et administratif
+  'organization',          -- Organisation et collaboration
+  'growth',                -- Développer le projet
+  'impact',                -- Renforcer l'impact du projet
+  'mentoring'              -- Accompagnement du projet
+);
 
 -- Catégories de compétences (7 types d'intervention)
-DO $$ BEGIN
-  CREATE TYPE skill_type AS ENUM (
-    'strategy',              -- Stratégie / Business / Impact
-    'marketing',             -- Marketing / Communication
-    'product',               -- Produit / Tech
-    'operations',            -- Opérations / Gestion de projet
-    'finance_legal_hr',      -- Finance / Juridique / RH
-    'commercial',            -- Commercial / Relation client
-    'other'                  -- Autre expertise (à préciser)
-  );
-EXCEPTION
-  WHEN duplicate_object THEN null;
-END $$;
+CREATE TYPE skill_type AS ENUM (
+  'strategy',              -- Stratégie / Business / Impact
+  'marketing',             -- Marketing / Communication
+  'product',               -- Produit / Tech
+  'operations',            -- Opérations / Gestion de projet
+  'finance_legal_hr',      -- Finance / Juridique / RH
+  'commercial',            -- Commercial / Relation client
+  'other'                  -- Autre expertise (à préciser)
+);
 
 -- Priorité des besoins
-DO $$ BEGIN
-  CREATE TYPE need_priority AS ENUM (
-    'essential',
-    'nice_to_have'
-  );
-EXCEPTION
-  WHEN duplicate_object THEN null;
-END $$;
+CREATE TYPE need_priority AS ENUM (
+  'essential',
+  'nice_to_have'
+);
 
 -- ============================================
 -- STEP 2: Créer la table NEEDS
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS needs (
+CREATE TABLE needs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   category need_category NOT NULL,
@@ -71,25 +57,18 @@ CREATE TABLE IF NOT EXISTS needs (
 );
 
 -- Index pour performance
-CREATE INDEX IF NOT EXISTS idx_needs_category ON needs(category);
-CREATE INDEX IF NOT EXISTS idx_needs_sort_order ON needs(category, sort_order);
+CREATE INDEX idx_needs_category ON needs(category);
+CREATE INDEX idx_needs_sort_order ON needs(category, sort_order);
 
 -- ============================================
 -- STEP 3: Recréer la table SKILLS (nouvelle structure)
 -- ============================================
 
--- Renommer l'ancienne table skills (si elle existe et n'a pas déjà été renommée)
-DO $$ BEGIN
-  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'skills' AND table_schema = 'public')
-     AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'skills_old' AND table_schema = 'public')
-     AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'skills' AND column_name = 'proficiency_level' AND table_schema = 'public')
-  THEN
-    ALTER TABLE skills RENAME TO skills_old;
-  END IF;
-END $$;
+-- Renommer l'ancienne table skills
+ALTER TABLE skills RENAME TO skills_old;
 
 -- Créer la nouvelle table skills
-CREATE TABLE IF NOT EXISTS skills (
+CREATE TABLE skills (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   category skill_type NOT NULL,
@@ -100,13 +79,13 @@ CREATE TABLE IF NOT EXISTS skills (
 );
 
 -- Index
-CREATE INDEX IF NOT EXISTS idx_skills_category ON skills(category);
+CREATE INDEX idx_skills_category ON skills(category);
 
 -- ============================================
 -- STEP 4: Table de mapping NEEDS ↔ SKILLS
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS need_skill_mapping (
+CREATE TABLE need_skill_mapping (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   need_id UUID NOT NULL REFERENCES needs(id) ON DELETE CASCADE,
   skill_id UUID NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
@@ -118,24 +97,18 @@ CREATE TABLE IF NOT EXISTS need_skill_mapping (
 );
 
 -- Index
-CREATE INDEX IF NOT EXISTS idx_need_skill_mapping_need ON need_skill_mapping(need_id);
-CREATE INDEX IF NOT EXISTS idx_need_skill_mapping_skill ON need_skill_mapping(skill_id);
+CREATE INDEX idx_need_skill_mapping_need ON need_skill_mapping(need_id);
+CREATE INDEX idx_need_skill_mapping_skill ON need_skill_mapping(skill_id);
 
 -- ============================================
 -- STEP 5: Recréer PROJECT_NEEDS (remplace project_skills_needed)
 -- ============================================
 
 -- Renommer l'ancienne table
-DO $$ BEGIN
-  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'project_skills_needed' AND table_schema = 'public')
-     AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'project_skills_needed_old' AND table_schema = 'public')
-  THEN
-    ALTER TABLE project_skills_needed RENAME TO project_skills_needed_old;
-  END IF;
-END $$;
+ALTER TABLE project_skills_needed RENAME TO project_skills_needed_old;
 
 -- Créer la nouvelle table project_needs
-CREATE TABLE IF NOT EXISTS project_needs (
+CREATE TABLE project_needs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   need_id UUID NOT NULL REFERENCES needs(id) ON DELETE CASCADE,
@@ -147,25 +120,18 @@ CREATE TABLE IF NOT EXISTS project_needs (
 );
 
 -- Index
-CREATE INDEX IF NOT EXISTS idx_project_needs_project ON project_needs(project_id);
-CREATE INDEX IF NOT EXISTS idx_project_needs_need ON project_needs(need_id);
+CREATE INDEX idx_project_needs_project ON project_needs(project_id);
+CREATE INDEX idx_project_needs_need ON project_needs(need_id);
 
 -- ============================================
 -- STEP 6: Adapter USER_SKILLS
 -- ============================================
 
 -- Renommer l'ancienne table
-DO $$ BEGIN
-  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_skills' AND table_schema = 'public')
-     AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user_skills_old' AND table_schema = 'public')
-     AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'user_skills' AND column_name = 'proficiency_level' AND table_schema = 'public')
-  THEN
-    ALTER TABLE user_skills RENAME TO user_skills_old;
-  END IF;
-END $$;
+ALTER TABLE user_skills RENAME TO user_skills_old;
 
 -- Créer la nouvelle table user_skills
-CREATE TABLE IF NOT EXISTS user_skills (
+CREATE TABLE user_skills (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   skill_id UUID NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
@@ -177,15 +143,12 @@ CREATE TABLE IF NOT EXISTS user_skills (
 );
 
 -- Index
-CREATE INDEX IF NOT EXISTS idx_user_skills_user ON user_skills(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_skills_skill ON user_skills(skill_id);
+CREATE INDEX idx_user_skills_user ON user_skills(user_id);
+CREATE INDEX idx_user_skills_skill ON user_skills(skill_id);
 
 -- ============================================
 -- STEP 7: Insérer les BESOINS (11 catégories, 44 items)
 -- ============================================
-
--- Supprimer les besoins existants pour éviter les doublons
-TRUNCATE TABLE needs CASCADE;
 
 -- Structurer le projet
 INSERT INTO needs (category, name, sort_order) VALUES
@@ -262,9 +225,6 @@ INSERT INTO needs (category, name, sort_order) VALUES
 -- ============================================
 -- STEP 8: Insérer les COMPÉTENCES (7 types)
 -- ============================================
-
--- Supprimer les compétences existantes pour éviter les doublons
-TRUNCATE TABLE skills CASCADE;
 
 INSERT INTO skills (category, name, is_custom) VALUES
   ('strategy', 'Stratégie / Business / Impact', FALSE),
@@ -395,55 +355,42 @@ END $$;
 
 -- Needs: tout le monde peut lire
 ALTER TABLE needs ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Needs are viewable by everyone" ON needs;
 CREATE POLICY "Needs are viewable by everyone"
   ON needs FOR SELECT
   USING (true);
 
 -- Skills: tout le monde peut lire, utilisateurs connectés peuvent créer custom skills
 ALTER TABLE skills ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Skills are viewable by everyone" ON skills;
 CREATE POLICY "Skills are viewable by everyone"
   ON skills FOR SELECT
   USING (true);
 
-DROP POLICY IF EXISTS "Authenticated users can create custom skills" ON skills;
 CREATE POLICY "Authenticated users can create custom skills"
   ON skills FOR INSERT
   WITH CHECK (auth.uid() = created_by AND is_custom = true);
 
 -- Need-Skill Mapping: tout le monde peut lire
 ALTER TABLE need_skill_mapping ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Need-skill mapping is viewable by everyone" ON need_skill_mapping;
 CREATE POLICY "Need-skill mapping is viewable by everyone"
   ON need_skill_mapping FOR SELECT
   USING (true);
 
 -- Project needs: tout le monde peut lire, propriétaires peuvent gérer
 ALTER TABLE project_needs ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Everyone can view project needs" ON project_needs;
 CREATE POLICY "Everyone can view project needs"
   ON project_needs FOR SELECT
   USING (true);
 
-DROP POLICY IF EXISTS "Project owners can manage project needs" ON project_needs;
 CREATE POLICY "Project owners can manage project needs"
   ON project_needs FOR ALL
   USING (auth.uid() IN (SELECT owner_id FROM projects WHERE id = project_id));
 
 -- User skills: utilisateurs gèrent leurs propres skills
 ALTER TABLE user_skills ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Users can view all user skills" ON user_skills;
 CREATE POLICY "Users can view all user skills"
   ON user_skills FOR SELECT
   USING (true);
 
-DROP POLICY IF EXISTS "Users can manage their own skills" ON user_skills;
 CREATE POLICY "Users can manage their own skills"
   ON user_skills FOR ALL
   USING (auth.uid() = user_id);
@@ -503,9 +450,9 @@ $$ LANGUAGE plpgsql;
 -- Elles ne sont PAS supprimées pour permettre une récupération si nécessaire
 --
 -- Pour nettoyer après validation complète :
--- DROP TABLE IF EXISTS skills_old CASCADE;
--- DROP TABLE IF EXISTS project_skills_needed_old CASCADE;
--- DROP TABLE IF EXISTS user_skills_old CASCADE;
--- DROP TYPE IF EXISTS skill_category CASCADE;
--- DROP TYPE IF EXISTS proficiency_level CASCADE;
--- DROP TYPE IF EXISTS skill_priority CASCADE;
+-- DROP TABLE skills_old CASCADE;
+-- DROP TABLE project_skills_needed_old CASCADE;
+-- DROP TABLE user_skills_old CASCADE;
+-- DROP TYPE skill_category CASCADE;
+-- DROP TYPE proficiency_level CASCADE;
+-- DROP TYPE skill_priority CASCADE;
