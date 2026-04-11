@@ -436,7 +436,7 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
                   <h3 className="text-lg font-semibold text-neutral-900">
                     {owner.first_name} {owner.last_name}
                   </h3>
-                  <p className="text-neutral-600">Entrepreneur • {owner.city}</p>
+                  <p className="text-neutral-600">Porteur d&apos;initiative • {owner.city}</p>
                 </div>
                 <svg
                   className="w-5 h-5 text-neutral-400"

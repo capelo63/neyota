@@ -30,9 +30,6 @@ export default function Navigation() {
             <Link href="/about" className="text-neutral-700 hover:text-primary-600 font-medium transition-colors">
               À propos
             </Link>
-            <Link href="/faq" className="text-neutral-700 hover:text-primary-600 font-medium transition-colors">
-              FAQ
-            </Link>
           </div>
 
           {/* Desktop CTA */}
@@ -85,9 +82,6 @@ export default function Navigation() {
               </Link>
               <Link href="/about" className="text-neutral-700 hover:text-primary-600 font-medium py-2">
                 À propos
-              </Link>
-              <Link href="/faq" className="text-neutral-700 hover:text-primary-600 font-medium py-2">
-                FAQ
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-neutral-200">
                 <Link href="/login">

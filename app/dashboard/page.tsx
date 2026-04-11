@@ -270,7 +270,7 @@ export default function DashboardPage() {
                   Bienvenue, {profile?.first_name || 'utilisateur'} !
                 </h1>
                 <p className="text-neutral-600 text-sm md:text-base">
-                  {profile?.role === 'entrepreneur' ? '💼 Entrepreneur' : '🌟 Talent'}
+                  {profile?.role === 'entrepreneur' ? '💼 Porteur d\'initiative' : '🌟 Talent'}
                 </p>
               </div>
             </div>
@@ -384,7 +384,7 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Entrepreneur Actions */}
+          {/* Project Holder Actions */}
           {profile?.role === 'entrepreneur' && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
               <div className="flex items-center justify-between mb-4">

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button, Input, Textarea } from '@/components/ui';
 import { Metadata } from 'next';
 
@@ -247,6 +248,8 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

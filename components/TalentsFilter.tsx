@@ -31,11 +31,13 @@ interface TalentsFilterProps {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  technical: '💻 Technique',
-  business: '💼 Business',
-  creative: '🎨 Créatif',
-  operational: '⚙️ Opérationnel',
-  expertise: '🎓 Expertise',
+  strategy: '🎯 Stratégie / Business / Impact',
+  marketing: '📣 Marketing / Communication',
+  product: '💻 Produit / Tech',
+  operations: '⚙️ Opérations / Gestion de projet',
+  finance: '💰 Finance / Juridique / RH',
+  commercial: '🤝 Commercial / Relation client',
+  other: '🔧 Autre expertise',
 };
 
 // Haversine formula to calculate distance between two points
@@ -91,13 +93,6 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
   // Filter talents
   const filteredTalents = useMemo(() => {
     return talents.filter(talent => {
-      // Name search
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchesName = `${talent.first_name} ${talent.last_name}`.toLowerCase().includes(query);
-        if (!matchesName) return false;
-      }
-
       // Skills filter
       if (selectedSkills.length > 0) {
         const talentSkillIds = talent.skills.map(s => s.id);
@@ -131,7 +126,7 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
 
       return true;
     });
-  }, [talents, searchQuery, selectedSkills, selectedCategory, selectedRegion, referenceLocation, radiusKm]);
+  }, [talents, selectedSkills, selectedCategory, selectedRegion, referenceLocation, radiusKm]);
 
   // Toggle skill selection
   const toggleSkill = (skillId: string) => {
@@ -144,7 +139,6 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
 
   // Clear all filters
   const clearFilters = () => {
-    setSearchQuery('');
     setSelectedSkills([]);
     setSelectedCategory('');
     setSelectedRegion('');
@@ -152,7 +146,7 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
     setRadiusKm(50);
   };
 
-  const hasActiveFilters = searchQuery || selectedSkills.length > 0 || selectedCategory || selectedRegion || locationSearch;
+  const hasActiveFilters = selectedSkills.length > 0 || selectedCategory || selectedRegion || locationSearch;
 
   return (
     <div className="grid lg:grid-cols-4 gap-6">
@@ -172,19 +166,6 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
           </div>
 
           <div className="space-y-5">
-            {/* Search by name */}
-            <div>
-              <label htmlFor="search" className="block text-sm font-medium text-neutral-700 mb-2">
-                Rechercher par nom
-              </label>
-              <Input
-                id="search"
-                type="text"
-                placeholder="Prénom ou nom..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
 
             {/* Location search */}
             <div>
@@ -232,11 +213,11 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
 
             {/* Category Filter */}
             <Select
-              label="Catégorie de compétences"
+              label="Types d'intervention"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               options={[
-                { value: '', label: 'Toutes les catégories' },
+                { value: '', label: 'Tous les types' },
                 ...categories.map(cat => ({
                   value: cat,
                   label: CATEGORY_LABELS[cat] || cat,
@@ -260,10 +241,10 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
             {/* Skills Filter */}
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
-                Compétences
+                Compétences spécifiques
                 {selectedCategory && (
                   <span className="ml-2 text-xs text-primary-600">
-                    ({filteredSkillsList.length} dans cette catégorie)
+                    ({filteredSkillsList.length} disponibles)
                   </span>
                 )}
               </label>

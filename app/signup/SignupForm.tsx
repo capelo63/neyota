@@ -301,7 +301,7 @@ export default function SignupForm() {
                     <CardBody className="text-center p-8">
                       <div className="text-6xl mb-4">💼</div>
                       <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                        Entrepreneur
+                        Porteur d&apos;initiative
                       </h3>
                       <p className="text-neutral-600 mb-4">
                         Je porte un projet et je recherche des talents pour m'accompagner
@@ -347,7 +347,7 @@ export default function SignupForm() {
                   <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full mb-4">
                     <span className="text-2xl">{role === 'entrepreneur' ? '💼' : '🌟'}</span>
                     <span className="font-medium">
-                      {role === 'entrepreneur' ? 'Profil Entrepreneur' : 'Profil Talent'}
+                      {role === 'entrepreneur' ? 'Profil Porteur d\'initiative' : 'Profil Talent'}
                     </span>
                   </div>
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">

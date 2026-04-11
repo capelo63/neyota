@@ -6,6 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Input, Select, Badge } from '@/components/ui';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { FRENCH_REGIONS, getRegionSlugFromPostal } from '@/lib/constants/regions';
 
 interface Project {
@@ -35,7 +36,7 @@ const PHASE_LABELS: Record<string, string> = {
   ideation: '💡 Idéation',
   mvp_development: '🛠️ En construction',
   launch: '🚀 Lancement',
-  growth: '📈 Croissance',
+  growth: '📈 Développement',
   scaling: '🌍 Structuration',
 };
 
@@ -48,22 +49,13 @@ const PHASE_COLORS: Record<string, 'primary' | 'secondary' | 'success' | 'warnin
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  agriculture: '🌾 Agriculture / Agroalimentaire',
-  mobility: '🚗 Mobilité / Transport',
-  industry: '🏭 Industrie / Manufacturing',
-  tech: '💻 Tech / Digital',
+  agriculture: '🌾 Agriculture / Alimentation',
+  culture: '🎨 Culture / Tourisme / Sport',
+  education: '🎓 Éducation',
+  environment: '🌱 Environnement / Transition',
+  mobility: '🚗 Mobilité / Énergie / Construction',
   health: '🏥 Santé / Bien-être',
-  education: '🎓 Éducation / Formation',
-  real_estate: '🏠 Immobilier / Construction',
-  environment: '🌍 Environnement / Écologie',
-  culture: '🎨 Culture / Créatif',
-  services: '💼 Services / Consulting',
-  commerce: '🛒 Commerce / Retail',
-  hospitality: '🍽️ Restauration / Hôtellerie',
-  finance: '💰 Finance / Fintech',
-  energy: '⚡ Énergie',
-  entertainment: '🎮 Divertissement / Loisirs',
-  social: '🤝 Social / Solidaire',
+  social: '🤝 Social / Associatif',
 };
 
 export default function ProjectsListForm() {
@@ -250,7 +242,8 @@ export default function ProjectsListForm() {
             Projets disponibles
           </h1>
           <p className="text-neutral-600">
-            Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences
+            Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.<br />
+            Teriis facilite la rencontre entre porteurs de projet et talents et permet de mobiliser des personnes éloignées des opportunités pour faire émerger des initiatives utiles, près de chez vous.
           </p>
         </div>
 
@@ -287,17 +280,17 @@ export default function ProjectsListForm() {
                     { value: 'ideation', label: '💡 Idéation' },
                     { value: 'mvp_development', label: '🛠️ En construction' },
                     { value: 'launch', label: '🚀 Lancement' },
-                    { value: 'growth', label: '📈 Croissance' },
+                    { value: 'growth', label: '📈 Développement' },
                     { value: 'scaling', label: '🌍 Structuration' },
                   ]}
                 />
 
                 <Select
-                  label="Compétence"
+                  label="Besoins"
                   value={selectedSkill}
                   onChange={(e) => setSelectedSkill(e.target.value)}
                   options={[
-                    { value: 'all', label: 'Toutes les compétences' },
+                    { value: 'all', label: 'Tous les besoins' },
                     ...skills.map(skill => ({
                       value: skill.id.toString(),
                       label: skill.name,
@@ -306,11 +299,11 @@ export default function ProjectsListForm() {
                 />
 
                 <Select
-                  label="Catégorie"
+                  label="Secteurs d'activité"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   options={[
-                    { value: 'all', label: 'Toutes les catégories' },
+                    { value: 'all', label: 'Tous les secteurs' },
                     ...Object.entries(CATEGORY_LABELS).map(([value, label]) => ({
                       value,
                       label,
@@ -435,6 +428,8 @@ export default function ProjectsListForm() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui';
 
 export const metadata: Metadata = {
@@ -212,6 +213,8 @@ export default function CharterPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, ReactNode } from 'react';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui';
 
 interface FAQItem {
@@ -540,6 +541,8 @@ export default function FAQPage() {
           </div>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

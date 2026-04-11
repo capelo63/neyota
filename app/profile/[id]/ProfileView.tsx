@@ -367,7 +367,7 @@ export default function ProfileView({ userId }: { userId: string }) {
                       ? 'bg-orange-100 text-orange-800'
                       : 'bg-blue-100 text-blue-800'
                   }`}>
-                    {profile.role === 'entrepreneur' ? 'Entrepreneur' : 'Talent'}
+                    {profile.role === 'entrepreneur' ? 'Porteur d\'initiative' : 'Talent'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600 text-sm">
