@@ -63,10 +63,12 @@ async function testSupabaseConnection() {
 
   const tables = [
     'profiles',
+    'needs',
     'skills',
     'user_skills',
     'projects',
-    'project_skills_needed',
+    'project_needs',
+    'need_skill_mapping',
     'applications',
     'user_charter_acceptances',
     'reports',
