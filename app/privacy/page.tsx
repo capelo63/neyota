@@ -58,7 +58,7 @@ export default function PrivacyPage() {
                 <li>Nom et prénom</li>
                 <li>Adresse email</li>
                 <li>Mot de passe (crypté)</li>
-                <li>Rôle (entrepreneur ou talent)</li>
+                <li>Rôle (porteur d'initiative ou talent)</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-neutral-900 mb-3">2.2. Données de profil</h3>
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
                 <li>Disponibilité</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-neutral-900 mb-3">2.3. Données de projets (pour les entrepreneurs)</h3>
+              <h3 className="text-xl font-semibold text-neutral-900 mb-3">2.3. Données de projets (pour les porteurs d'initiative)</h3>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2 mb-4">
                 <li>Titre et description du projet</li>
                 <li>Phase du projet</li>

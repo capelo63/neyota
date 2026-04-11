@@ -8,9 +8,9 @@ export const metadata: Metadata = {
     default: "Teriis - Ensemble, faisons vivre nos territoires",
     template: "%s | Teriis"
   },
-  description: "Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux. 100% gratuit • 100% territorial • 100% impact. Trouvez les compétences près de chez vous.",
+  description: "Plateforme de mise en relation entre porteurs d'initiative et talents locaux. 100% gratuit • 100% territorial • 100% impact. Trouvez les compétences près de chez vous.",
   keywords: [
-    "entrepreneuriat local",
+    "initiatives locales",
     "talents territoriaux",
     "mise en relation",
     "projets locaux",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: 'https://neyota.vercel.app',
     siteName: 'Teriis',
     title: 'Teriis - Ensemble, faisons vivre nos territoires',
-    description: 'Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux. 100% gratuit • 100% territorial • 100% impact.',
+    description: 'Plateforme de mise en relation entre porteurs d\'initiative et talents locaux. 100% gratuit • 100% territorial • 100% impact.',
     images: [
       {
         url: '/og-image.png',

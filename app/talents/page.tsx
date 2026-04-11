@@ -8,7 +8,7 @@ import TalentsFilter from '@/components/TalentsFilter';
 
 export const metadata: Metadata = {
   title: 'Talents disponibles',
-  description: 'Découvrez les talents locaux prêts à rejoindre votre projet entrepreneurial',
+  description: 'Découvrez les talents locaux prêts à rejoindre votre projet d\'initiative',
 };
 
 async function getTalentsAndSkills() {

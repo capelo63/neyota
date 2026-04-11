@@ -327,7 +327,7 @@ export default function ProfileView({ userId }: { userId: string }) {
         <div className="bg-primary-600 text-white px-4 py-3">
           <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
             <span>
-              🔒 Créez un compte entrepreneur gratuit pour inviter ce talent à rejoindre votre projet.
+              🔒 Créez un compte Porteur d'initiative gratuit pour inviter ce talent à rejoindre votre projet.
             </span>
             <div className="flex gap-3 shrink-0">
               <Link href={`/signup?role=entrepreneur&redirect=/profile/${userId}`}>
@@ -567,7 +567,7 @@ export default function ProfileView({ userId }: { userId: string }) {
             <h3 className="text-2xl font-bold mb-3">
               {profile.role === 'talent'
                 ? 'Vous cherchez des talents pour votre projet ?'
-                : 'Vous souhaitez collaborer avec cet entrepreneur ?'}
+                : 'Vous souhaitez collaborer avec ce porteur d\'initiative ?'}
             </h3>
             <p className="text-primary-100 mb-6">
               Rejoignez Teriis gratuitement pour entrer en contact et collaborer sur des projets locaux.

@@ -158,8 +158,8 @@ export default function ContactPage() {
                   Comment fonctionne Teriis ?
                 </h3>
                 <p className="text-neutral-600">
-                  Teriis est une plateforme gratuite qui met en relation les porteurs de projets
-                  entrepreneuriaux avec des talents locaux. Le matching se fait sur la base des
+                  Teriis est une plateforme gratuite qui met en relation les porteurs d'initiative
+                  avec des talents locaux. Le matching se fait sur la base des
                   compétences et de la proximité géographique.
                 </p>
               </div>
@@ -169,7 +169,7 @@ export default function ContactPage() {
                   Est-ce vraiment gratuit ?
                 </h3>
                 <p className="text-neutral-600">
-                  Oui, Teriis est 100% gratuit pour les entrepreneurs et les talents. Notre modèle
+                  Oui, Teriis est 100% gratuit pour les porteurs d'initiative et les talents. Notre modèle
                   économique repose sur des partenariats avec des collectivités territoriales et
                   des institutions publiques.
                 </p>
