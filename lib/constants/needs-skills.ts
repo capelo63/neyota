@@ -269,5 +269,5 @@ export function getSkillCategoryIcon(categoryId: SkillCategoryId): string {
 
 // Vérifier si une compétence a un champ custom
 export function hasCustomField(categoryId: SkillCategoryId): boolean {
-  return SKILL_CATEGORIES[categoryId]?.hasCustomField || false;
+  return categoryId === 'other';
 }
