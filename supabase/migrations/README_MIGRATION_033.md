@@ -1,29 +1,41 @@
 # Guide de Migration 033 - Système Besoins/Compétences
 
-## Problème rencontré
+## Problèmes possibles
 
-Vous avez obtenu l'erreur : `ERROR: 42P07: relation "idx_skills_category" already exists`
+Vous pouvez rencontrer ces erreurs :
+- `ERROR: 42P07: relation "idx_skills_category" already exists`
+- `ERROR: 42P01: relation "project_needs" does not exist`  
+- `ERROR: 22P02: invalid input value for enum skill_category: "strategy"`
 
-Cela signifie que la migration a été partiellement exécutée.
+Cela signifie que la migration a été partiellement exécutée ou que l'ancien système interfère.
 
-## Solution : 2 options
+## ✅ Solution recommandée : Nettoyage complet
 
-### Option 1 : Nettoyer et recommencer (RECOMMANDÉ)
+**⚠️ ATTENTION : Cette option supprime TOUT (ancien et nouveau système)**
 
-**⚠️ ATTENTION : Cette option supprime les données partiellement créées**
+### Étape 1 : Nettoyage complet
 
-1. **Exécutez le script de nettoyage dans l'éditeur SQL Supabase :**
-   ```
-   supabase/migrations/033_cleanup.sql
-   ```
-   
-2. **Ensuite, exécutez la migration safe :**
-   ```
-   supabase/migrations/033_refactor_needs_skills_system.sql
-   ```
-   (Le fichier a été mis à jour avec la version safe)
+**Exécutez dans l'éditeur SQL Supabase :**
+```
+supabase/migrations/033_cleanup_complete.sql
+```
 
-### Option 2 : Exécuter directement la version safe
+Ce script supprime :
+- ✅ Toutes les policies
+- ✅ Toutes les fonctions  
+- ✅ Toutes les tables (nouvelles, anciennes, et `*_old`)
+- ✅ Tous les types ENUM (anciens `skill_category` ET nouveaux `skill_type`)
+
+### Étape 2 : Migration propre
+
+**Ensuite, exécutez :**
+```
+supabase/migrations/033_refactor_needs_skills_system.sql
+```
+
+---
+
+## Alternative : Migration safe (si vous savez ce que vous faites)
 
 Si vous préférez ne pas tout nettoyer :
 
@@ -32,9 +44,7 @@ Si vous préférez ne pas tout nettoyer :
    supabase/migrations/033_refactor_needs_skills_system_safe.sql
    ```
    
-   Cette version utilise `IF NOT EXISTS` et `IF EXISTS` pour éviter les erreurs.
-
-   ⚠️ **Note :** Cette option utilisera `TRUNCATE` sur les tables `needs` et `skills` pour réinitialiser les données, mais préservera les anciennes tables en `*_old`.
+   ⚠️ **Note :** Cette option peut échouer si l'ancien système interfère. Utilisez le nettoyage complet si vous avez des erreurs.
 
 ## Différences entre les versions
 
