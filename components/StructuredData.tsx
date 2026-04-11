@@ -54,7 +54,7 @@ export function OrganizationStructuredData() {
     '@type': 'Organization',
     name: 'Teriis',
     description:
-      'Plateforme de mise en relation entre porteurs de projets entrepreneuriaux et talents locaux',
+      'Plateforme de mise en relation entre porteurs d\'initiative et talents locaux',
     url: 'https://neyota.vercel.app',
     logo: 'https://neyota.vercel.app/logo.png',
     foundingDate: '2024',

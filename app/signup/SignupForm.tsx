@@ -529,14 +529,14 @@ export default function SignupForm() {
                       <p>
                         Les porteurs de projets partagent leurs idées en toute confiance. Les talents
                         s'engagent à ne pas copier, divulguer ou exploiter les projets présentés sans
-                        accord explicite de l'entrepreneur. La propriété intellectuelle doit être respectée.
+                        accord explicite du porteur d'initiative. La propriété intellectuelle doit être respectée.
                       </p>
                     </div>
 
                     <div>
                       <h4 className="font-semibold mb-2">💚 Engagement territorial</h4>
                       <p>
-                        Teriis valorise l'entrepreneuriat local et l'impact territorial. Les membres
+                        Teriis valorise les initiatives locales et l'impact territorial. Les membres
                         s'engagent à privilégier les collaborations de proximité et à contribuer
                         au dynamisme économique de leur territoire.
                       </p>

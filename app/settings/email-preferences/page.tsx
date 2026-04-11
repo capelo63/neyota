@@ -188,7 +188,7 @@ export default function EmailPreferencesPage() {
               <div className="flex-1">
                 <h3 className="font-medium text-neutral-900">Invitation reçue</h3>
                 <p className="text-sm text-neutral-600">
-                  Quand un entrepreneur m'invite à rejoindre un projet
+                  Quand un porteur d'initiative m'invite à rejoindre un projet
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">

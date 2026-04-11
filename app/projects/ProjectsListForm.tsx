@@ -243,7 +243,7 @@ export default function ProjectsListForm() {
             Projets disponibles
           </h1>
           <p className="text-neutral-600">
-            Découvrez les projets entrepreneuriaux de votre territoire et proposez vos compétences.<br />
+            Découvrez les projets d'initiative de votre territoire et proposez vos compétences.<br />
             Teriis facilite la rencontre entre porteurs de projet et talents et permet de mobiliser des personnes éloignées des opportunités pour faire émerger des initiatives utiles, près de chez vous.
           </p>
         </div>

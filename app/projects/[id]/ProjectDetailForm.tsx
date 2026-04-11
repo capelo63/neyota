@@ -515,7 +515,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
           <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
             <h4 className="font-semibold text-neutral-900 mb-2">
-              📋 Informations partagées avec l'entrepreneur
+              📋 Informations partagées avec le porteur d'initiative
             </h4>
             <ul className="text-sm text-neutral-700 space-y-1">
               <li>• Votre nom et prénom</li>

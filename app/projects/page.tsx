@@ -4,7 +4,7 @@ import ProjectsListForm from './ProjectsListForm';
 
 export const metadata: Metadata = {
   title: 'Projets locaux',
-  description: 'Découvrez tous les projets entrepreneuriaux locaux sur Teriis. Trouvez un projet qui correspond à vos compétences près de chez vous.',
+  description: 'Découvrez tous les projets d\'initiative locaux sur Teriis. Trouvez un projet qui correspond à vos compétences près de chez vous.',
 };
 
 export default function ProjectsPage() {

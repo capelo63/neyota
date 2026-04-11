@@ -123,7 +123,7 @@ export default async function Home({
               <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-8 animate-fade-in">
                 <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
                 <span className="text-sm font-medium text-neutral-700">
-                  Plateforme 100% gratuite pour entrepreneurs et talents
+                  Plateforme 100% gratuite pour porteurs d'initiative et talents
                 </span>
               </div>
 
@@ -287,7 +287,7 @@ export default async function Home({
                 Pourquoi Teriis ?
               </h2>
               <p className="text-neutral-600 text-lg">
-                Une plateforme pensée pour l&apos;entrepreneuriat et les projets collectifs territoriaux
+                Une plateforme pensée pour les projets d'initiative et les collaborations territoriales
               </p>
             </div>
 

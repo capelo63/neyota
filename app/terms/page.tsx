@@ -34,8 +34,8 @@ export default function TermsPage() {
                 à l&apos;adresse neyota.vercel.app.
               </p>
               <p className="text-neutral-700 leading-relaxed">
-                Teriis est une plateforme gratuite de mise en relation entre porteurs de projets
-                entrepreneuriaux et talents locaux, dans une optique de développement territorial
+                Teriis est une plateforme gratuite de mise en relation entre porteurs d'initiative
+                et talents locaux, dans une optique de développement territorial
                 et d&apos;économie de proximité.
               </p>
             </section>
@@ -64,7 +64,7 @@ export default function TermsPage() {
                 Teriis propose les services suivants :
               </p>
               <ul className="list-disc pl-6 text-neutral-700 space-y-2 mb-4">
-                <li>Création et publication de projets entrepreneuriaux</li>
+                <li>Création et publication de projets d'initiative</li>
                 <li>Recherche de talents et compétences locales</li>
                 <li>Matching territorial basé sur la géolocalisation et les compétences</li>
                 <li>Mise en relation entre porteurs de projets et talents</li>

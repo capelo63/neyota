@@ -629,7 +629,7 @@ export default function OnboardingForm() {
 
                     <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 mb-6">
                       <p className="text-neutral-700">
-                        En tant qu'entrepreneur, vous pourrez spécifier les compétences recherchées
+                        En tant que porteur d'initiative, vous pourrez spécifier les compétences recherchées
                         pour chaque projet que vous créerez. Passons à la suite !
                       </p>
                     </div>
@@ -681,7 +681,7 @@ export default function OnboardingForm() {
                     label={profile?.role === 'entrepreneur' ? 'Votre présentation' : 'Votre parcours et motivations'}
                     placeholder={
                       profile?.role === 'entrepreneur'
-                        ? "Parlez de votre parcours, de votre vision entrepreneuriale et de ce qui vous motive à entreprendre localement..."
+                        ? "Parlez de votre parcours, de votre vision et de ce qui vous motive à développer vos projets localement..."
                         : "Décrivez votre expérience, vos réalisations et pourquoi vous souhaitez contribuer à des projets locaux..."
                     }
                     value={formData.bio}
