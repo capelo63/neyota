@@ -434,7 +434,7 @@ export default function SignupForm() {
                     >
                       ← Retour
                     </Button>
-                    <Button type="submit" variant="primary" className="flex-1">
+                    <Button type="submit" variant="default" className="flex-1">
                       Continuer
                     </Button>
                   </div>
@@ -472,7 +472,7 @@ export default function SignupForm() {
 
                 <div className="flex flex-col gap-4 max-w-md mx-auto">
                   <Button
-                    variant="primary"
+                    variant="default"
                     onClick={handleResendConfirmation}
                     isLoading={isLoading}
                     disabled={isLoading}
@@ -578,7 +578,7 @@ export default function SignupForm() {
                     </span>
                   }
                   checked={charterAccepted}
-                  onChange={(e) => setCharterAccepted(e.target.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCharterAccepted(e.target.checked)}
                   error={errors.charter}
                   required
                 />
@@ -595,7 +595,7 @@ export default function SignupForm() {
                   </Button>
                   <Button
                     type="button"
-                    variant="primary"
+                    variant="default"
                     onClick={handleFinalSubmit}
                     className="flex-1"
                     isLoading={isLoading}
@@ -644,7 +644,7 @@ export default function SignupForm() {
                 </div>
 
                 <Link href="/login">
-                  <Button variant="primary" className="w-full">
+                  <Button variant="default" className="w-full">
                     Aller à la page de connexion
                   </Button>
                 </Link>

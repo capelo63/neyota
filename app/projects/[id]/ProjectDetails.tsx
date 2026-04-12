@@ -353,7 +353,7 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
             {isOwner ? (
               <div className="flex gap-3">
                 <Link href={`/projects/${project.id}/applications`}>
-                  <Button variant="primary" size="lg">
+                  <Button variant="default" size="lg">
                     📨 Gérer les candidatures ({applicationsCount})
                   </Button>
                 </Link>
@@ -369,7 +369,7 @@ export default function ProjectDetails({ projectId }: { projectId: string }) {
               </Button>
             ) : (
               <Button
-                variant="primary"
+                variant="default"
                 size="lg"
                 onClick={handleApply}
                 disabled={isApplying}

@@ -180,7 +180,7 @@ export default function CharterPage() {
           {/* Footer Actions */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup">
-              <Button variant="primary" size="lg">
+              <Button variant="default" size="lg">
                 Créer un compte
               </Button>
             </Link>

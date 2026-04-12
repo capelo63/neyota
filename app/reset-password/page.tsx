@@ -190,7 +190,7 @@ export default function ResetPasswordPage() {
 
                   <Button
                     type="submit"
-                    variant="primary"
+                    variant="default"
                     className="w-full"
                     isLoading={isLoading}
                     disabled={isLoading}
@@ -228,7 +228,7 @@ export default function ResetPasswordPage() {
                     Vous allez être redirigé vers la page de connexion dans quelques secondes...
                   </div>
                   <Link href="/login">
-                    <Button variant="primary" className="w-full">
+                    <Button variant="default" className="w-full">
                       Se connecter maintenant
                     </Button>
                   </Link>

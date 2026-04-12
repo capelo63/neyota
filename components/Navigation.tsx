@@ -104,7 +104,7 @@ export default function Navigation() {
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button variant="primary" size="sm">
+                  <Button variant="default" size="sm">
                     S&apos;inscrire
                   </Button>
                 </Link>
@@ -169,7 +169,7 @@ export default function Navigation() {
                       </Button>
                     </Link>
                     <Link href="/signup">
-                      <Button variant="primary" className="w-full">
+                      <Button variant="default" className="w-full">
                         S&apos;inscrire
                       </Button>
                     </Link>

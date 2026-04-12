@@ -238,7 +238,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
 
                             <div className="flex gap-3">
                               <Button
-                                variant="primary"
+                                variant="default"
                                 onClick={() => handleUpdateStatus(application.id, 'accepted')}
                               >
                                 ✓ Accepter

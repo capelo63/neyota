@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import AvatarUpload from '@/components/AvatarUpload';
 
 interface Profile {
@@ -346,7 +346,7 @@ export default function ProfileEditForm() {
             {/* Save button */}
             <div className="pt-4">
               <Button
-                variant="primary"
+                variant="default"
                 onClick={handleSaveProfile}
                 disabled={saving}
               >
@@ -399,7 +399,7 @@ export default function ProfileEditForm() {
                 </select>
 
                 <Button
-                  variant="primary"
+                  variant="default"
                   onClick={handleAddSkill}
                   disabled={!selectedSkillId}
                 >

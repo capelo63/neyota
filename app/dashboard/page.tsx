@@ -392,7 +392,7 @@ export default function DashboardPage() {
                   Mes projets {projects.length > 0 && `(${projects.length})`}
                 </h2>
                 <Link href="/projects/new">
-                  <Button variant="primary">
+                  <Button variant="default">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
@@ -470,7 +470,7 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-bold text-neutral-900 mb-3">Projets disponibles</h2>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link href="/matching" className="flex-1">
-                    <Button variant="primary" className="w-full">
+                    <Button variant="default" className="w-full">
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                       </svg>

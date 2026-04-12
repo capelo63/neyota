@@ -500,7 +500,7 @@ export default function OnboardingForm() {
                     ]}
                   />
 
-                  <Button type="submit" variant="primary" className="w-full mt-6">
+                  <Button type="submit" variant="default" className="w-full mt-6">
                     Continuer
                   </Button>
                 </form>
@@ -609,7 +609,7 @@ export default function OnboardingForm() {
                         >
                           ← Retour
                         </Button>
-                        <Button type="submit" variant="primary" className="flex-1">
+                        <Button type="submit" variant="default" className="flex-1">
                           Continuer
                         </Button>
                       </div>
@@ -645,7 +645,7 @@ export default function OnboardingForm() {
                       </Button>
                       <Button
                         type="button"
-                        variant="primary"
+                        variant="default"
                         onClick={() => setStep(3)}
                         className="flex-1"
                       >
@@ -705,7 +705,7 @@ export default function OnboardingForm() {
                     </Button>
                     <Button
                       type="submit"
-                      variant="primary"
+                      variant="default"
                       className="flex-1"
                       isLoading={isSaving}
                       disabled={isSaving}

@@ -94,7 +94,7 @@ export default async function TalentsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup?role=talent">
-              <Button variant="primary" size="lg">
+              <Button variant="default" size="lg">
                 🌟 Devenir talent
               </Button>
             </Link>
@@ -118,7 +118,7 @@ export default async function TalentsPage() {
               au service de projets locaux.
             </p>
             <Link href="/signup?role=talent">
-              <Button variant="primary" size="lg">
+              <Button variant="default" size="lg">
                 Créer mon profil talent
               </Button>
             </Link>

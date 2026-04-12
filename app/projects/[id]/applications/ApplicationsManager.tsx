@@ -397,7 +397,7 @@ export default function ApplicationsManager({ projectId }: { projectId: string }
                     {application.status === 'pending' && (
                       <>
                         <Button
-                          variant="primary"
+                          variant="default"
                           size="sm"
                           onClick={() => handleUpdateStatus(application.id, 'accepted')}
                           disabled={processingId === application.id}

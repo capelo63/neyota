@@ -653,7 +653,7 @@ export default function MatchingView() {
                   {/* Actions */}
                   <div className="flex gap-3 pt-4 border-t border-neutral-200">
                     <Link href={`/projects/${project.id}`}>
-                      <Button variant="primary">Voir le projet</Button>
+                      <Button variant="default">Voir le projet</Button>
                     </Link>
                     <Link href={`/profile/${project.owner_id}`}>
                       <Button variant="secondary">Voir le profil</Button>

@@ -173,7 +173,7 @@ export default async function Home({
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
                 <Link href="/signup?role=entrepreneur">
-                  <Button variant="primary" size="lg" className="min-w-[200px]">
+                  <Button variant="default" size="lg" className="min-w-[200px]">
                     💼 Je porte un projet
                   </Button>
                 </Link>
@@ -209,7 +209,7 @@ export default async function Home({
                   Soyez parmi les premiers à rejoindre Teriis et faites vivre votre territoire.
                 </p>
                 <Link href="/signup">
-                  <Button variant="primary" size="lg">
+                  <Button variant="default" size="lg">
                     Créer un compte
                   </Button>
                 </Link>

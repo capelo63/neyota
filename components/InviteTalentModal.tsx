@@ -165,7 +165,7 @@ export default function InviteTalentModal({
                 Vous devez d'abord créer un projet pour inviter des talents.
               </p>
               <Button
-                variant="primary"
+                variant="default"
                 onClick={() => window.location.href = '/projects/new'}
               >
                 Créer un projet
@@ -252,7 +252,7 @@ export default function InviteTalentModal({
                 </Button>
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="default"
                   disabled={isLoading || !selectedProjectId}
                   className="flex-1"
                 >
