@@ -63,7 +63,7 @@ const Notification = React.forwardRef<HTMLDivElement, NotificationProps>(
     children,
     ...props
   }, ref) => {
-    const Icon = iconMap[variant]
+    const Icon = iconMap[variant ?? "info"]
 
     return (
       <div
