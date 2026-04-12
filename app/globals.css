@@ -13,6 +13,26 @@
     --color-primary-dark: 5 150 105; /* #059669 */
     --color-primary-light: 187 247 208; /* #bbf7d0 */
 
+    /* IBM Carbon Design System Spacing (2px base unit) */
+    --spacing-01: 0.125rem; /* 2px */
+    --spacing-02: 0.25rem;  /* 4px */
+    --spacing-03: 0.5rem;   /* 8px */
+    --spacing-04: 0.75rem;  /* 12px */
+    --spacing-05: 1rem;     /* 16px */
+    --spacing-06: 1.5rem;   /* 24px */
+    --spacing-07: 2rem;     /* 32px */
+    --spacing-08: 2.5rem;   /* 40px */
+    --spacing-09: 3rem;     /* 48px */
+    --spacing-10: 4rem;     /* 64px */
+
+    /* IBM Carbon Layers (pour les surfaces empilées) */
+    --layer-01: 0 0% 100%;     /* Base layer */
+    --layer-02: 0 0% 98%;      /* Elevated layer */
+    --layer-03: 0 0% 95%;      /* Most elevated layer */
+    --layer-hover-01: 0 0% 96%;
+    --layer-hover-02: 0 0% 94%;
+    --layer-active-01: 0 0% 92%;
+
     /* shadcn/ui Variables */
     --background: 0 0% 100%; /* white */
     --foreground: 0 0% 9%; /* dark text */
@@ -185,6 +205,43 @@ a:hover {
       padding-right: 2rem;
     }
   }
+
+  /* IBM Carbon Grid System (16 colonnes) */
+  .carbon-grid {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    gap: var(--spacing-05);
+    width: 100%;
+  }
+
+  .carbon-grid-narrow {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 672px) {
+    .carbon-grid-narrow {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+
+  @media (min-width: 1056px) {
+    .carbon-grid-narrow {
+      grid-template-columns: repeat(16, 1fr);
+    }
+  }
+
+  /* IBM Carbon Layers */
+  .layer-01 {
+    background: hsl(var(--layer-01));
+  }
+
+  .layer-02 {
+    background: hsl(var(--layer-02));
+  }
+
+  .layer-03 {
+    background: hsl(var(--layer-03));
+  }
 }
 
 /* ============================================
@@ -230,6 +287,18 @@ a:hover {
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
 
