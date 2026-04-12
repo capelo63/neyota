@@ -70,7 +70,15 @@ function DataTable<T>({
 
       if (aValue === bValue) return 0
 
-      const comparison = aValue > bValue ? 1 : -1
+      // Handle null/undefined values
+      if (aValue == null) return 1
+      if (bValue == null) return -1
+
+      // Convert to string for comparison if needed
+      const aStr = String(aValue)
+      const bStr = String(bValue)
+
+      const comparison = aStr > bStr ? 1 : -1
       return sortConfig.direction === "asc" ? comparison : -comparison
     })
   }, [data, sortConfig, columns])
