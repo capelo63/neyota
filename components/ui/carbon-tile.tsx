@@ -61,7 +61,9 @@ Tile.displayName = "Tile"
 /**
  * ClickableTile - Une tuile cliquable avec états hover/active
  */
-export interface ClickableTileProps extends Omit<TileProps, "variant"> {
+export interface ClickableTileProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, "variant">,
+    Omit<VariantProps<typeof tileVariants>, "variant"> {
   href?: string
   as?: "div" | "a" | "button"
 }
@@ -129,7 +131,9 @@ SelectableTile.displayName = "SelectableTile"
 /**
  * ExpandableTile - Une tuile expandable avec contenu caché
  */
-export interface ExpandableTileProps extends Omit<TileProps, "variant"> {
+export interface ExpandableTileProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, "variant" | "title">,
+    Omit<VariantProps<typeof tileVariants>, "variant"> {
   title: React.ReactNode
   expanded?: boolean
   onExpandedChange?: (expanded: boolean) => void
