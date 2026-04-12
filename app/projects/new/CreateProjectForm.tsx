@@ -571,7 +571,7 @@ export default function CreateProjectForm() {
                     </p>
                   </div>
 
-                  <Button type="submit" variant="primary" className="w-full mt-6">
+                  <Button type="submit" variant="default" className="w-full mt-6">
                     Continuer
                   </Button>
                 </form>
@@ -701,7 +701,7 @@ export default function CreateProjectForm() {
                     >
                       ← Retour
                     </Button>
-                    <Button type="submit" variant="primary" className="flex-1">
+                    <Button type="submit" variant="default" className="flex-1">
                       Continuer
                     </Button>
                   </div>
@@ -784,7 +784,7 @@ export default function CreateProjectForm() {
                     <Checkbox
                       label="Le projet peut se faire en distanciel"
                       checked={formData.isRemotePossible}
-                      onChange={(e) => setFormData({ ...formData, isRemotePossible: e.target.checked })}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, isRemotePossible: e.target.checked })}
                     />
                   </div>
 
@@ -800,7 +800,7 @@ export default function CreateProjectForm() {
                     </Button>
                     <Button
                       type="submit"
-                      variant="primary"
+                      variant="default"
                       className="flex-1"
                       isLoading={isSaving}
                       disabled={isSaving}

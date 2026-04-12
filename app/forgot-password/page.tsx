@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
 
                   <Button
                     type="submit"
-                    variant="primary"
+                    variant="default"
                     className="w-full"
                     isLoading={isLoading}
                     disabled={isLoading}
@@ -156,7 +156,7 @@ export default function ForgotPasswordPage() {
                   </div>
                   <div className="space-y-3">
                     <Link href="/login">
-                      <Button variant="primary" className="w-full">
+                      <Button variant="default" className="w-full">
                         Retour à la connexion
                       </Button>
                     </Link>

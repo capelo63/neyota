@@ -84,7 +84,7 @@ export default function ContactPage() {
                 />
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button type="submit" variant="primary" size="lg" className="flex-1">
+                  <Button type="submit" variant="default" size="lg" className="flex-1">
                     Envoyer le message
                   </Button>
                   <Link href="/" className="flex-1">
@@ -139,7 +139,7 @@ export default function ContactPage() {
                 et consulter vos notifications.
               </p>
               <Link href="/dashboard">
-                <Button variant="primary" className="w-full">
+                <Button variant="default" className="w-full">
                   Accéder à mon dashboard
                 </Button>
               </Link>

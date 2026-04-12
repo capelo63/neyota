@@ -200,7 +200,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             <div className="flex items-center gap-3">
               {!user && (
                 <Link href={`/login?redirect=/projects/${projectId}`}>
-                  <Button variant="primary" size="sm">Se connecter</Button>
+                  <Button variant="default" size="sm">Se connecter</Button>
                 </Link>
               )}
               <Link href="/projects">
@@ -270,7 +270,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                 user ? (
                   isTalent && (
                     <Button
-                      variant="primary"
+                      variant="default"
                       size="lg"
                       onClick={handleApply}
                       disabled={hasApplied}
@@ -280,7 +280,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                   )
                 ) : (
                   <Link href={`/login?redirect=/projects/${projectId}`}>
-                    <Button variant="primary" size="lg">
+                    <Button variant="default" size="lg">
                       Se connecter pour postuler
                     </Button>
                   </Link>
@@ -413,7 +413,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                   </p>
                 </div>
                 <Button
-                  variant="primary"
+                  variant="default"
                   size="lg"
                   onClick={handleApply}
                   disabled={hasApplied}
@@ -536,7 +536,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               Annuler
             </Button>
             <Button
-              variant="primary"
+              variant="default"
               className="flex-1"
               onClick={handleSubmitApplication}
               isLoading={isSubmitting}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
 import ReportButton from '@/components/ReportButton';
@@ -310,7 +310,7 @@ export default function ProfileView({ userId }: { userId: string }) {
                 <Button variant="ghost" size="sm">Se connecter</Button>
               </Link>
               <Link href={`/signup?redirect=/profile/${userId}`}>
-                <Button variant="primary" size="sm">Créer un compte</Button>
+                <Button variant="default" size="sm">Créer un compte</Button>
               </Link>
             </div>
           )}
@@ -391,7 +391,7 @@ export default function ProfileView({ userId }: { userId: string }) {
               {isOwnProfile && (
                 <>
                   <Link href="/dashboard">
-                    <Button variant="primary" size="sm">Dashboard</Button>
+                    <Button variant="default" size="sm">Dashboard</Button>
                   </Link>
                   <Link href="/profile/edit">
                     <Button variant="secondary" size="sm">Modifier</Button>
@@ -401,7 +401,7 @@ export default function ProfileView({ userId }: { userId: string }) {
 
               {/* Invite button — authenticated entrepreneur viewing a talent */}
               {!isOwnProfile && isAuthenticatedEntrepreneur && profile.role === 'talent' && (
-                <Button variant="primary" size="sm" onClick={() => setShowInviteModal(true)}>
+                <Button variant="default" size="sm" onClick={() => setShowInviteModal(true)}>
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
@@ -412,7 +412,7 @@ export default function ProfileView({ userId }: { userId: string }) {
               {/* Login CTA — unauthenticated visitor viewing a talent */}
               {!currentUserId && profile.role === 'talent' && (
                 <Link href={`/login?redirect=/profile/${userId}`}>
-                  <Button variant="primary" size="sm">
+                  <Button variant="default" size="sm">
                     Se connecter pour inviter
                   </Button>
                 </Link>
@@ -454,7 +454,7 @@ export default function ProfileView({ userId }: { userId: string }) {
                 </p>
               </div>
               <Link href="/dashboard" className="shrink-0">
-                <Button variant="primary">Voir mon dashboard →</Button>
+                <Button variant="default">Voir mon dashboard →</Button>
               </Link>
             </div>
           </div>

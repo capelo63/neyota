@@ -339,7 +339,7 @@ export default function EmailPreferencesPage() {
         {/* Actions */}
         <div className="flex gap-3">
           <Button
-            variant="primary"
+            variant="default"
             onClick={handleSave}
             disabled={isSaving}
             className="flex-1"

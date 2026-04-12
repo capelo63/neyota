@@ -137,7 +137,7 @@ function LoginForm() {
             </Link>
           </div>
 
-          <Button type="submit" variant="primary" className="w-full" isLoading={isLoading} disabled={isLoading}>
+          <Button type="submit" variant="default" className="w-full" isLoading={isLoading} disabled={isLoading}>
             Se connecter
           </Button>
         </form>

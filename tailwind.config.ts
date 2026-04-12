@@ -9,8 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Brand colors - TERRII territorial green
+        // shadcn/ui color system (HSL)
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          // Brand colors - TERRII territorial green
           50: '#f0fdf4',
           100: '#dcfce7',
           200: '#bbf7d0',
@@ -22,6 +30,30 @@ const config: Config = {
           800: '#065f46',
           900: '#064e3b',
           950: '#022c22',
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         // Neutral colors (gray scale)
         neutral: {
@@ -60,9 +92,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-ibm-plex-sans)', 'sans-serif'],
-        mono: ['var(--font-ibm-plex-mono)', 'monospace'],
-        display: ['var(--font-ibm-plex-sans)', 'sans-serif'],
+        sans: ['IBM Plex Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'monospace'],
+        display: ['IBM Plex Sans', 'sans-serif'],
       },
       fontSize: {
         'display-lg': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
@@ -83,6 +115,9 @@ const config: Config = {
         '128': '32rem',
       },
       borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
         'xl': '1rem',
         '2xl': '1.5rem',
         '3xl': '2rem',
@@ -117,6 +152,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };
 export default config;

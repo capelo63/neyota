@@ -175,7 +175,7 @@ export default function MatchingProjectsForm() {
                   </h3>
                   <p className="text-error-700 mb-4">{error}</p>
                   <Link href="/dashboard">
-                    <Button variant="primary" size="sm">
+                    <Button variant="default" size="sm">
                       Retour au dashboard
                     </Button>
                   </Link>
@@ -203,7 +203,7 @@ export default function MatchingProjectsForm() {
                 </ul>
               </div>
               <Link href="/projects">
-                <Button variant="primary">
+                <Button variant="default">
                   Voir tous les projets
                 </Button>
               </Link>

@@ -299,7 +299,7 @@ export default function TalentsFilter({ talents, allSkills }: TalentsFilterProps
               Essayez de modifier vos critères de recherche pour trouver plus de talents.
             </p>
             {hasActiveFilters && (
-              <Button variant="primary" onClick={clearFilters}>
+              <Button variant="default" onClick={clearFilters}>
                 Réinitialiser les filtres
               </Button>
             )}
