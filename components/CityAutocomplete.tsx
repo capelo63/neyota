@@ -122,9 +122,20 @@ export default function CityAutocomplete({
 
     setIsLoading(true);
     try {
-      const searchType = type === 'postal' ? 'postcode' : 'municipality';
-      const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=${searchType}&limit=8&autocomplete=1`;
+      // For postal codes, search without type (API doesn't support type=postcode)
+      // For cities, use type=municipality
+      const typeParam = type === 'city' ? '&type=municipality' : '';
+      const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}${typeParam}&limit=8&autocomplete=1`;
       const response = await fetch(url);
+
+      if (!response.ok) {
+        console.error('API address error:', response.status, response.statusText);
+        setSuggestions([]);
+        setIsOpen(false);
+        setIsLoading(false);
+        return;
+      }
+
       const data = await response.json();
 
       const results: AddressSuggestion[] = (data.features || []).map((feature: any) => {

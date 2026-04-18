@@ -314,7 +314,7 @@ export default async function HomeCarbonPage({
                 {
                   icon: '✨',
                   title: 'Réussir ensemble',
-                  description: 'Transformez ces rencontres en réussites concrètes, au service de l&apos;engagement et du dynamisme local'
+                  description: "Transformez ces rencontres en réussites concrètes, au service de l'engagement et du dynamisme local"
                 }
               ].map((benefit, index) => (
                 <Tile key={index} className="text-center bg-layer-01 hover:shadow-md transition-shadow">
