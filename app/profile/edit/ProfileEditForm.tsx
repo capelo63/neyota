@@ -101,7 +101,7 @@ export default function ProfileEditForm() {
         // Expand categories that have selected skills
         const expanded: Record<string, boolean> = {};
         for (const cat of Object.keys(grouped)) {
-          expanded[cat] = grouped[cat].some(s => ids.has(s.id));
+          expanded[cat] = grouped[cat].some((s: Skill) => ids.has(s.id));
         }
         setExpandedCategories(expanded);
       }
