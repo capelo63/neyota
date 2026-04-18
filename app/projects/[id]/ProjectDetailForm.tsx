@@ -436,7 +436,9 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                       <div>
                         <div className="font-semibold text-neutral-900">{need.name}</div>
                         {need.category && (
-                          <div className="text-sm text-neutral-600 mt-1 capitalize">{need.category}</div>
+                          <div className="text-sm text-neutral-600 mt-1">
+                            {NEED_CATEGORIES[need.category as NeedCategoryId]?.label ?? need.category}
+                          </div>
                         )}
                       </div>
                     </div>
