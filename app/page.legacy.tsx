@@ -306,7 +306,7 @@ export default async function Home({
                 {
                   icon: '✨',
                   title: 'Réussir ensemble',
-                  description: 'Transformez ces rencontres en réussites concrètes, au service de l&apos;engagement et du dynamisme local'
+                  description: "Transformez ces rencontres en réussites concrètes, au service de l'engagement et du dynamisme local"
                 }
               ].map((benefit, index) => (
                 <div key={index} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">

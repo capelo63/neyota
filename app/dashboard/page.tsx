@@ -277,16 +277,16 @@ export default function DashboardPage() {
 
             <div className="space-y-4 text-neutral-700">
               <div>
-                <strong>Email:</strong> {user?.email}
+                <strong>Email :</strong> {user?.email}
               </div>
               <div>
-                <strong>Nom:</strong> {profile?.first_name} {profile?.last_name}
+                <strong>Nom :</strong> {profile?.first_name} {profile?.last_name}
               </div>
               <div>
-                <strong>Rôle:</strong> {profile?.role}
+                <strong>Rôle :</strong> {profile?.role === 'entrepreneur' ? 'Porteur d\'initiative' : 'Talent'}
               </div>
               <div>
-                <strong>Membre depuis:</strong> {new Date(user?.created_at).toLocaleDateString('fr-FR')}
+                <strong>Membre depuis :</strong> {new Date(user?.created_at).toLocaleDateString('fr-FR')}
               </div>
             </div>
           </div>
