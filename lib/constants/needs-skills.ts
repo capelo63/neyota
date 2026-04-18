@@ -207,6 +207,122 @@ export const SKILL_CATEGORIES = {
 
 export type SkillCategoryId = keyof typeof SKILL_CATEGORIES;
 
+// Liste des compétences par catégorie (70 items au total)
+export const SKILLS_BY_CATEGORY: Record<SkillCategoryId, string[]> = {
+  strategy: [
+    // Structuration & stratégie
+    'Business model & stratégie',
+    'Étude de marché & positionnement',
+    'Business plan & pitch deck',
+    'Définition de l\'offre de valeur',
+    'Priorisation & roadmap',
+    // Impact & ancrage territorial
+    'Mesure d\'impact social/environnemental',
+    'Développement de partenariats stratégiques',
+    'Ancrage territorial & écosystème local',
+    // Accompagnement
+    'Accompagnement entrepreneurial / mentoring',
+    'Coaching de dirigeant',
+  ],
+  marketing: [
+    // Stratégie marketing
+    'Stratégie marketing & communication',
+    'Étude de cible & persona',
+    'Positionnement & messaging',
+    // Marketing digital
+    'Marketing digital (SEO, SEA, réseaux sociaux)',
+    'SEO / Référencement naturel',
+    'SEA / Publicité en ligne (Google Ads, Meta Ads)',
+    'Social media marketing',
+    'Content marketing & stratégie éditoriale',
+    'Community management',
+    'Email marketing & automation',
+    // Branding & création
+    'Identité visuelle & branding',
+    'Création de supports de communication',
+    'Copywriting & rédaction',
+    'Photographie & vidéo',
+    'Design graphique',
+  ],
+  product: [
+    // Product management
+    'Product management',
+    'UX/UI Design',
+    'Prototypage & wireframing',
+    'Tests utilisateurs & validation',
+    // Développement web
+    'Développement web (sites vitrine, e-commerce)',
+    'Développement d\'applications web (SaaS, plateformes)',
+    'Développement front-end (React, Vue, etc.)',
+    'Développement back-end (Node, Python, PHP)',
+    // Développement mobile
+    'Développement mobile (iOS, Android)',
+    'Développement mobile cross-platform (React Native, Flutter)',
+    // No-code & automation
+    'No-code / Low-code (Webflow, Bubble, Notion)',
+    'Automatisation & workflows (Zapier, Make, n8n)',
+    'Intégration d\'outils & API',
+    // Tech avancée
+    'Data science / Intelligence Artificielle',
+    'DevOps / Infrastructure cloud',
+  ],
+  operations: [
+    // Gestion de projet
+    'Gestion de projet (Agile, Scrum, Kanban)',
+    'Planification & pilotage de projet',
+    'Coordination d\'équipe',
+    // Organisation
+    'Organisation & productivité',
+    'Gestion du temps & priorisation',
+    'Mise en place de processus & workflows',
+    // Croissance & structuration
+    'Pilotage de la croissance',
+    'Structuration d\'équipe',
+    'Change management',
+    'Qualité & amélioration continue',
+  ],
+  finance_legal_hr: [
+    // Finance
+    'Budget & prévisionnel financier',
+    'Comptabilité & trésorerie',
+    'Analyse financière & rentabilité',
+    'Recherche de financements (subventions, prêts)',
+    'Levée de fonds / Fundraising',
+    // Juridique
+    'Choix de statut juridique',
+    'Droit des affaires & contrats',
+    'Propriété intellectuelle',
+    'Gestion administrative',
+    // RH
+    'Ressources humaines & recrutement',
+    'Formation & développement des compétences',
+  ],
+  commercial: [
+    // Vente & développement commercial
+    'Développement commercial B2B',
+    'Développement commercial B2C',
+    'Prospection & génération de leads',
+    'Techniques de vente & négociation',
+    // Stratégie commerciale
+    'Stratégie de distribution',
+    'Pricing & politique tarifaire',
+    'Amélioration de la rentabilité',
+    // Relation client
+    'Relation client & customer success',
+    'Service après-vente & support',
+    'Fidélisation client',
+  ],
+  other: [
+    // Champ libre - la compétence sera saisie par l'utilisateur
+  ],
+};
+
+// Comptage total des skills
+export const TOTAL_SKILLS = Object.values(SKILLS_BY_CATEGORY).reduce(
+  (sum, skills) => sum + skills.length,
+  0
+);
+
 // Pour les formulaires
 export const SKILL_CATEGORIES_OPTIONS = Object.values(SKILL_CATEGORIES).map(
   (cat) => ({
@@ -270,4 +386,14 @@ export function getSkillCategoryIcon(categoryId: SkillCategoryId): string {
 // Vérifier si une compétence a un champ custom
 export function hasCustomField(categoryId: SkillCategoryId): boolean {
   return categoryId === 'other';
+}
+
+// Obtenir toutes les skills d'une catégorie
+export function getSkillsByCategory(categoryId: SkillCategoryId): string[] {
+  return SKILLS_BY_CATEGORY[categoryId] || [];
+}
+
+// Obtenir toutes les needs d'une catégorie
+export function getNeedsByCategory(categoryId: NeedCategoryId): string[] {
+  return NEEDS_BY_CATEGORY[categoryId] || [];
 }

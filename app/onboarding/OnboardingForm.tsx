@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button, Textarea, Select, Checkbox } from '@/components/ui';
 import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
 import CityAutocomplete from '@/components/CityAutocomplete';
-import { SKILL_CATEGORIES, hasCustomField } from '@/lib/constants/needs-skills';
+import { SKILL_CATEGORIES, SKILLS_BY_CATEGORY, hasCustomField, type SkillCategoryId } from '@/lib/constants/needs-skills';
 
 type UserRole = 'entrepreneur' | 'talent';
 
@@ -35,6 +35,8 @@ export default function OnboardingForm() {
   const [profile, setProfile] = useState<any>(null);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [skills, setSkills] = useState<any[]>([]);
+  const [skillsByCategory, setSkillsByCategory] = useState<Record<string, any[]>>({});
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -87,6 +89,25 @@ export default function OnboardingForm() {
           .order('name');
 
         setSkills(skillsData || []);
+
+        // Group skills by category
+        const grouped = (skillsData || []).reduce((acc: Record<string, any[]>, skill: any) => {
+          const category = skill.category;
+          if (!acc[category]) {
+            acc[category] = [];
+          }
+          acc[category].push(skill);
+          return acc;
+        }, {});
+
+        setSkillsByCategory(grouped);
+
+        // Expand all categories by default
+        const initialExpanded = Object.keys(grouped).reduce((acc: Record<string, boolean>, category) => {
+          acc[category] = true;
+          return acc;
+        }, {});
+        setExpandedCategories(initialExpanded);
       }
 
       setIsLoading(false);
@@ -529,56 +550,95 @@ export default function OnboardingForm() {
                         </div>
                       )}
 
-                      <div className="space-y-3">
-                        {skills.map((skill) => {
-                          const isSelected = formData.selectedSkills.includes(skill.id);
-                          const skillCategory = SKILL_CATEGORIES[skill.category as keyof typeof SKILL_CATEGORIES];
-                          const needsCustomField = hasCustomField(skill.category);
+                      <div className="space-y-4">
+                        {Object.entries(skillsByCategory).map(([categoryId, categorySkills]) => {
+                          const categoryInfo = SKILL_CATEGORIES[categoryId as SkillCategoryId];
+                          const isExpanded = expandedCategories[categoryId];
+                          const selectedInCategory = categorySkills.filter(skill =>
+                            formData.selectedSkills.includes(skill.id)
+                          ).length;
+
+                          if (!categoryInfo) return null;
 
                           return (
-                            <div
-                              key={skill.id}
-                              className={`p-4 rounded-lg border-2 transition-all ${
-                                isSelected
-                                  ? 'border-primary-500 bg-primary-50'
-                                  : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
-                              }`}
-                            >
-                              <label className="flex items-start gap-3 cursor-pointer">
-                                <input
-                                  type="checkbox"
-                                  checked={isSelected}
-                                  onChange={() => toggleSkill(skill.id)}
-                                  className="mt-1 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                                />
-                                <div className="flex-1">
-                                  <div className="font-semibold text-neutral-900">
-                                    {skillCategory?.label || skill.name}
+                            <div key={categoryId} className="border border-neutral-200 rounded-lg overflow-hidden">
+                              {/* Category Header */}
+                              <button
+                                type="button"
+                                onClick={() => setExpandedCategories(prev => ({
+                                  ...prev,
+                                  [categoryId]: !prev[categoryId]
+                                }))}
+                                className="w-full px-4 py-3 bg-neutral-50 hover:bg-neutral-100 transition-colors flex items-center justify-between text-left"
+                              >
+                                <div className="flex items-center gap-3 flex-1">
+                                  <span className="text-2xl">{categoryInfo.icon}</span>
+                                  <div className="flex-1">
+                                    <div className="font-semibold text-neutral-900">
+                                      {categoryInfo.shortLabel}
+                                    </div>
+                                    <div className="text-xs text-neutral-600 mt-0.5">
+                                      {categoryInfo.description}
+                                    </div>
                                   </div>
-                                  {skillCategory?.description && (
-                                    <div className="text-sm text-neutral-600 mt-1">
-                                      {skillCategory.description}
-                                    </div>
-                                  )}
-
-                                  {/* Custom field for "Autre expertise" */}
-                                  {isSelected && needsCustomField && (
-                                    <div className="mt-3">
-                                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                                        Précisez votre domaine d'expertise :
-                                      </label>
-                                      <input
-                                        type="text"
-                                        placeholder="Ex: Architecture, Design industriel, Photographie..."
-                                        value={formData.customSkillDetails[skill.id] || ''}
-                                        onChange={(e) => updateCustomDetail(skill.id, e.target.value)}
-                                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                        onClick={(e) => e.stopPropagation()}
-                                      />
-                                    </div>
+                                  {selectedInCategory > 0 && (
+                                    <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">
+                                      {selectedInCategory} sélectionnée{selectedInCategory > 1 ? 's' : ''}
+                                    </span>
                                   )}
                                 </div>
-                              </label>
+                                <svg
+                                  className={`w-5 h-5 text-neutral-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+
+                              {/* Category Skills */}
+                              {isExpanded && (
+                                <div className="p-4 space-y-2 bg-white">
+                                  {categorySkills.map((skill) => {
+                                    const isSelected = formData.selectedSkills.includes(skill.id);
+                                    const needsCustomField = hasCustomField(skill.category);
+
+                                    return (
+                                      <div key={skill.id}>
+                                        <label className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                                          isSelected
+                                            ? 'bg-primary-50 border border-primary-200'
+                                            : 'hover:bg-neutral-50 border border-transparent'
+                                        }`}>
+                                          <input
+                                            type="checkbox"
+                                            checked={isSelected}
+                                            onChange={() => toggleSkill(skill.id)}
+                                            className="mt-0.5 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                          />
+                                          <span className="text-sm text-neutral-900 flex-1">
+                                            {skill.name}
+                                          </span>
+                                        </label>
+
+                                        {/* Custom field for "Autre expertise" */}
+                                        {isSelected && needsCustomField && (
+                                          <div className="ml-9 mt-2 mb-2">
+                                            <input
+                                              type="text"
+                                              placeholder="Ex: Architecture, Design industriel, Photographie..."
+                                              value={formData.customSkillDetails[skill.id] || ''}
+                                              onChange={(e) => updateCustomDetail(skill.id, e.target.value)}
+                                              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                            />
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
                             </div>
                           );
                         })}
