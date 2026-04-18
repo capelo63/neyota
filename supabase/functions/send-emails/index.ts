@@ -271,7 +271,7 @@ const EMAIL_TEMPLATES = {
               </div>
 
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-                💚 <strong>Notre mission :</strong> Faire vivre les territoires en connectant talents locaux et porteurs de projets. 100% gratuit, 100% territorial, 100% impact.
+                💚 <strong>Notre mission :</strong> Faire vivre les territoires en connectant talents locaux et porteurs de projets. 100% gratuit, 100% territorial, 100% initiatives.
               </p>
             </div>
             <div class="footer">
