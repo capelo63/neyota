@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import AvatarUpload from '@/components/AvatarUpload';
+import { SKILL_CATEGORIES, hasCustomField, type SkillCategoryId } from '@/lib/constants/needs-skills';
 
 interface Profile {
   id: string;
@@ -23,19 +24,6 @@ interface Skill {
   category: string;
 }
 
-interface UserSkill {
-  id: string;
-  skill_id: string;
-  proficiency_level: 'beginner' | 'intermediate' | 'expert';
-  skill: Skill;
-}
-
-const PROFICIENCY_OPTIONS = [
-  { value: 'beginner', label: 'Débutant' },
-  { value: 'intermediate', label: 'Intermédiaire' },
-  { value: 'expert', label: 'Expert' },
-];
-
 export default function ProfileEditForm() {
   const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -43,16 +31,18 @@ export default function ProfileEditForm() {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [maxDistance, setMaxDistance] = useState(50);
 
-  // Skills management (for talents only)
-  const [allSkills, setAllSkills] = useState<Skill[]>([]);
-  const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
-  const [selectedSkillId, setSelectedSkillId] = useState('');
-  const [selectedProficiency, setSelectedProficiency] = useState<'beginner' | 'intermediate' | 'expert'>('intermediate');
+  // Skills management (talents only)
+  const [skillsByCategory, setSkillsByCategory] = useState<Record<string, Skill[]>>({});
+  const [selectedSkillIds, setSelectedSkillIds] = useState<Set<string>>(new Set());
+  const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [savingSkills, setSavingSkills] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [skillsSuccess, setSkillsSuccess] = useState(false);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -68,17 +58,9 @@ export default function ProfileEditForm() {
       setLoading(true);
       setError(null);
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { router.push('/login'); return; }
 
-      if (!user) {
-        router.push('/login');
-        return;
-      }
-
-      // Get profile
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -92,43 +74,38 @@ export default function ProfileEditForm() {
       setAvatarUrl(profileData.avatar_url || '');
       setMaxDistance(profileData.max_distance_km);
 
-      // If talent, load skills data
       if (profileData.role === 'talent') {
-        // Load all available skills
-        const { data: skillsData } = await supabase
-          .from('skills')
-          .select('*')
-          .order('name');
+        const [skillsResult, userSkillsResult] = await Promise.all([
+          supabase.from('skills').select('*').order('name'),
+          supabase.from('user_skills').select('skill_id, custom_detail').eq('user_id', user.id),
+        ]);
 
-        setAllSkills(skillsData || []);
+        // Group all available skills by category
+        const grouped = (skillsResult.data || []).reduce((acc: Record<string, Skill[]>, skill: Skill) => {
+          if (!acc[skill.category]) acc[skill.category] = [];
+          acc[skill.category].push(skill);
+          return acc;
+        }, {});
+        setSkillsByCategory(grouped);
 
-        // Load user's skills
-        const { data: userSkillsData } = await supabase
-          .from('user_skills')
-          .select(`
-            id,
-            skill_id,
-            proficiency_level,
-            skill:skills (
-              id,
-              name,
-              category
-            )
-          `)
-          .eq('user_id', user.id);
+        // Build selected IDs and custom details from user's current skills
+        const ids = new Set<string>();
+        const details: Record<string, string> = {};
+        for (const us of (userSkillsResult.data || [])) {
+          ids.add(us.skill_id);
+          if (us.custom_detail) details[us.skill_id] = us.custom_detail;
+        }
+        setSelectedSkillIds(ids);
+        setCustomDetails(details);
 
-        // Transform data to match expected format (skill is an array in response)
-        const transformedSkills = (userSkillsData || []).map((item: any) => ({
-          id: item.id,
-          skill_id: item.skill_id,
-          proficiency_level: item.proficiency_level,
-          skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
-        }));
-
-        setUserSkills(transformedSkills);
+        // Expand categories that have selected skills
+        const expanded: Record<string, boolean> = {};
+        for (const cat of Object.keys(grouped)) {
+          expanded[cat] = grouped[cat].some((s: Skill) => ids.has(s.id));
+        }
+        setExpandedCategories(expanded);
       }
     } catch (err: any) {
-      console.error('Error loading data:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -137,7 +114,6 @@ export default function ProfileEditForm() {
 
   const handleSaveProfile = async () => {
     if (!profile) return;
-
     try {
       setSaving(true);
       setError(null);
@@ -145,95 +121,57 @@ export default function ProfileEditForm() {
 
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({
-          bio,
-          avatar_url: avatarUrl || null,
-          max_distance_km: maxDistance,
-        })
+        .update({ bio, avatar_url: avatarUrl || null, max_distance_km: maxDistance })
         .eq('id', profile.id);
 
       if (updateError) throw updateError;
-
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      console.error('Error saving profile:', err);
       setError(err.message);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleAddSkill = async () => {
-    if (!profile || !selectedSkillId) return;
+  const toggleSkill = (skillId: string) => {
+    setSelectedSkillIds(prev => {
+      const next = new Set(prev);
+      if (next.has(skillId)) {
+        next.delete(skillId);
+        setCustomDetails(d => { const nd = { ...d }; delete nd[skillId]; return nd; });
+      } else {
+        next.add(skillId);
+      }
+      return next;
+    });
+  };
 
+  const handleSaveSkills = async () => {
+    if (!profile) return;
     try {
+      setSavingSkills(true);
       setError(null);
 
-      const { error: insertError } = await supabase
-        .from('user_skills')
-        .insert({
+      // Delete all existing skills then re-insert
+      await supabase.from('user_skills').delete().eq('user_id', profile.id);
+
+      if (selectedSkillIds.size > 0) {
+        const toInsert = Array.from(selectedSkillIds).map(skillId => ({
           user_id: profile.id,
-          skill_id: selectedSkillId,
-          proficiency_level: selectedProficiency,
-        });
+          skill_id: skillId,
+          custom_detail: customDetails[skillId] || null,
+        }));
+        const { error: insertError } = await supabase.from('user_skills').insert(toInsert);
+        if (insertError) throw insertError;
+      }
 
-      if (insertError) throw insertError;
-
-      // Reload user skills
-      await loadData();
-      setSelectedSkillId('');
-      setSelectedProficiency('intermediate');
+      setSkillsSuccess(true);
+      setTimeout(() => setSkillsSuccess(false), 3000);
     } catch (err: any) {
-      console.error('Error adding skill:', err);
       setError(err.message);
-    }
-  };
-
-  const handleRemoveSkill = async (userSkillId: string) => {
-    try {
-      setError(null);
-
-      const { error: deleteError } = await supabase
-        .from('user_skills')
-        .delete()
-        .eq('id', userSkillId);
-
-      if (deleteError) throw deleteError;
-
-      // Reload user skills
-      await loadData();
-    } catch (err: any) {
-      console.error('Error removing skill:', err);
-      setError(err.message);
-    }
-  };
-
-  const handleUpdateSkillProficiency = async (
-    userSkillId: string,
-    newProficiency: 'beginner' | 'intermediate' | 'expert'
-  ) => {
-    try {
-      setError(null);
-
-      const { error: updateError } = await supabase
-        .from('user_skills')
-        .update({ proficiency_level: newProficiency })
-        .eq('id', userSkillId);
-
-      if (updateError) throw updateError;
-
-      // Update local state
-      setUserSkills(
-        userSkills.map((us) =>
-          us.id === userSkillId
-            ? { ...us, proficiency_level: newProficiency }
-            : us
-        )
-      );
-    } catch (err: any) {
-      console.error('Error updating skill proficiency:', err);
-      setError(err.message);
+    } finally {
+      setSavingSkills(false);
     }
   };
 
@@ -249,30 +187,19 @@ export default function ProfileEditForm() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Erreur
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Erreur</h2>
           <p className="text-gray-600 mb-4">Impossible de charger votre profil</p>
-          <Link href="/dashboard">
-            <Button variant="secondary">Retour au tableau de bord</Button>
-          </Link>
+          <Link href="/dashboard"><Button variant="secondary">Retour au tableau de bord</Button></Link>
         </div>
       </div>
     );
   }
 
-  // Available skills to add (not already in user's skills)
-  const availableSkills = allSkills.filter(
-    (skill) => !userSkills.some((us) => us.skill_id === skill.id)
-  );
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
         <div className="mb-6 flex items-center justify-between gap-3">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Modifier mon profil
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Modifier mon profil</h1>
           <Link href={`/profile/${profile.id}`} className="shrink-0">
             <Button variant="secondary" size="sm">Voir mon profil</Button>
           </Link>
@@ -284,24 +211,19 @@ export default function ProfileEditForm() {
           </div>
         )}
 
-        {success && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-800">Profil mis à jour avec succès !</p>
-          </div>
-        )}
-
-        {/* Basic profile info */}
+        {/* Informations générales */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Informations générales
-          </h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Informations générales</h2>
+
+          {success && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-800 text-sm">Profil mis à jour avec succès !</p>
+            </div>
+          )}
 
           <div className="space-y-4">
-            {/* Avatar Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Photo de profil
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-4">Photo de profil</label>
               <AvatarUpload
                 currentAvatarUrl={avatarUrl}
                 userId={profile.id}
@@ -309,11 +231,8 @@ export default function ProfileEditForm() {
               />
             </div>
 
-            {/* Bio */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Bio
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
@@ -323,16 +242,12 @@ export default function ProfileEditForm() {
               />
             </div>
 
-            {/* Max distance */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Rayon de recherche : {maxDistance} km
               </label>
               <input
-                type="range"
-                min="10"
-                max="200"
-                step="10"
+                type="range" min="10" max="200" step="10"
                 value={maxDistance}
                 onChange={(e) => setMaxDistance(parseInt(e.target.value))}
                 className="w-full"
@@ -343,134 +258,112 @@ export default function ProfileEditForm() {
               </div>
             </div>
 
-            {/* Save button */}
             <div className="pt-4">
-              <Button
-                variant="default"
-                onClick={handleSaveProfile}
-                disabled={saving}
-              >
+              <Button variant="default" onClick={handleSaveProfile} disabled={saving}>
                 {saving ? 'Enregistrement...' : 'Enregistrer les modifications'}
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Skills management (talents only) */}
+        {/* Compétences (talents uniquement) */}
         {profile.role === 'talent' && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Mes compétences
-            </h2>
-
-            {/* Add skill */}
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Ajouter une compétence
-              </h3>
-              <div className="flex gap-3">
-                <select
-                  value={selectedSkillId}
-                  onChange={(e) => setSelectedSkillId(e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                >
-                  <option value="">Sélectionnez une compétence</option>
-                  {availableSkills.map((skill) => (
-                    <option key={skill.id} value={skill.id}>
-                      {skill.name} ({skill.category})
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={selectedProficiency}
-                  onChange={(e) =>
-                    setSelectedProficiency(
-                      e.target.value as 'beginner' | 'intermediate' | 'expert'
-                    )
-                  }
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                >
-                  {PROFICIENCY_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-
-                <Button
-                  variant="default"
-                  onClick={handleAddSkill}
-                  disabled={!selectedSkillId}
-                >
-                  Ajouter
-                </Button>
-              </div>
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-xl font-bold text-gray-900">Mes compétences</h2>
+              <span className="text-sm text-neutral-500">
+                {selectedSkillIds.size} sélectionnée{selectedSkillIds.size > 1 ? 's' : ''}
+              </span>
             </div>
+            <p className="text-sm text-gray-600 mb-6">
+              Cochez les compétences que vous pouvez apporter aux projets.
+            </p>
 
-            {/* User skills list */}
-            {userSkills.length === 0 ? (
-              <p className="text-gray-600">
-                Vous n'avez pas encore ajouté de compétences.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {userSkills.map((userSkill) => (
-                  <div
-                    key={userSkill.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {userSkill.skill.name}
-                      </div>
-                      <div className="text-sm text-gray-500 capitalize">
-                        {userSkill.skill.category}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <select
-                        value={userSkill.proficiency_level}
-                        onChange={(e) =>
-                          handleUpdateSkillProficiency(
-                            userSkill.id,
-                            e.target.value as 'beginner' | 'intermediate' | 'expert'
-                          )
-                        }
-                        className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      >
-                        {PROFICIENCY_OPTIONS.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-
-                      <button
-                        onClick={() => handleRemoveSkill(userSkill.id)}
-                        className="text-red-600 hover:text-red-800 p-2"
-                        title="Retirer cette compétence"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
+            {skillsSuccess && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800 text-sm">Compétences mises à jour !</p>
               </div>
             )}
+
+            <div className="space-y-3 mb-6">
+              {Object.entries(skillsByCategory).map(([categoryId, categorySkills]) => {
+                const categoryInfo = SKILL_CATEGORIES[categoryId as SkillCategoryId];
+                const isExpanded = expandedCategories[categoryId];
+                const selectedCount = categorySkills.filter(s => selectedSkillIds.has(s.id)).length;
+
+                if (!categoryInfo) return null;
+
+                return (
+                  <div key={categoryId} className="border border-neutral-200 rounded-lg overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }))}
+                      className="w-full px-4 py-3 bg-neutral-50 hover:bg-neutral-100 transition-colors flex items-center justify-between text-left"
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <span className="text-xl">{categoryInfo.icon}</span>
+                        <div className="flex-1">
+                          <div className="font-semibold text-neutral-900 text-sm">{categoryInfo.shortLabel}</div>
+                          <div className="text-xs text-neutral-500 mt-0.5">{categoryInfo.description}</div>
+                        </div>
+                        {selectedCount > 0 && (
+                          <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">
+                            {selectedCount}
+                          </span>
+                        )}
+                      </div>
+                      <svg
+                        className={`w-4 h-4 text-neutral-400 transition-transform ml-2 ${isExpanded ? 'rotate-180' : ''}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="p-3 space-y-1 bg-white">
+                        {categorySkills.map((skill) => {
+                          const isSelected = selectedSkillIds.has(skill.id);
+                          const needsCustom = hasCustomField(skill.category as SkillCategoryId);
+
+                          return (
+                            <div key={skill.id}>
+                              <label className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all ${
+                                isSelected ? 'bg-primary-50 border border-primary-200' : 'hover:bg-neutral-50 border border-transparent'
+                              }`}>
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => toggleSkill(skill.id)}
+                                  className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                />
+                                <span className="text-sm text-neutral-900">{skill.name}</span>
+                              </label>
+
+                              {isSelected && needsCustom && (
+                                <div className="ml-10 mt-1 mb-2">
+                                  <input
+                                    type="text"
+                                    placeholder="Précisez votre domaine..."
+                                    value={customDetails[skill.id] || ''}
+                                    onChange={(e) => setCustomDetails(d => ({ ...d, [skill.id]: e.target.value }))}
+                                    className="w-full px-3 py-1.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <Button variant="default" onClick={handleSaveSkills} disabled={savingSkills}>
+              {savingSkills ? 'Enregistrement...' : 'Enregistrer mes compétences'}
+            </Button>
           </div>
         )}
       </div>

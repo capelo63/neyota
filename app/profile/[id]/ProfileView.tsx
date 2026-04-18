@@ -30,7 +30,7 @@ interface UserSkill {
     name: string;
     category: string;
   };
-  proficiency_level: 'beginner' | 'intermediate' | 'expert';
+  custom_detail: string | null;
 }
 
 interface Project {
@@ -62,18 +62,6 @@ interface ImpactStats {
   projects_created?: number;
   talents_recruited?: number;
 }
-
-const PROFICIENCY_LABELS = {
-  beginner: 'Débutant',
-  intermediate: 'Intermédiaire',
-  expert: 'Expert',
-};
-
-const PROFICIENCY_COLORS = {
-  beginner: 'bg-blue-100 text-blue-800',
-  intermediate: 'bg-purple-100 text-purple-800',
-  expert: 'bg-orange-100 text-orange-800',
-};
 
 const PHASE_LABELS = {
   ideation: 'Idéation',
@@ -147,7 +135,7 @@ export default function ProfileView({ userId }: { userId: string }) {
         profileData.role === 'talent'
           ? supabase
               .from('user_skills')
-              .select(`proficiency_level, skill:skills (id, name, category)`)
+              .select(`custom_detail, skill:skills (id, name, category)`)
               .eq('user_id', userId)
           : Promise.resolve({ data: [], error: null }),
 
@@ -211,7 +199,7 @@ export default function ProfileView({ userId }: { userId: string }) {
       const rawSkills = ((skillsResult as any).data || []) as any[];
       setSkills(
         rawSkills.map((item) => ({
-          proficiency_level: item.proficiency_level,
+          custom_detail: item.custom_detail,
           skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
         }))
       );
@@ -506,19 +494,16 @@ export default function ProfileView({ userId }: { userId: string }) {
             {skills.length === 0 ? (
               <p className="text-gray-600">Aucune compétence renseignée pour le moment.</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {skills.map((userSkill, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    className="p-3 bg-gray-50 rounded-lg"
                   >
-                    <div>
-                      <div className="font-medium text-gray-900">{userSkill.skill.name}</div>
-                      <div className="text-sm text-gray-500 capitalize">{userSkill.skill.category}</div>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${PROFICIENCY_COLORS[userSkill.proficiency_level]}`}>
-                      {PROFICIENCY_LABELS[userSkill.proficiency_level]}
-                    </span>
+                    <div className="font-medium text-gray-900">{userSkill.skill.name}</div>
+                    {userSkill.custom_detail && (
+                      <div className="text-sm text-gray-600 mt-1">{userSkill.custom_detail}</div>
+                    )}
                   </div>
                 ))}
               </div>
