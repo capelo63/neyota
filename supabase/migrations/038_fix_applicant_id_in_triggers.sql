@@ -4,6 +4,62 @@
 -- La table applications utilise talent_id, pas applicant_id.
 -- Les fonctions de la migration 004 utilisent l'ancien nom de champ.
 
+-- Corriger update_talent_impact_stats
+CREATE OR REPLACE FUNCTION update_talent_impact_stats(talent_id UUID)
+RETURNS VOID AS $$
+DECLARE
+  accepted_count INTEGER;
+  local_projects_count INTEGER;
+  total_score INTEGER;
+BEGIN
+  SELECT COUNT(*)
+  INTO accepted_count
+  FROM applications
+  WHERE talent_id = talent_id AND status = 'accepted';
+
+  SELECT COUNT(DISTINCT a.project_id)
+  INTO local_projects_count
+  FROM applications a
+  JOIN projects p ON a.project_id = p.id
+  JOIN profiles talent ON a.talent_id = talent.id
+  WHERE a.talent_id = talent_id
+    AND a.status = 'accepted'
+    AND (p.location IS NULL OR talent.location IS NULL OR
+         ST_Distance(p.location::geography, talent.location::geography) / 1000 <= 50);
+
+  total_score := (accepted_count * 10) + (local_projects_count * 5);
+
+  UPDATE user_impact_stats
+  SET projects_helped = accepted_count, impact_score = total_score, updated_at = NOW()
+  WHERE user_id = talent_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Corriger update_entrepreneur_impact_stats
+CREATE OR REPLACE FUNCTION update_entrepreneur_impact_stats(entrepreneur_id UUID)
+RETURNS VOID AS $$
+DECLARE
+  project_count INTEGER;
+  talent_count INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO project_count FROM projects WHERE owner_id = entrepreneur_id;
+
+  SELECT COUNT(DISTINCT a.talent_id)
+  INTO talent_count
+  FROM applications a
+  JOIN projects p ON a.project_id = p.id
+  WHERE p.owner_id = entrepreneur_id AND a.status = 'accepted';
+
+  UPDATE user_impact_stats
+  SET
+    projects_created = project_count,
+    talents_recruited = talent_count,
+    impact_score = (project_count * 15) + (talent_count * 5),
+    updated_at = NOW()
+  WHERE user_id = entrepreneur_id;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Corriger update_stats_on_application_change
 CREATE OR REPLACE FUNCTION update_stats_on_application_change()
 RETURNS TRIGGER AS $$
