@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Button, Badge, Input, Select } from '@/components/ui';
 import { FRENCH_REGIONS } from '@/lib/constants/regions';
+import { SKILL_CATEGORIES } from '@/lib/constants/needs-skills';
 
 interface Skill {
   id: string;
@@ -30,15 +31,9 @@ interface TalentsFilterProps {
   allSkills: Skill[];
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  strategy: '🎯 Stratégie / Business / Impact',
-  marketing: '📣 Marketing / Communication',
-  product: '💻 Produit / Tech',
-  operations: '⚙️ Opérations / Gestion de projet',
-  finance: '💰 Finance / Juridique / RH',
-  commercial: '🤝 Commercial / Relation client',
-  other: '🔧 Autre expertise',
-};
+const CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  Object.values(SKILL_CATEGORIES).map(cat => [cat.id, cat.label])
+);
 
 // Haversine formula to calculate distance between two points
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
