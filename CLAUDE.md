@@ -60,3 +60,7 @@
 ## Pages publiques (sans auth)
 /, /login, /signup, /projects, /projects/[id], /talents, /profile/[id],
 /about, /charter, /terms, /privacy, /contact, /matching, /faq, /legal
+
+## Source unique de vérité
+- Catégories de compétences : toujours importer depuis `lib/constants/needs-skills.ts`
+  → Ne jamais redéfinir `SKILL_CATEGORIES` ou les labels localement dans un composant
