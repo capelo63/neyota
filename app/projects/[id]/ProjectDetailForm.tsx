@@ -6,6 +6,15 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Badge, Modal, Textarea } from '@/components/ui';
 import ReportButton from '@/components/ReportButton';
+import { NEED_CATEGORIES, type NeedCategoryId } from '@/lib/constants/needs-skills';
+
+const PROJECT_PHASES = [
+  { value: 'ideation', label: '💡 Idéation - Je concrétise mon idée' },
+  { value: 'mvp_development', label: '🛠️ En construction - Je construis mon prototype' },
+  { value: 'launch', label: '🚀 Lancement - Je lance mon produit/service' },
+  { value: 'growth', label: '📈 Croissance - Je développe mon activité' },
+  { value: 'scaling', label: '🌍 Structuration - Je structure et pérennise' },
+];
 
 interface ProjectDetailProps {
   projectId: string;
@@ -43,6 +52,17 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   const [applicationMessage, setApplicationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applicationError, setApplicationError] = useState('');
+
+  // Edition du projet (porteur uniquement)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editPhase, setEditPhase] = useState('');
+  const [editPhaseObjectives, setEditPhaseObjectives] = useState('');
+  const [allNeeds, setAllNeeds] = useState<any[]>([]);
+  const [needsByCategory, setNeedsByCategory] = useState<Record<string, any[]>>({});
+  const [selectedNeedIds, setSelectedNeedIds] = useState<Set<string>>(new Set());
+  const [expandedNeedCategories, setExpandedNeedCategories] = useState<Record<string, boolean>>({});
+  const [isSavingProject, setIsSavingProject] = useState(false);
+  const [editSuccess, setEditSuccess] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -112,6 +132,63 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
     } catch (error) {
       console.error('Error loading data:', error);
       router.push('/projects');
+    }
+  };
+
+  const openEdit = async () => {
+    if (!project) return;
+    setEditPhase(project.current_phase);
+    setEditPhaseObjectives(project.phase_objectives || '');
+
+    // Charger les besoins disponibles si pas encore chargés
+    if (allNeeds.length === 0) {
+      const { data: needsData } = await supabase.from('needs').select('*').order('sort_order');
+      const needs = needsData || [];
+      setAllNeeds(needs);
+      const grouped = needs.reduce((acc: Record<string, any[]>, need: any) => {
+        if (!acc[need.category]) acc[need.category] = [];
+        acc[need.category].push(need);
+        return acc;
+      }, {});
+      setNeedsByCategory(grouped);
+      // Ouvrir toutes les catégories
+      setExpandedNeedCategories(Object.keys(grouped).reduce((acc: Record<string, boolean>, k) => ({ ...acc, [k]: true }), {}));
+    }
+
+    // Pré-sélectionner les besoins actuels
+    setSelectedNeedIds(new Set(project.needs.map((n: any) => n.id)));
+    setIsEditing(true);
+  };
+
+  const handleSaveProject = async () => {
+    if (!project) return;
+    setIsSavingProject(true);
+    try {
+      // Mettre à jour la phase et les objectifs
+      const { error: updateError } = await supabase
+        .from('projects')
+        .update({ current_phase: editPhase, phase_objectives: editPhaseObjectives || null })
+        .eq('id', projectId);
+      if (updateError) throw updateError;
+
+      // Remplacer les besoins
+      await supabase.from('project_needs').delete().eq('project_id', projectId);
+      if (selectedNeedIds.size > 0) {
+        const { error: needsError } = await supabase.from('project_needs').insert(
+          Array.from(selectedNeedIds).map(needId => ({ project_id: projectId, need_id: needId, priority: 'essential' }))
+        );
+        if (needsError) throw needsError;
+      }
+
+      // Rafraîchir les données affichées
+      await loadData();
+      setIsEditing(false);
+      setEditSuccess(true);
+      setTimeout(() => setEditSuccess(false), 3000);
+    } catch (err) {
+      console.error('Erreur sauvegarde projet:', err);
+    } finally {
+      setIsSavingProject(false);
     }
   };
 
@@ -462,20 +539,136 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
           {/* Owner view */}
           {isOwner && (
-            <div className="mt-8 bg-neutral-50 border border-neutral-200 rounded-xl p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                    Vous êtes le propriétaire de ce projet
-                  </h3>
-                  <p className="text-neutral-700">
-                    Gérez les candidatures et suivez l'évolution de votre projet.
-                  </p>
+            <div className="mt-8 space-y-4">
+              {editSuccess && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 text-sm font-medium">
+                  ✅ Projet mis à jour avec succès.
                 </div>
-                <Link href={`/projects/${projectId}/applications`}>
-                  <Button variant="secondary">Voir les candidatures</Button>
-                </Link>
+              )}
+
+              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div>
+                    <h3 className="text-xl font-semibold text-neutral-900 mb-1">Gestion du projet</h3>
+                    <p className="text-neutral-600 text-sm">Mettez à jour la phase et les besoins au fil de l'avancement.</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <Link href={`/projects/${projectId}/applications`}>
+                      <Button variant="secondary" size="sm">Voir les candidatures</Button>
+                    </Link>
+                    <Button variant="default" size="sm" onClick={openEdit}>
+                      ✏️ Modifier le projet
+                    </Button>
+                  </div>
+                </div>
               </div>
+
+              {isEditing && (
+                <div className="bg-white border border-primary-200 rounded-xl p-6 space-y-6">
+                  <h3 className="text-lg font-semibold text-neutral-900">Modifier le projet</h3>
+
+                  {/* Phase */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">Phase actuelle</label>
+                    <select
+                      value={editPhase}
+                      onChange={(e) => setEditPhase(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      {PROJECT_PHASES.map(p => (
+                        <option key={p.value} value={p.value}>{p.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Objectifs de phase */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Objectifs de cette phase <span className="text-neutral-400">(optionnel)</span>
+                    </label>
+                    <textarea
+                      value={editPhaseObjectives}
+                      onChange={(e) => setEditPhaseObjectives(e.target.value)}
+                      rows={3}
+                      maxLength={500}
+                      placeholder="Décrivez ce que vous souhaitez accomplir dans cette phase..."
+                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+
+                  {/* Besoins */}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="block text-sm font-medium text-neutral-700">Besoins du projet</label>
+                      <span className="text-xs text-neutral-500">{selectedNeedIds.size} sélectionné{selectedNeedIds.size > 1 ? 's' : ''}</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {Object.entries(needsByCategory).map(([categoryId, categoryNeeds]) => {
+                        const categoryInfo = NEED_CATEGORIES[categoryId as NeedCategoryId];
+                        const isExpanded = expandedNeedCategories[categoryId];
+                        const selectedCount = categoryNeeds.filter((n: any) => selectedNeedIds.has(n.id)).length;
+                        if (!categoryInfo) return null;
+
+                        return (
+                          <div key={categoryId} className="border border-neutral-200 rounded-lg overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => setExpandedNeedCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }))}
+                              className="w-full px-4 py-2.5 bg-neutral-50 hover:bg-neutral-100 transition-colors flex items-center justify-between text-left"
+                            >
+                              <div className="flex items-center gap-2 flex-1">
+                                <span>{categoryInfo.icon}</span>
+                                <span className="font-medium text-sm text-neutral-900">{categoryInfo.label}</span>
+                                {selectedCount > 0 && (
+                                  <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">{selectedCount}</span>
+                                )}
+                              </div>
+                              <svg className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+
+                            {isExpanded && (
+                              <div className="p-3 space-y-1 bg-white">
+                                {categoryNeeds.map((need: any) => {
+                                  const isSelected = selectedNeedIds.has(need.id);
+                                  return (
+                                    <label key={need.id} className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all ${
+                                      isSelected ? 'bg-primary-50 border border-primary-200' : 'hover:bg-neutral-50 border border-transparent'
+                                    }`}>
+                                      <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={() => setSelectedNeedIds(prev => {
+                                          const next = new Set(prev);
+                                          next.has(need.id) ? next.delete(need.id) : next.add(need.id);
+                                          return next;
+                                        })}
+                                        className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                      />
+                                      <span className="text-sm text-neutral-900">{need.name}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <Button variant="ghost" onClick={() => setIsEditing(false)} disabled={isSavingProject} className="flex-1">
+                      Annuler
+                    </Button>
+                    <Button variant="default" onClick={handleSaveProject} disabled={isSavingProject} className="flex-1">
+                      {isSavingProject ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
