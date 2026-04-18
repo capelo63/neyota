@@ -35,4 +35,6 @@ CREATE TRIGGER update_stats_on_application
   FOR EACH ROW
   EXECUTE FUNCTION update_stats_on_application_change();
 
-RAISE NOTICE '✓ Migration 038 : applicant_id corrigé en talent_id';
+DO $$ BEGIN
+  RAISE NOTICE '✓ Migration 038 : applicant_id corrigé en talent_id';
+END $$;
