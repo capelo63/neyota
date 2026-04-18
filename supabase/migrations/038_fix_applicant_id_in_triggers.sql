@@ -5,33 +5,29 @@
 -- Les fonctions de la migration 004 utilisent l'ancien nom de champ.
 
 -- Corriger update_talent_impact_stats
-CREATE OR REPLACE FUNCTION update_talent_impact_stats(talent_id UUID)
+CREATE OR REPLACE FUNCTION update_talent_impact_stats(p_talent_id UUID)
 RETURNS VOID AS $$
 DECLARE
   accepted_count INTEGER;
   local_projects_count INTEGER;
   total_score INTEGER;
 BEGIN
-  SELECT COUNT(*)
-  INTO accepted_count
-  FROM applications
-  WHERE talent_id = talent_id AND status = 'accepted';
+  SELECT COUNT(*) INTO accepted_count
+  FROM applications WHERE talent_id = p_talent_id AND status = 'accepted';
 
-  SELECT COUNT(DISTINCT a.project_id)
-  INTO local_projects_count
+  SELECT COUNT(DISTINCT a.project_id) INTO local_projects_count
   FROM applications a
   JOIN projects p ON a.project_id = p.id
-  JOIN profiles talent ON a.talent_id = talent.id
-  WHERE a.talent_id = talent_id
-    AND a.status = 'accepted'
-    AND (p.location IS NULL OR talent.location IS NULL OR
-         ST_Distance(p.location::geography, talent.location::geography) / 1000 <= 50);
+  JOIN profiles t ON a.talent_id = t.id
+  WHERE a.talent_id = p_talent_id AND a.status = 'accepted'
+    AND (p.location IS NULL OR t.location IS NULL OR
+         ST_Distance(p.location::geography, t.location::geography) / 1000 <= 50);
 
   total_score := (accepted_count * 10) + (local_projects_count * 5);
 
   UPDATE user_impact_stats
   SET projects_helped = accepted_count, impact_score = total_score, updated_at = NOW()
-  WHERE user_id = talent_id;
+  WHERE user_id = p_talent_id;
 END;
 $$ LANGUAGE plpgsql;
 
