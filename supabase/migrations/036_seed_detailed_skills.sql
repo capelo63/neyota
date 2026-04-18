@@ -1,9 +1,21 @@
 -- ============================================
 -- MIGRATION 036: Skills détaillées par catégorie
 -- ============================================
--- Ajoute des compétences prédéfinies détaillées pour chaque catégorie
--- Correspond au système de 44 besoins des porteurs de projets
--- Total: environ 60-70 skills prédéfinies
+-- Remplace les 7 skills génériques de la migration 033 par des
+-- compétences détaillées. Correspond aux 44 besoins des porteurs.
+-- Total: environ 70 skills prédéfinies
+
+-- Supprimer les 7 skills génériques insérées par la migration 033
+-- (CASCADE supprime aussi les entrées user_skills et need_skill_mapping associées)
+DELETE FROM skills WHERE is_custom = FALSE AND name IN (
+  'Stratégie / Business / Impact',
+  'Marketing / Communication',
+  'Produit / Tech',
+  'Opérations / Gestion de projet',
+  'Finance / Juridique / RH',
+  'Commercial / Relation client',
+  'Autre expertise (à préciser)'
+);
 
 -- ============================================
 -- STRATEGY / BUSINESS / IMPACT (🎯)
