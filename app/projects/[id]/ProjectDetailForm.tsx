@@ -49,6 +49,13 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
+  const [ownerContactEmail, setOwnerContactEmail] = useState<string | null>(null);
+  const [acceptedCollaborators, setAcceptedCollaborators] = useState<Array<{
+    application_id: string;
+    talent_id: string;
+    talent_name: string;
+    talent_email: string;
+  }>>([]);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -128,6 +135,17 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         }
         setHasApplied(!!applicationResult.data);
         setApplicationStatus(applicationResult.data?.status ?? null);
+
+        const isOwnerLocal = currentUser.id === projectData.owner_id;
+        const isTalentLocal = profileResult.data?.role === 'talent';
+
+        if (isOwnerLocal) {
+          const { data: collaborators } = await supabase.rpc('get_accepted_talent_emails', { p_project_id: projectId });
+          setAcceptedCollaborators(collaborators || []);
+        } else if (isTalentLocal && applicationResult.data?.status === 'accepted') {
+          const { data: email } = await supabase.rpc('get_owner_email_if_accepted', { p_project_id: projectId });
+          setOwnerContactEmail(email ?? null);
+        }
       }
 
       setIsLoading(false);
@@ -489,15 +507,27 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
           {/* Apply CTA Bottom — candidature acceptée */}
           {user && !isOwner && isTalent && applicationStatus === 'accepted' && (
-            <div className="mt-8 bg-success-50 border border-success-200 rounded-xl p-6 flex items-center gap-4">
-              <span className="text-3xl shrink-0">✅</span>
-              <div>
-                <h3 className="text-xl font-semibold text-neutral-900 mb-1">
-                  Votre candidature a été acceptée !
-                </h3>
-                <p className="text-neutral-700">
-                  Le porteur de projet vous a sélectionné. Prenez contact avec lui pour la suite.
-                </p>
+            <div className="mt-8 bg-success-50 border border-success-200 rounded-xl p-6">
+              <div className="flex items-start gap-4">
+                <span className="text-3xl shrink-0">✅</span>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-neutral-900 mb-1">
+                    Votre candidature a été acceptée !
+                  </h3>
+                  <p className="text-neutral-700 mb-3">
+                    Le porteur de projet vous a sélectionné. Prenez contact avec lui pour la suite.
+                  </p>
+                  {ownerContactEmail && (
+                    <div className="inline-flex items-center gap-2 bg-white border border-success-200 rounded-lg px-4 py-2">
+                      <svg className="w-4 h-4 text-success-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      <a href={`mailto:${ownerContactEmail}`} className="text-success-700 font-medium hover:underline">
+                        {ownerContactEmail}
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -587,6 +617,38 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                   </div>
                 </div>
               </div>
+
+              {/* Collaborateurs acceptés — emails révélés */}
+              {acceptedCollaborators.length > 0 && (
+                <div className="bg-success-50 border border-success-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                    ✅ Collaborateur{acceptedCollaborators.length > 1 ? 's' : ''} accepté{acceptedCollaborators.length > 1 ? 's' : ''} ({acceptedCollaborators.length})
+                  </h3>
+                  <div className="space-y-3">
+                    {acceptedCollaborators.map((collab) => (
+                      <div key={collab.application_id} className="flex items-center justify-between bg-white border border-success-200 rounded-lg px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 bg-success-100 rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-success-700 font-semibold text-sm">
+                              {collab.talent_name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+                            </span>
+                          </div>
+                          <span className="font-medium text-neutral-900">{collab.talent_name}</span>
+                        </div>
+                        <a
+                          href={`mailto:${collab.talent_email}`}
+                          className="flex items-center gap-2 text-success-700 hover:underline text-sm"
+                        >
+                          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          {collab.talent_email}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {isEditing && (
                 <div className="bg-white border border-primary-200 rounded-xl p-6 space-y-6">
