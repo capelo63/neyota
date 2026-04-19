@@ -56,7 +56,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
         .from('applications')
         .select(`
           *,
-          applicant:profiles!talent_id(
+          talent:profiles!applications_talent_id_fkey(
             id, first_name, last_name, email, city, bio,
             skills:user_skills(
               skill:skills(id, name)
@@ -69,9 +69,9 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
       if (applicationsData) {
         const transformedApplications = applicationsData.map((app: any) => ({
           ...app,
-          applicant: {
-            ...app.applicant,
-            skills: app.applicant.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
+          talent: {
+            ...app.talent,
+            skills: app.talent.skills.map((s: any) => s.skill).filter((s: any) => s !== null),
           },
         }));
         setApplications(transformedApplications);
@@ -198,32 +198,32 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
                         <div className="flex items-start gap-6">
                           <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-white font-bold text-2xl">
-                              {application.applicant.first_name[0]}{application.applicant.last_name[0]}
+                              {application.talent.first_name[0]}{application.talent.last_name[0]}
                             </span>
                           </div>
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-3">
                               <div>
                                 <h3 className="text-xl font-semibold text-neutral-900">
-                                  {application.applicant.first_name} {application.applicant.last_name}
+                                  {application.talent.first_name} {application.talent.last_name}
                                 </h3>
                                 <p className="text-sm text-neutral-600">
-                                  {application.applicant.city} • Candidature du {new Date(application.created_at).toLocaleDateString('fr-FR')}
+                                  {application.talent.city} • Candidature du {new Date(application.created_at).toLocaleDateString('fr-FR')}
                                 </p>
                               </div>
                               <Badge variant="warning">En attente</Badge>
                             </div>
 
-                            {application.applicant.skills.length > 0 && (
+                            {application.talent.skills.length > 0 && (
                               <div className="flex flex-wrap gap-2 mb-4">
-                                {application.applicant.skills.slice(0, 5).map((skill: any) => (
+                                {application.talent.skills.slice(0, 5).map((skill: any) => (
                                   <Badge key={skill.id} variant="secondary">
                                     {skill.name}
                                   </Badge>
                                 ))}
-                                {application.applicant.skills.length > 5 && (
+                                {application.talent.skills.length > 5 && (
                                   <Badge variant="secondary">
-                                    +{application.applicant.skills.length - 5}
+                                    +{application.talent.skills.length - 5}
                                   </Badge>
                                 )}
                               </div>
@@ -270,15 +270,15 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-lg">
-                              {application.applicant.first_name[0]}{application.applicant.last_name[0]}
+                              {application.talent.first_name[0]}{application.talent.last_name[0]}
                             </span>
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold text-neutral-900">
-                              {application.applicant.first_name} {application.applicant.last_name}
+                              {application.talent.first_name} {application.talent.last_name}
                             </h3>
                             <p className="text-sm text-neutral-600">
-                              {application.applicant.city}
+                              {application.talent.city}
                             </p>
                           </div>
                           <Badge variant="success">Acceptée</Badge>
@@ -301,15 +301,15 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-neutral-300 rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-lg">
-                              {application.applicant.first_name[0]}{application.applicant.last_name[0]}
+                              {application.talent.first_name[0]}{application.talent.last_name[0]}
                             </span>
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold text-neutral-900">
-                              {application.applicant.first_name} {application.applicant.last_name}
+                              {application.talent.first_name} {application.talent.last_name}
                             </h3>
                             <p className="text-sm text-neutral-600">
-                              {application.applicant.city}
+                              {application.talent.city}
                             </p>
                           </div>
                           <Badge variant="secondary">Refusée</Badge>
