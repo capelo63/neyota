@@ -64,3 +64,7 @@
 ## Source unique de vérité
 - Catégories de compétences : toujours importer depuis `lib/constants/needs-skills.ts`
   → Ne jamais redéfinir `SKILL_CATEGORIES` ou les labels localement dans un composant
+
+  ## Terminologie — NE JAMAIS utiliser "entrepreneur"
+- Dans l'UI, les emails et les templates : toujours "porteur d'initiative"
+- En base de données : le rôle reste `entrepreneur` (ENUM, ne pas changer)
