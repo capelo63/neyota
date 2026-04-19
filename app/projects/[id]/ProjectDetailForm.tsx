@@ -48,6 +48,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   const [project, setProject] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -116,7 +117,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             .single(),
           supabase
             .from('applications')
-            .select('id')
+            .select('id, status')
             .eq('project_id', projectId)
             .eq('talent_id', currentUser.id)
             .maybeSingle(),
@@ -126,6 +127,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
           setProfile(profileResult.data);
         }
         setHasApplied(!!applicationResult.data);
+        setApplicationStatus(applicationResult.data?.status ?? null);
       }
 
       setIsLoading(false);
@@ -346,14 +348,20 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               {!isOwner && (
                 user ? (
                   isTalent && (
-                    <Button
-                      variant="default"
-                      size="lg"
-                      onClick={handleApply}
-                      disabled={hasApplied}
-                    >
-                      {hasApplied ? '✓ Déjà candidaté' : 'Postuler à ce projet'}
-                    </Button>
+                    applicationStatus === 'accepted' ? (
+                      <div className="px-4 py-2.5 bg-success-50 border border-success-200 rounded-lg text-success-700 font-semibold text-sm text-center">
+                        Votre candidature a été acceptée ✅
+                      </div>
+                    ) : (
+                      <Button
+                        variant="default"
+                        size="lg"
+                        onClick={handleApply}
+                        disabled={hasApplied}
+                      >
+                        {hasApplied ? '✓ Déjà candidaté' : 'Postuler à ce projet'}
+                      </Button>
+                    )
                   )
                 ) : (
                   <Link href={`/login?redirect=/projects/${projectId}`}>
@@ -479,8 +487,23 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             </div>
           </div>
 
-          {/* Apply CTA Bottom — authenticated talent only */}
-          {user && !isOwner && isTalent && (
+          {/* Apply CTA Bottom — candidature acceptée */}
+          {user && !isOwner && isTalent && applicationStatus === 'accepted' && (
+            <div className="mt-8 bg-success-50 border border-success-200 rounded-xl p-6 flex items-center gap-4">
+              <span className="text-3xl shrink-0">✅</span>
+              <div>
+                <h3 className="text-xl font-semibold text-neutral-900 mb-1">
+                  Votre candidature a été acceptée !
+                </h3>
+                <p className="text-neutral-700">
+                  Le porteur de projet vous a sélectionné. Prenez contact avec lui pour la suite.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Apply CTA Bottom — non candidaté ou en attente */}
+          {user && !isOwner && isTalent && applicationStatus !== 'accepted' && (
             <div className="mt-8 bg-primary-50 border border-primary-200 rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <div>
