@@ -57,7 +57,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
         .select(`
           *,
           talent:profiles!applications_talent_id_fkey(
-            id, first_name, last_name, email, city, bio,
+            id, first_name, last_name, city, bio,
             skills:user_skills(
               skill:skills(id, name)
             )

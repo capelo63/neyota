@@ -217,7 +217,7 @@ export default function SignupForm() {
       } else {
         // Email confirmation required — show confirmation step
         console.log('[SIGNUP] Email confirmation required (normal new user flow)');
-        console.log('[SIGNUP] Setting userEmail to:', formData.email);
+        if (process.env.NODE_ENV === 'development') console.log('[SIGNUP] Setting userEmail');;
         console.log('[SIGNUP] Setting step to: email-confirmation');
         setUserEmail(formData.email);
         setStep('email-confirmation');
