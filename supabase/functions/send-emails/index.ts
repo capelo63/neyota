@@ -35,7 +35,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Consultez son profil et sa lettre de motivation pour décider de la suite à donner à cette candidature.</p>
               <div style="text-align: center;">
-                <a href="https://neyota.fr/projects/${params.project_id}/applications" class="button">
+                <a href="https://neyota.vercel.app/projects/${params.project_id}/applications" class="button">
                   Voir la candidature
                 </a>
               </div>
@@ -44,10 +44,10 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://neyota.vercel.app/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Votre profil a retenu l'attention de cet entrepreneur. C'est le moment de découvrir son projet et de décider si vous souhaitez le rejoindre !</p>
               <div style="text-align: center;">
-                <a href="https://neyota.fr/dashboard/invitations" class="button">
+                <a href="https://neyota.vercel.app/dashboard/invitations" class="button">
                   Voir l'invitation
                 </a>
               </div>
@@ -94,10 +94,10 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.fr/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://neyota.vercel.app/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Félicitations ! L'entrepreneur souhaite travailler avec vous. Vous pouvez maintenant échanger avec lui pour discuter des prochaines étapes.</p>
               <div style="text-align: center;">
-                <a href="https://neyota.fr/projects/${params.project_id}" class="button">
+                <a href="https://neyota.vercel.app/projects/${params.project_id}" class="button">
                   Accéder au projet
                 </a>
               </div>
@@ -144,10 +144,10 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.fr/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://neyota.vercel.app/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -190,16 +190,16 @@ const EMAIL_TEMPLATES = {
                 </ul>
               </div>
               <div style="text-align: center;">
-                <a href="https://neyota.fr/projects" class="button">
+                <a href="https://neyota.vercel.app/projects" class="button">
                   Découvrir d'autres projets
                 </a>
               </div>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://neyota.vercel.app/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -265,7 +265,7 @@ const EMAIL_TEMPLATES = {
               `}
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://neyota.fr/dashboard" class="button">
+                <a href="https://neyota.vercel.app/dashboard" class="button">
                   Accéder à mon tableau de bord
                 </a>
               </div>
@@ -277,7 +277,7 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - Ensemble, faisons vivre nos territoires</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -341,7 +341,7 @@ const EMAIL_TEMPLATES = {
               </div>
 
               <div style="text-align: center;">
-                <a href="https://neyota.fr/profile/${params.profile_id}/edit" class="button">
+                <a href="https://neyota.vercel.app/profile/${params.profile_id}/edit" class="button">
                   Compléter mon profil
                 </a>
               </div>
@@ -351,9 +351,9 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -420,7 +420,7 @@ const EMAIL_TEMPLATES = {
               ` : ''}
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://neyota.fr/dashboard" class="button">
+                <a href="https://neyota.vercel.app/dashboard" class="button">
                   Voir mon tableau de bord
                 </a>
               </div>
@@ -430,10 +430,10 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - Connecter les talents aux projets locaux</p>
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
               </p>
             </div>
           </div>
