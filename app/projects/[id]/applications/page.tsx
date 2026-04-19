@@ -1,4 +1,6 @@
-import { Suspense } from 'react';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import ApplicationsManager from './ApplicationsManager';
 
 export default async function ApplicationsPage({
@@ -7,19 +9,42 @@ export default async function ApplicationsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const cookieStore = await cookies();
 
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-neutral-600">Chargement des candidatures...</p>
-          </div>
-        </div>
-      }
-    >
-      <ApplicationsManager projectId={id} />
-    </Suspense>
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          );
+        },
+      },
+    }
   );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  const { data: project } = await supabase
+    .from('projects')
+    .select('owner_id')
+    .eq('id', id)
+    .single();
+
+  if (!project || project.owner_id !== user.id) {
+    redirect('/dashboard');
+  }
+
+  return <ApplicationsManager projectId={id} />;
 }
