@@ -52,7 +52,9 @@ SELECT
   is_profile_complete,
   avatar_url,
   created_at,
-  updated_at
+  updated_at,
+  ROUND(latitude::numeric, 2)  AS latitude,
+  ROUND(longitude::numeric, 2) AS longitude
 FROM profiles;
 
 -- Policy anon sur la vue
