@@ -83,7 +83,7 @@ const EMAIL_TEMPLATES = {
               <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
                 <h3 style="margin: 0 0 10px 0; color: #f59e0b;">${params.project_title}</h3>
               </div>
-              <p>Votre profil a retenu l'attention de cet entrepreneur. C'est le moment de découvrir son projet et de décider si vous souhaitez le rejoindre !</p>
+              <p>Votre profil a retenu l'attention de ce porteur d'initiative. C'est le moment de découvrir son projet et de décider si vous souhaitez le rejoindre !</p>
               <div style="text-align: center;">
                 <a href="https://neyota.vercel.app/dashboard/invitations" class="button">
                   Voir l'invitation
@@ -133,14 +133,14 @@ const EMAIL_TEMPLATES = {
               <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
                 <h3 style="margin: 0 0 10px 0; color: #10b981;">${params.project_title}</h3>
               </div>
-              <p>Félicitations ! L'entrepreneur souhaite travailler avec vous. Vous pouvez maintenant échanger avec lui pour discuter des prochaines étapes.</p>
+              <p>Félicitations ! Le porteur d'initiative souhaite travailler avec vous. Vous pouvez maintenant échanger avec lui pour discuter des prochaines étapes.</p>
               <div style="text-align: center;">
                 <a href="https://neyota.vercel.app/projects/${params.project_id}" class="button">
                   Accéder au projet
                 </a>
               </div>
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-                🚀 <strong>Prochaine étape :</strong> Prenez contact avec l'entrepreneur pour démarrer la collaboration !
+                🚀 <strong>Prochaine étape :</strong> Prenez contact avec le porteur d'initiative pour démarrer la collaboration !
               </p>
             </div>
             <div class="footer">
@@ -180,7 +180,7 @@ const EMAIL_TEMPLATES = {
             <div class="content">
               <p>Bonjour <strong>${params.talent_name}</strong>,</p>
               <p>Nous vous informons que votre candidature pour le projet "${params.project_title}" n'a pas été retenue cette fois-ci.</p>
-              <p>Cela ne reflète pas la qualité de votre profil. Chaque entrepreneur a des besoins spécifiques pour son projet.</p>
+              <p>Cela ne reflète pas la qualité de votre profil. Chaque porteur d'initiative a des besoins spécifiques pour son projet.</p>
               <div style="background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
                 <p style="margin: 0;"><strong>💡 Nos conseils :</strong></p>
                 <ul style="margin: 10px 0;">
@@ -320,7 +320,7 @@ const EMAIL_TEMPLATES = {
               <p>Un profil complet vous permet de :</p>
               <ul style="margin: 20px 0; padding-left: 20px;">
                 <li><strong>Recevoir plus de recommandations</strong> personnalisées</li>
-                <li><strong>Inspirer confiance</strong> aux entrepreneurs ou talents</li>
+                <li><strong>Inspirer confiance</strong> aux porteurs d'initiative ou aux talents</li>
                 <li><strong>Améliorer votre visibilité</strong> dans les résultats de recherche</li>
                 ${params.user_role === 'talent' ? '<li><strong>Recevoir des invitations</strong> directes sur des projets</li>' : '<li><strong>Attirer les meilleurs talents</strong> locaux</li>'}
               </ul>
@@ -406,7 +406,7 @@ const EMAIL_TEMPLATES = {
               ${params.invitations_count > 0 ? `
                 <div class="stat-box">
                   <h3 style="margin: 0 0 10px 0; color: #3b82f6;">🎯 ${params.invitations_count} ${params.invitations_count === 1 ? 'invitation' : 'invitations'} reçue${params.invitations_count === 1 ? '' : 's'}</h3>
-                  <p style="margin: 0; font-size: 14px; color: #6b7280;">Des entrepreneurs ont identifié votre profil</p>
+                  <p style="margin: 0; font-size: 14px; color: #6b7280;">Des porteurs d'initiative ont identifié votre profil</p>
                 </div>
               ` : ''}
 
