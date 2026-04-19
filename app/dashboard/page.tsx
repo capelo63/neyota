@@ -103,7 +103,7 @@ export default function DashboardPage() {
         profile.role === 'talent'
           ? supabase
               .from('user_skills')
-              .select(`proficiency_level, skill:skills (id, name, category)`)
+              .select(`skill:skills (id, name, category)`)
               .eq('user_id', user.id)
           : Promise.resolve({ data: [], error: null }),
 
@@ -159,7 +159,6 @@ export default function DashboardPage() {
       // Apply skills
       if (skillsResult.data) {
         const transformedSkills = (skillsResult.data as any[]).map((item: any) => ({
-          proficiency_level: item.proficiency_level,
           skill: Array.isArray(item.skill) ? item.skill[0] : item.skill,
         }));
         setSkills(transformedSkills);
@@ -354,32 +353,14 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {skills.map((userSkill: any, index: number) => {
-                  const levelEmoji = userSkill.proficiency_level === 'expert'
-                    ? '⭐'
-                    : userSkill.proficiency_level === 'beginner'
-                    ? '🌱'
-                    : '🔧';
-                  const levelColor = userSkill.proficiency_level === 'expert'
-                    ? 'bg-orange-50 border-orange-200 text-orange-800'
-                    : userSkill.proficiency_level === 'beginner'
-                    ? 'bg-blue-50 border-blue-200 text-blue-800'
-                    : 'bg-purple-50 border-purple-200 text-purple-800';
-                  return (
-                    <div
-                      key={index}
-                      className={`px-3 py-1.5 rounded-lg border flex items-center gap-1.5 ${levelColor}`}
-                    >
-                      <span className="text-sm">{levelEmoji}</span>
-                      <span className="font-medium text-sm">{userSkill.skill.name}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-4 text-xs text-neutral-500">
-                <span className="flex items-center gap-1">🌱 Débutant</span>
-                <span className="flex items-center gap-1">🔧 Intermédiaire</span>
-                <span className="flex items-center gap-1">⭐ Expert</span>
+                {skills.map((userSkill: any, index: number) => (
+                  <div
+                    key={index}
+                    className="px-3 py-1.5 rounded-lg border bg-primary-50 border-primary-200 text-primary-800 flex items-center gap-1.5"
+                  >
+                    <span className="font-medium text-sm">{userSkill.skill?.name}</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}
