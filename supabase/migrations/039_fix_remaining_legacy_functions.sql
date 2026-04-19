@@ -7,9 +7,18 @@
 --   - notify_matching_projects_of_new_talent (018) : project_skills_needed
 -- Bug résiduel dans 034 :
 --   - find_matching_projects       (034) : a.user_id → a.talent_id
+--
+-- Chaque fonction est précédée d'un DROP explicite pour éviter tout conflit
+-- avec les versions existantes en base.
+-- Pour la fonction trigger, les triggers dépendants sont supprimés d'abord
+-- puis recréés après.
 -- ============================================
 
--- 1. Corriger find_matching_projects (bug résiduel de 034 : a.user_id → a.talent_id)
+-- ============================================
+-- 1. find_matching_projects (bug résiduel 034 : a.user_id → a.talent_id)
+-- ============================================
+DROP FUNCTION IF EXISTS find_matching_projects(UUID, INTEGER);
+
 CREATE OR REPLACE FUNCTION find_matching_projects(
   talent_user_id UUID,
   max_results INTEGER DEFAULT 10
@@ -105,9 +114,13 @@ BEGIN
 END;
 $$;
 
--- 2. Corriger find_matching_talents
+-- ============================================
+-- 2. find_matching_talents
 --    project_skills_needed → project_needs + need_skill_mapping
 --    applicant_id          → talent_id
+-- ============================================
+DROP FUNCTION IF EXISTS find_matching_talents(UUID, INTEGER);
+
 CREATE OR REPLACE FUNCTION find_matching_talents(
   project_uuid UUID,
   max_results INTEGER DEFAULT 20
@@ -202,8 +215,12 @@ BEGIN
 END;
 $$;
 
--- 3. Corriger calculate_match_score
+-- ============================================
+-- 3. calculate_match_score
 --    project_skills_needed → project_needs + need_skill_mapping
+-- ============================================
+DROP FUNCTION IF EXISTS calculate_match_score(UUID, UUID);
+
 CREATE OR REPLACE FUNCTION calculate_match_score(
   p_talent_id UUID,
   p_project_id UUID
@@ -230,7 +247,7 @@ BEGIN
   FROM profiles
   WHERE id = p_talent_id;
 
-  -- 1. SKILLS MATCHING (20 points par compétence matchée)
+  -- 1. SKILLS MATCHING (20 points par compétence matchée via need_skill_mapping)
   SELECT COUNT(DISTINCT us.skill_id) INTO matching_skills_count
   FROM user_skills us
   INNER JOIN need_skill_mapping nsm ON nsm.skill_id = us.skill_id
@@ -276,8 +293,18 @@ BEGIN
 END;
 $$;
 
--- 4. Corriger notify_matching_projects_of_new_talent
+-- ============================================
+-- 4. notify_matching_projects_of_new_talent (fonction trigger)
 --    project_skills_needed → project_needs + need_skill_mapping
+--
+--    Les triggers doivent être supprimés avant la fonction, car PostgreSQL
+--    interdit de supprimer une fonction référencée par un trigger actif.
+--    Ils sont recréés après.
+-- ============================================
+DROP TRIGGER IF EXISTS trigger_notify_matching_projects_on_insert ON profiles;
+DROP TRIGGER IF EXISTS trigger_notify_matching_projects_on_update ON profiles;
+DROP FUNCTION IF EXISTS notify_matching_projects_of_new_talent();
+
 CREATE OR REPLACE FUNCTION notify_matching_projects_of_new_talent()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -343,11 +370,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Recréer les triggers supprimés ci-dessus
+CREATE TRIGGER trigger_notify_matching_projects_on_insert
+  AFTER INSERT ON profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION notify_matching_projects_of_new_talent();
+
+CREATE TRIGGER trigger_notify_matching_projects_on_update
+  AFTER UPDATE ON profiles
+  FOR EACH ROW
+  WHEN (OLD.location IS NULL AND NEW.location IS NOT NULL)
+  EXECUTE FUNCTION notify_matching_projects_of_new_talent();
+
+-- ============================================
 -- Grants
+-- ============================================
 GRANT EXECUTE ON FUNCTION find_matching_projects TO authenticated;
 GRANT EXECUTE ON FUNCTION find_matching_talents TO authenticated;
 GRANT EXECUTE ON FUNCTION calculate_match_score TO authenticated;
 
 DO $$ BEGIN
-  RAISE NOTICE '✓ Migration 039 : find_matching_talents, calculate_match_score, notify_matching_projects_of_new_talent corrigés (project_skills_needed → project_needs + need_skill_mapping, applicant_id → talent_id). Bug a.user_id dans find_matching_projects (034) corrigé.';
+  RAISE NOTICE '✓ Migration 039 appliquée : DROP + recréation de find_matching_projects, find_matching_talents, calculate_match_score, notify_matching_projects_of_new_talent (triggers recréés).';
 END $$;
