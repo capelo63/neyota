@@ -35,7 +35,7 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **038** (fix applicant_id → talent_id dans triggers)
+- Dernière migration appliquée : **044** (ajout des 5 besoins manquants + mappings)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma

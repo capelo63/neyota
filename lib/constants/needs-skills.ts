@@ -101,6 +101,7 @@ export const NEEDS_BY_CATEGORY: Record<NeedCategoryId, string[]> = {
     'Créer une identité visuelle',
     'Concevoir des supports de communication',
     'Renforcer mon image de marque',
+    'Définir mon positionnement de marque',
   ],
   digital_tools: [
     'Créer un site web',
@@ -118,6 +119,7 @@ export const NEEDS_BY_CATEGORY: Record<NeedCategoryId, string[]> = {
     'Choisir un statut juridique',
     'Gérer les aspects administratifs',
     'Protéger mon projet (marque, propriété intellectuelle)',
+    'Mettre mon activité en conformité',
   ],
   organization: [
     'Organiser mon fonctionnement',
@@ -129,16 +131,19 @@ export const NEEDS_BY_CATEGORY: Record<NeedCategoryId, string[]> = {
     'Faire grandir mon activité',
     'Structurer ma croissance',
     'Changer d\'échelle',
+    'Diversifier mes sources de revenus',
   ],
   impact: [
     'Clarifier mon impact social / environnemental',
     'M\'ancrer sur mon territoire',
     'Développer des partenariats',
+    'Communiquer sur mon impact',
   ],
   mentoring: [
     'Être conseillé / mentoré',
     'Prendre du recul',
     'Monter en compétences',
+    'Renforcer ma posture de dirigeant',
   ],
 };
 
