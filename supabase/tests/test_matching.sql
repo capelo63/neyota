@@ -16,15 +16,15 @@ SET LOCAL session_replication_role = replica;
 -- 1. Données fictives
 -- ============================================
 
--- UUIDs fixes pour faciliter la lecture des résultats
 DO $$
 BEGIN
 
   INSERT INTO profiles (id, role, first_name, last_name, postal_code, city, max_distance_km)
   VALUES
-    ('ffffffff-0000-0000-0000-000000000001', 'entrepreneur', 'Porteur', 'Test',    '75001', 'Paris', 50),
-    ('ffffffff-0000-0000-0000-000000000002', 'talent',       'Talent',  'Alpha',   '75002', 'Paris', 100),
-    ('ffffffff-0000-0000-0000-000000000003', 'talent',       'Talent',  'Beta',    '75003', 'Paris', 100);
+    ('ffffffff-0000-0000-0000-000000000001', 'entrepreneur', 'Porteur', 'Test',  '75001', 'Paris', 50),
+    ('ffffffff-0000-0000-0000-000000000002', 'talent',       'Talent',  'Alpha', '75002', 'Paris', 100),
+    ('ffffffff-0000-0000-0000-000000000003', 'talent',       'Talent',  'Beta',  '75003', 'Paris', 100)
+  ON CONFLICT (id) DO NOTHING;
 
   INSERT INTO projects (id, owner_id, title, short_pitch, status, current_phase, city, postal_code, is_remote_possible)
   VALUES (
@@ -33,20 +33,24 @@ BEGIN
     '[TEST] Projet Matching',
     'Projet fictif pour valider les scores de matching',
     'active', 'ideation', 'Paris', '75001', true
-  );
+  )
+  ON CONFLICT (id) DO NOTHING;
 
   -- 4 besoins variés : 2 Produit/Tech, 1 Marketing, 1 Finance
   INSERT INTO project_needs (project_id, need_id, priority)
   SELECT 'ffffffff-0000-0000-0000-000000000010', n.id, 'essential'
   FROM needs n
   WHERE n.name IN (
-    'Créer un site web',                         -- digital_tools
-    'Créer une première version (produit/service)', -- launching
-    'Définir ma cible',                          -- finding_clients
-    'Construire un budget'                        -- finance
-  );
+    'Créer un site web',
+    'Créer une première version (produit/service)',
+    'Définir ma cible',
+    'Construire un budget'
+  )
+  ON CONFLICT (project_id, need_id) DO NOTHING;
 
   -- Talent A : 4 compétences Produit/Tech
+  -- Couvre "Créer un site web" (dev web=10, UX/UI=8, prototypage=7)
+  --    et "Créer une première version" (product mgmt=10, prototypage=10, UX/UI=9)
   INSERT INTO user_skills (user_id, skill_id)
   SELECT 'ffffffff-0000-0000-0000-000000000002', s.id
   FROM skills s
@@ -55,9 +59,11 @@ BEGIN
     'UX/UI Design',
     'Product management',
     'Prototypage & wireframing'
-  );
+  )
+  ON CONFLICT (user_id, skill_id) DO NOTHING;
 
   -- Talent B : 4 compétences Marketing/Communication
+  -- Couvre "Définir ma cible" (étude de cible=10, stratégie mktg=9)
   INSERT INTO user_skills (user_id, skill_id)
   SELECT 'ffffffff-0000-0000-0000-000000000003', s.id
   FROM skills s
@@ -66,83 +72,33 @@ BEGIN
     'SEO / Référencement naturel',
     'Community management',
     'Étude de cible & persona'
-  );
+  )
+  ON CONFLICT (user_id, skill_id) DO NOTHING;
 
 END $$;
 
 -- ============================================
--- 2. Vérifications intermédiaires
+-- 2. Couverture par besoin × talent
 -- ============================================
 
--- Besoins du projet fictif et nombre de compétences mappées
 SELECT
-  n.category                            AS catégorie,
-  n.name                                AS besoin,
-  COUNT(nsm.id)                         AS nb_compétences_mappées
+  n.name                                                     AS besoin,
+  n.category,
+  CASE WHEN COUNT(us_a.skill_id) > 0 THEN '✓' ELSE '✗' END AS talent_a,
+  CASE WHEN COUNT(us_b.skill_id) > 0 THEN '✓' ELSE '✗' END AS talent_b
 FROM project_needs pn
-JOIN needs n             ON n.id  = pn.need_id
+JOIN needs n ON n.id = pn.need_id
 JOIN need_skill_mapping nsm ON nsm.need_id = n.id
+LEFT JOIN user_skills us_a ON us_a.skill_id = nsm.skill_id
+                          AND us_a.user_id   = 'ffffffff-0000-0000-0000-000000000002'
+LEFT JOIN user_skills us_b ON us_b.skill_id = nsm.skill_id
+                          AND us_b.user_id   = 'ffffffff-0000-0000-0000-000000000003'
 WHERE pn.project_id = 'ffffffff-0000-0000-0000-000000000010'
-GROUP BY n.category, n.name
+GROUP BY n.name, n.category
 ORDER BY n.category;
 
--- Couverture par besoin et par talent
-SELECT
-  n.name                                                    AS besoin,
-  'Talent A (Produit/Tech)'                                 AS talent,
-  MAX(nsm.relevance_score)                                  AS meilleur_score_mapping,
-  CASE WHEN COUNT(us.skill_id) > 0 THEN '✓ couvert'
-       ELSE '✗ non couvert' END                            AS couverture
-FROM project_needs pn
-JOIN needs n             ON n.id       = pn.need_id
-JOIN need_skill_mapping nsm ON nsm.need_id = n.id
-LEFT JOIN user_skills us ON us.skill_id = nsm.skill_id
-                        AND us.user_id  = 'ffffffff-0000-0000-0000-000000000002'
-WHERE pn.project_id = 'ffffffff-0000-0000-0000-000000000010'
-GROUP BY n.name
-
-UNION ALL
-
-SELECT
-  n.name                                                    AS besoin,
-  'Talent B (Marketing)'                                    AS talent,
-  MAX(nsm.relevance_score)                                  AS meilleur_score_mapping,
-  CASE WHEN COUNT(us.skill_id) > 0 THEN '✓ couvert'
-       ELSE '✗ non couvert' END                            AS couverture
-FROM project_needs pn
-JOIN needs n             ON n.id       = pn.need_id
-JOIN need_skill_mapping nsm ON nsm.need_id = n.id
-LEFT JOIN user_skills us ON us.skill_id = nsm.skill_id
-                        AND us.user_id  = 'ffffffff-0000-0000-0000-000000000003'
-WHERE pn.project_id = 'ffffffff-0000-0000-0000-000000000010'
-GROUP BY n.name
-
-ORDER BY besoin, talent;
-
 -- ============================================
--- 3. Appel de find_matching_projects()
--- ============================================
-
--- Talent A
-SELECT
-  'Talent A — Produit/Tech'                AS talent,
-  project_title,
-  skills_match_count                       AS besoins_couverts,
-  4                                        AS total_besoins,
-  ROUND(relevance_score::numeric * 100, 1) AS score_pct
-FROM find_matching_projects('ffffffff-0000-0000-0000-000000000002'::uuid, 5);
-
--- Talent B
-SELECT
-  'Talent B — Marketing'                   AS talent,
-  project_title,
-  skills_match_count                       AS besoins_couverts,
-  4                                        AS total_besoins,
-  ROUND(relevance_score::numeric * 100, 1) AS score_pct
-FROM find_matching_projects('ffffffff-0000-0000-0000-000000000003'::uuid, 5);
-
--- ============================================
--- 4. Comparaison finale
+-- 3. Résultats find_matching_projects() — projet fictif uniquement
 -- ============================================
 
 SELECT
@@ -153,20 +109,22 @@ SELECT
   CASE WHEN score_pct = MAX(score_pct) OVER () THEN '← meilleur match' ELSE '' END AS résultat
 FROM (
   SELECT
-    'Talent A — Produit/Tech'                AS talent,
-    skills_match_count                       AS besoins_couverts,
-    4                                        AS total_besoins,
-    ROUND(relevance_score::numeric * 100, 1) AS score_pct
-  FROM find_matching_projects('ffffffff-0000-0000-0000-000000000002'::uuid, 5)
+    'Talent A — Produit/Tech'                  AS talent,
+    skills_match_count                         AS besoins_couverts,
+    4                                          AS total_besoins,
+    ROUND(relevance_score * 100, 1)            AS score_pct
+  FROM find_matching_projects('ffffffff-0000-0000-0000-000000000002'::uuid, 50)
+  WHERE project_id = 'ffffffff-0000-0000-0000-000000000010'
 
   UNION ALL
 
   SELECT
-    'Talent B — Marketing'                   AS talent,
-    skills_match_count                       AS besoins_couverts,
-    4                                        AS total_besoins,
-    ROUND(relevance_score::numeric * 100, 1) AS score_pct
-  FROM find_matching_projects('ffffffff-0000-0000-0000-000000000003'::uuid, 5)
+    'Talent B — Marketing'                     AS talent,
+    skills_match_count                         AS besoins_couverts,
+    4                                          AS total_besoins,
+    ROUND(relevance_score * 100, 1)            AS score_pct
+  FROM find_matching_projects('ffffffff-0000-0000-0000-000000000003'::uuid, 50)
+  WHERE project_id = 'ffffffff-0000-0000-0000-000000000010'
 ) sub
 ORDER BY score_pct DESC;
 
