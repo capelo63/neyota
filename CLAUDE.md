@@ -28,6 +28,7 @@
 - Composants client avec hooks → `'use client'` obligatoire
 - `useSearchParams()` → toujours dans `<Suspense>`
 - RLS pages publiques : `GRANT SELECT ON table TO anon` EN PLUS du `CREATE POLICY ... TO public`
+- **NE PAS** accorder `GRANT SELECT ON profiles TO anon` ni `GRANT SELECT ON user_skills TO anon` (révoqués en 047 — utiliser les vues `profiles_public` / `projects_public`)
 
 ## Diagnostic erreurs
 - **Quand une page server-side retourne 0 résultats** → vérifier les logs Vercel EN PREMIER
@@ -35,7 +36,7 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **044** (ajout des 5 besoins manquants + mappings)
+- Dernière migration appliquée : **047** (corrections IDOR : REVOKE anon sur profiles/user_skills, auth guard sur find_matching_projects)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
