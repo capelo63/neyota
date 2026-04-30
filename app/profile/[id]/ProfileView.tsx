@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
+import Navigation from '@/components/Navigation';
 import ReportButton from '@/components/ReportButton';
 import InviteTalentModal from '@/components/InviteTalentModal';
 
@@ -283,32 +284,7 @@ export default function ProfileView({ userId }: { userId: string }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header — always visible, adapts to auth state */}
-      <header className="bg-white border-b border-neutral-200 py-4 px-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">T</span>
-            </div>
-            <span className="text-2xl font-bold text-neutral-900">Teriis</span>
-          </Link>
-          {!currentUserId && (
-            <div className="flex items-center gap-3">
-              <Link href={`/login?redirect=/profile/${userId}`}>
-                <Button variant="ghost" size="sm">Se connecter</Button>
-              </Link>
-              <Link href={`/signup?redirect=/profile/${userId}`}>
-                <Button variant="default" size="sm">Créer un compte</Button>
-              </Link>
-            </div>
-          )}
-          {currentUserId && (
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">← Tableau de bord</Button>
-            </Link>
-          )}
-        </div>
-      </header>
+      <Navigation />
 
       {/* Banner for unauthenticated visitors viewing a talent profile */}
       {!currentUserId && profile.role === 'talent' && (
