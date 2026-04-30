@@ -5,20 +5,19 @@
 ## Projet
 - **Nom** : Teriis (TERritoires, Initiatives et Innovation sociale)
 - **Repo** : github.com/capelo63/neyota
-- **Branche active** : claude/analyze-website-proposal-AqIw9
-- **Prod** : https://neyota.vercel.app (déployé depuis la branche active)
+- **Prod** : https://neyota.vercel.app (déployé depuis `main` via Vercel)
 - **Supabase** : https://rnzezkzsbdvaizpuukec.supabase.co
 
 ## Stack
 - Next.js 15+ App Router, TypeScript, Tailwind CSS
 - Supabase Pro (PostgreSQL + PostGIS)
-- Vercel (déploiement auto sur push branche active)
+- Vercel (déploiement auto sur merge vers `main`)
 - Brevo (emails via API + SMTP)
 
 ## Workflow Git
-- Toujours travailler sur `claude/analyze-website-proposal-AqIw9`
+- Travailler sur une branche feature (ex. `claude/create-claude-md-ZlC7d`)
 - Commiter et pusher après chaque groupe de modifications
-- Les PRs vers `main` déclenchent le déploiement Vercel
+- Merger vers `main` via PR pour déclencher le déploiement Vercel
 - Ne jamais pusher directement sur `main` (branche protégée)
 
 ## Conventions critiques — NE PAS SE TROMPER
