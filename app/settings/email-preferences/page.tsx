@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
+import Link from 'next/link';
 import { Button } from '@/components/ui';
 
 interface EmailPreferences {
@@ -100,6 +101,15 @@ export default function EmailPreferencesPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Nav paramètres */}
+        <nav className="flex gap-4 mb-8 text-sm">
+          <span className="text-primary-700 font-medium">Préférences emails</span>
+          <span className="text-neutral-300">|</span>
+          <Link href="/settings/partner-visibility" className="text-neutral-500 hover:text-neutral-800 transition-colors">
+            Visibilité partenaires
+          </Link>
+        </nav>
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-neutral-900 mb-2">
