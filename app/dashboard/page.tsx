@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
-import { NotificationBell } from '@/components/notifications/NotificationBell';
+import Navigation from '@/components/Navigation';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats as ImpactStatsComponent } from '@/components/badges/ImpactStats';
 
@@ -206,12 +206,6 @@ export default function DashboardPage() {
     loadUserData();
   }, [router, supabase]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
@@ -225,34 +219,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Header */}
-      <header className="bg-white border-b border-neutral-200 py-4 px-4">
-        <div className="container-custom">
-          <div className="flex items-center justify-between gap-2">
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900">Teriis</span>
-            </Link>
-            <div className="flex items-center gap-2">
-              <NotificationBell />
-              {profile?.id && (
-                <Link href={`/profile/${profile.id}`}>
-                  <Button variant="ghost" size="sm">
-                    <span className="hidden sm:inline">Mon profil</span>
-                    <span className="sm:hidden">Profil</span>
-                  </Button>
-                </Link>
-              )}
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
-                <span className="hidden sm:inline">Déconnexion</span>
-                <span className="sm:hidden">←</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       {/* Main Content */}
       <main className="container-custom py-12">
