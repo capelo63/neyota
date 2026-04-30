@@ -127,7 +127,7 @@ export default function PartnerVisibilityClient({ userId, role, initialSettings,
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 mb-8 text-sm text-neutral-500">
-          <Link href="/settings/email-preferences" className="hover:text-neutral-800 transition-colors">
+          <Link href="/settings" className="hover:text-neutral-800 transition-colors">
             Paramètres
           </Link>
           <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
