@@ -37,6 +37,7 @@
 
 ## Migrations Supabase
 - Dernière migration appliquée : **047** (corrections IDOR : REVOKE anon sur profiles/user_skills, auth guard sur find_matching_projects)
+- Migration suivante à appliquer : **048** (module B2B : enum partner_organization_type, tables partner_organizations / partner_visibility_settings / partner_profile_views, is_admin sur profiles)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
