@@ -92,6 +92,11 @@ export default function Navigation() {
                     Tableau de bord
                   </Button>
                 </Link>
+                <Link href="/settings">
+                  <Button variant="ghost" size="sm">
+                    Paramètres
+                  </Button>
+                </Link>
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   Déconnexion
                 </Button>
@@ -155,6 +160,11 @@ export default function Navigation() {
                     <Link href="/dashboard">
                       <Button variant="ghost" className="w-full">
                         Tableau de bord
+                      </Button>
+                    </Link>
+                    <Link href="/settings">
+                      <Button variant="ghost" className="w-full">
+                        Paramètres
                       </Button>
                     </Link>
                     <Button variant="ghost" className="w-full" onClick={handleSignOut}>
