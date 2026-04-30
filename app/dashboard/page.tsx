@@ -474,6 +474,22 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* Encart visibilité partenaires */}
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 mb-6 flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-neutral-800">Visibilité auprès des partenaires</p>
+              <p className="text-xs text-neutral-500 mt-0.5">
+                Choisissez si des partenaires institutionnels ou commerciaux peuvent consulter votre profil.
+              </p>
+            </div>
+            <Link
+              href="/settings/partner-visibility"
+              className="flex-shrink-0 text-xs text-primary-700 hover:text-primary-800 font-medium underline underline-offset-2"
+            >
+              Gérer
+            </Link>
+          </div>
+
           {/* Quick navigation */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">
