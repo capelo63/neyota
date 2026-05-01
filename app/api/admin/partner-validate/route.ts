@@ -62,6 +62,7 @@ export async function POST(request: NextRequest) {
         recipient_email: email,
         recipient_name: firstName || org.organization_name,
         email_type: 'partner_validated',
+        subject: 'Votre compte partenaire Teriis est validé',
         template_params: {
           first_name: firstName,
           organization_name: org.organization_name,
