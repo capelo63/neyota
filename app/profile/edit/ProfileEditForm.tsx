@@ -69,6 +69,11 @@ export default function ProfileEditForm() {
 
       if (profileError) throw profileError;
 
+      if (profileData.role === 'partner') {
+        router.push('/partenaires/dashboard');
+        return;
+      }
+
       setProfile(profileData);
       setBio(profileData.bio || '');
       setAvatarUrl(profileData.avatar_url || '');

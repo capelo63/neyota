@@ -79,6 +79,12 @@ export default function OnboardingForm() {
         return;
       }
 
+      // Partners must not go through onboarding
+      if (profileData.role === 'partner') {
+        router.push('/partenaires/en-attente');
+        return;
+      }
+
       setProfile(profileData);
 
       // Load skills if user is a talent
