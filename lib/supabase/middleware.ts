@@ -55,7 +55,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith('/auth')
   ) ||
   request.nextUrl.pathname.startsWith('/projects/') ||
-  request.nextUrl.pathname.startsWith('/profile/');
+  request.nextUrl.pathname.startsWith('/profile/') ||
+  request.nextUrl.pathname.startsWith('/partenaires');
 
   // Redirect to login if user is not authenticated and trying to access protected route
   if (!user && !isPublicRoute) {
