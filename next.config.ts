@@ -37,7 +37,7 @@ const securityHeaders = [
       `default-src 'self'`,
       `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
       `style-src 'self' 'unsafe-inline'`,
-      `img-src 'self' data: blob: https://${SUPABASE_HOST}`,
+      `img-src 'self' data: blob: https://${SUPABASE_HOST} https://*.tile.openstreetmap.org`,
       `font-src 'self' data:`,
       `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api-adresse.data.gouv.fr`,
       `media-src 'none'`,
