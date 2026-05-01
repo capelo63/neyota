@@ -64,12 +64,18 @@ function LoginForm() {
         return;
       }
 
-      // Check if profile is complete
+      // Check profile role and completeness
       const { data: profile } = await supabase
         .from('profiles')
         .select('role, postal_code, city, first_name, last_name')
         .eq('id', data.user.id)
         .single();
+
+      if (profile?.role === 'partner') {
+        router.push('/partenaires/en-attente');
+        router.refresh();
+        return;
+      }
 
       const isComplete =
         profile &&

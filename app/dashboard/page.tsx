@@ -58,6 +58,12 @@ export default function DashboardPage() {
         city: profile?.city
       });
 
+      // Partners have their own dashboard
+      if (profile?.role === 'partner') {
+        router.push('/partenaires/en-attente');
+        return;
+      }
+
       // If profile doesn't exist or is incomplete, redirect to onboarding
       const isIncomplete = !profile || !profile.first_name || !profile.last_name || !profile.postal_code || profile.postal_code === '00000' || profile.city === 'À définir';
 
@@ -236,7 +242,7 @@ export default function DashboardPage() {
                   Bienvenue, {profile?.first_name || 'utilisateur'} !
                 </h1>
                 <p className="text-neutral-600 text-sm md:text-base">
-                  {profile?.role === 'entrepreneur' ? '💼 Porteur d\'initiative' : '🌟 Talent'}
+                  {profile?.role === 'entrepreneur' ? '💼 Porteur d\'initiative' : profile?.role === 'talent' ? '🌟 Talent' : '🤝 Partenaire'}
                 </p>
               </div>
             </div>
@@ -249,7 +255,7 @@ export default function DashboardPage() {
                 <strong>Nom :</strong> {profile?.first_name} {profile?.last_name}
               </div>
               <div>
-                <strong>Rôle :</strong> {profile?.role === 'entrepreneur' ? 'Porteur d\'initiative' : 'Talent'}
+                <strong>Rôle :</strong> {profile?.role === 'entrepreneur' ? 'Porteur d\'initiative' : profile?.role === 'talent' ? 'Talent' : 'Partenaire'}
               </div>
               <div>
                 <strong>Membre depuis :</strong> {new Date(user?.created_at).toLocaleDateString('fr-FR')}
