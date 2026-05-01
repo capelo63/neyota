@@ -65,8 +65,8 @@ export default async function EnAttentePage() {
             )}
             <p className="text-sm text-neutral-500 mb-8">
               Pour toute question, contactez-nous à{' '}
-              <a href="mailto:contact@neyota.com" className="text-primary-600 hover:underline">
-                contact@neyota.com
+              <a href="mailto:cyril.hugon@gmail.com" className="text-primary-600 hover:underline">
+                cyril.hugon@gmail.com
               </a>.
             </p>
             <Link href="/" className="text-sm text-neutral-500 hover:text-neutral-800 transition-colors">
@@ -130,7 +130,7 @@ export default async function EnAttentePage() {
 
             <p className="text-sm text-neutral-500">
               Une question ?{' '}
-              <a href="mailto:contact@neyota.com" className="text-primary-600 hover:underline">
+              <a href="mailto:cyril.hugon@gmail.com" className="text-primary-600 hover:underline">
                 Contactez-nous
               </a>
             </p>

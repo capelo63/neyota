@@ -17,7 +17,7 @@ export default function ChartePartenairesPage() {
 
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-neutral-900 mb-4">Charte des partenaires Teriis</h1>
-          <p className="text-neutral-500 text-sm">Dernière mise à jour : mai 2025</p>
+          <p className="text-neutral-500 text-sm">Dernière mise à jour : mai 2026</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-8 prose prose-neutral max-w-none">
@@ -114,7 +114,7 @@ export default function ChartePartenairesPage() {
 
           <p className="text-sm text-neutral-500 leading-relaxed">
             Pour toute question relative à cette charte, contactez-nous à{' '}
-            <a href="mailto:contact@neyota.com" className="text-primary-600 hover:underline">contact@neyota.com</a>.
+            <a href="mailto:cyril.hugon@gmail.com" className="text-primary-600 hover:underline">cyril.hugon@gmail.com</a>.
             En cochant la case d'acceptation lors de votre inscription, vous attestez avoir lu et accepté l'intégralité de la présente charte.
           </p>
         </div>

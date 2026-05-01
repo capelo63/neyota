@@ -20,9 +20,9 @@ async function getTalentsAndSkills() {
     .select('id, name, category')
     .order('name');
 
-  // Fetch talents
+  // Fetch talents from profiles_public (coords extracted from location via ST_Y/ST_X)
   const { data: talents, error } = await supabase
-    .from('profiles')
+    .from('profiles_public')
     .select(`
       id,
       first_name,
@@ -56,10 +56,9 @@ async function getTalentsAndSkills() {
 
       return {
         ...talent,
-        // Mask precise GPS coordinates to ~1km precision (2 decimal places)
-        // to protect user privacy on public pages
-        latitude: talent.latitude != null ? Math.round(talent.latitude * 100) / 100 : undefined,
-        longitude: talent.longitude != null ? Math.round(talent.longitude * 100) / 100 : undefined,
+        // profiles_public already rounds to 2 decimal places via ST_Y/ST_X
+        latitude: talent.latitude ?? undefined,
+        longitude: talent.longitude ?? undefined,
         skills: (skillsData || [])
           .map((s: any) => s.skill)
           .filter((s: any) => s !== null) as Array<{ id: string; name: string; category: string }>,
