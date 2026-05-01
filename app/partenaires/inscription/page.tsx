@@ -397,7 +397,7 @@ export default function PartenaireInscriptionPage() {
                 />
                 <span className="text-sm text-neutral-700">
                   J'accepte les{' '}
-                  <Link href="/charter" target="_blank" className="text-primary-600 underline underline-offset-2">
+                  <Link href="/partenaires/charte" target="_blank" className="text-primary-600 underline underline-offset-2">
                     conditions générales partenaires
                   </Link>{' '}
                   de Teriis et m'engage à utiliser les données dans le respect des utilisateurs.
