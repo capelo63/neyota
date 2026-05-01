@@ -71,42 +71,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Email inserts are best-effort — a failure here must not block the registration
-    try {
-      await supabase.from('email_queue').insert({
-        user_id: userId,
-        recipient_email: email,
-        recipient_name: `${firstName} ${lastName}`,
-        email_type: 'partner_application_received',
-        template_params: {
-          first_name: firstName,
-          organization_name: organizationName,
-        },
-        scheduled_for: new Date().toISOString(),
-      });
-    } catch (emailErr) {
-      console.error('email_queue insert (partner_application_received) failed:', emailErr);
-    }
+    const { error: email1Err } = await supabase.from('email_queue').insert({
+      user_id: userId,
+      recipient_email: email,
+      recipient_name: `${firstName} ${lastName}`,
+      email_type: 'partner_application_received',
+      template_params: {
+        first_name: firstName,
+        organization_name: organizationName,
+      },
+      scheduled_for: new Date().toISOString(),
+    });
+    if (email1Err) console.error('email_queue insert (partner_application_received) failed:', JSON.stringify(email1Err));
 
-    try {
-      await supabase.from('email_queue').insert({
-        user_id: userId,
-        recipient_email: 'cyril.hugon@gmail.com',
-        recipient_name: 'Admin Teriis',
-        email_type: 'partner_new_submission_admin',
-        template_params: {
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          organization_name: organizationName,
-          organization_type: organizationType,
-          territory_scope: territoryScope || 'national',
-          admin_url: 'https://neyota.vercel.app/admin/partner-validations',
-        },
-        scheduled_for: new Date().toISOString(),
-      });
-    } catch (emailErr) {
-      console.error('email_queue insert (partner_new_submission_admin) failed:', emailErr);
-    }
+    const { error: email2Err } = await supabase.from('email_queue').insert({
+      user_id: userId,
+      recipient_email: 'cyril.hugon@gmail.com',
+      recipient_name: 'Admin Teriis',
+      email_type: 'partner_new_submission_admin',
+      template_params: {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        organization_name: organizationName,
+        organization_type: organizationType,
+        territory_scope: territoryScope || 'national',
+        admin_url: 'https://neyota.vercel.app/admin/partner-validations',
+      },
+      scheduled_for: new Date().toISOString(),
+    });
+    if (email2Err) console.error('email_queue insert (partner_new_submission_admin) failed:', JSON.stringify(email2Err));
 
     return NextResponse.json({ userId }, { status: 201 });
   } catch (err) {
