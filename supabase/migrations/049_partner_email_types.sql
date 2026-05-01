@@ -20,6 +20,8 @@ ALTER TABLE email_queue ADD CONSTRAINT valid_email_type CHECK (
     'application_rejected',
     'daily_digest',
     'weekly_digest',
+    'welcome_email',
+    'profile_incomplete',
     -- Partenaires B2B
     'partner_application_received',   -- confirmation au partenaire après inscription
     'partner_new_submission_admin',   -- notification admin (nouvelle demande)
