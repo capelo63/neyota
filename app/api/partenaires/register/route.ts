@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     // Admin notification
     await supabase.from('email_queue').insert({
       user_id: userId,
-      recipient_email: 'contact@neyota.com',
+      recipient_email: 'cyril.hugon@gmail.com',
       recipient_name: 'Admin Teriis',
       email_type: 'partner_new_submission_admin',
       template_params: {
