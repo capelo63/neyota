@@ -4,6 +4,24 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
+const ORG_TYPE_LABELS: Record<string, string> = {
+  public_collectivity: 'Collectivité territoriale',
+  public_support: "Structure publique d'accompagnement",
+  consular_chamber: 'Chambre consulaire',
+  nonprofit_network: "Réseau d'accompagnement",
+  incubator_accelerator: 'Incubateur ou accélérateur',
+  foundation: 'Fondation',
+  private_financial: 'Partenaire financier privé',
+  service_provider: 'Prestataire de services',
+  other_commercial: 'Autre acteur commercial',
+};
+
+const TERRITORY_LABELS: Record<string, string> = {
+  national: 'National',
+  regional: 'Régional',
+  departmental: 'Départemental',
+};
+
 // Email templates for different notification types
 const EMAIL_TEMPLATES = {
   application_received: (params: any) => ({
@@ -396,7 +414,7 @@ const EMAIL_TEMPLATES = {
                 </a>
               </div>
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-                Une question ? Répondez directement à cet email ou contactez-nous à <a href="mailto:contact@neyota.com" style="color: #1d4ed8;">contact@neyota.com</a>.
+                Une question ? Répondez directement à cet email ou contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #1d4ed8;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
             <div class="footer">
@@ -438,8 +456,8 @@ const EMAIL_TEMPLATES = {
                 <tr><td>Nom</td><td>${params.first_name} ${params.last_name}</td></tr>
                 <tr><td>Email</td><td><a href="mailto:${params.email}" style="color: #1d4ed8;">${params.email}</a></td></tr>
                 <tr><td>Organisation</td><td>${params.organization_name}</td></tr>
-                <tr><td>Type</td><td>${params.organization_type}</td></tr>
-                <tr><td>Périmètre</td><td>${params.territory_scope || 'National'}</td></tr>
+                <tr><td>Type</td><td>${ORG_TYPE_LABELS[params.organization_type] ?? params.organization_type}</td></tr>
+                <tr><td>Périmètre</td><td>${TERRITORY_LABELS[params.territory_scope] ?? 'National'}</td></tr>
               </table>
               <div style="text-align: center; margin-top: 24px;">
                 <a href="${params.admin_url}" style="display: inline-block; background: #1e293b; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
@@ -479,14 +497,37 @@ const EMAIL_TEMPLATES = {
             <div class="content">
               <p>Bonjour <strong>${params.first_name}</strong>,</p>
               <p>Bonne nouvelle ! Votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> a été <strong style="color: #059669;">validée</strong>.</p>
-              <p>Vous pouvez maintenant accéder au tableau de bord partenaire Teriis et consulter les porteurs d'initiative et talents qui ont activé leur visibilité partenaire dans votre périmètre d'intervention.</p>
+
+              <h3 style="color: #059669; margin-top: 30px; font-size: 16px;">Pour bien démarrer :</h3>
+
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+                <strong>1. Accéder au tableau de bord</strong>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Cliquez sur le bouton ci-dessous pour accéder à votre espace partenaire et consulter les profils et projets visibles dans votre périmètre d'intervention.</p>
+              </div>
+
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+                <strong>2. Principe de l'opt-in</strong>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Seuls les porteurs d'initiative et talents ayant <strong>explicitement activé leur visibilité partenaire</strong> apparaissent dans votre tableau de bord. Ce choix leur appartient entièrement.</p>
+              </div>
+
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+                <strong>3. Filtrer par territoire</strong>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Utilisez les filtres région ou département pour cibler les dynamiques locales relevant de votre périmètre d'intervention.</p>
+              </div>
+
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+                <strong>4. Respecter la charte partenaires</strong>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Votre accès est conditionné au respect de la <a href="https://neyota.vercel.app/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> : pas de démarchage agressif, pas d'extraction massive de données, et uniquement des propositions à valeur ajoutée pour les utilisateurs.</p>
+              </div>
+
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${params.dashboard_url}" style="display: inline-block; background: #059669; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
                   Accéder au tableau de bord
                 </a>
               </div>
-              <p style="font-size: 14px; color: #6b7280;">
-                Rappel : seuls les utilisateurs ayant explicitement activé leur visibilité partenaire apparaissent dans votre tableau de bord.
+
+              <p style="font-size: 13px; color: #9ca3af; margin-top: 20px;">
+                Une question ? Contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #059669;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
             <div class="footer">
@@ -529,7 +570,7 @@ const EMAIL_TEMPLATES = {
                 </div>
               ` : ''}
               <p style="font-size: 14px; color: #6b7280;">
-                Si vous pensez que cette décision est une erreur ou souhaitez nous apporter des éléments complémentaires, contactez-nous à <a href="mailto:contact@neyota.com" style="color: #1d4ed8;">contact@neyota.com</a>.
+                Si vous pensez que cette décision est une erreur ou souhaitez nous apporter des éléments complémentaires, contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #1d4ed8;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
             <div class="footer">
