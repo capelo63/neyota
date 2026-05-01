@@ -4,8 +4,47 @@
 -- 1. Corrige le sujet du welcome_email : "NEYOTA" → "Teriis"
 -- 2. Exclut les comptes avec role = 'partner' de la file welcome_email
 --    (ils reçoivent partner_application_received à la place)
+-- 3. Défensif : s'assure que le trigger hérité de migration 020
+--    (trigger_send_welcome_email) n'envoie plus de welcome aux partenaires,
+--    même si migration 022 n'avait pas été appliquée.
 -- ============================================
 
+-- Neutralise le trigger-based welcome (migration 020) pour les partenaires.
+-- On recrée la fonction avec le filtre rôle ; si le trigger n'existe plus
+-- (migration 022 déjà appliquée) cette ligne est sans effet.
+CREATE OR REPLACE FUNCTION send_welcome_email()
+RETURNS TRIGGER AS $$
+DECLARE
+  user_email TEXT;
+BEGIN
+  -- Ne pas envoyer de welcome_email aux comptes partenaires
+  IF NEW.role = 'partner' THEN
+    RETURN NEW;
+  END IF;
+
+  SELECT email INTO user_email
+  FROM auth.users
+  WHERE id = NEW.id;
+
+  PERFORM queue_email(
+    NEW.id,
+    'welcome_email',
+    'Bienvenue sur Teriis ! 🎉',
+    jsonb_build_object(
+      'user_name',  NEW.first_name,
+      'user_role',  NEW.role,
+      'profile_id', NEW.id
+    ),
+    NULL, NULL, NULL,
+    NOW()
+  );
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Corrige la fonction cron (migration 022) :
+-- exclure les partenaires + corriger le sujet "NEYOTA" → "Teriis"
 CREATE OR REPLACE FUNCTION check_and_send_welcome_emails()
 RETURNS INTEGER
 SECURITY DEFINER
@@ -36,9 +75,9 @@ BEGIN
       p_email_type     := 'welcome_email',
       p_subject        := 'Bienvenue sur Teriis ! 🎉',
       p_template_params := jsonb_build_object(
-        'user_name',   COALESCE(v_profile.first_name, 'nouveau membre'),
-        'user_role',   v_profile.role,
-        'profile_id',  v_profile.id
+        'user_name',  COALESCE(v_profile.first_name, 'nouveau membre'),
+        'user_role',  v_profile.role,
+        'profile_id', v_profile.id
       )
     );
 
@@ -49,6 +88,13 @@ BEGIN
 END;
 $$;
 
+-- Supprimer les welcome_email pending pour les partenaires existants
+-- (en cas d'inscription antérieure à cette migration)
+DELETE FROM email_queue
+WHERE email_type = 'welcome_email'
+  AND status = 'pending'
+  AND user_id IN (SELECT id FROM profiles WHERE role = 'partner');
+
 DO $$ BEGIN
-  RAISE NOTICE '✓ Migration 050 : welcome_email corrigé (Teriis), partenaires exclus.';
+  RAISE NOTICE '✓ Migration 050 : welcome_email corrigé (Teriis + exclusion partenaires), pending nettoyés.';
 END $$;

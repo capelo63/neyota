@@ -10,7 +10,7 @@ import { NotificationBell } from '@/components/notifications/NotificationBell';
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<'talent' | 'entrepreneur' | null>(null);
+  const [userRole, setUserRole] = useState<'talent' | 'entrepreneur' | 'partner' | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -95,12 +95,16 @@ export default function Navigation() {
                     <Button variant="ghost" size="sm">Mon profil</Button>
                   </Link>
                 )}
-                <Link href="/dashboard">
-                  <Button variant="ghost" size="sm">Tableau de bord</Button>
+                <Link href={userRole === 'partner' ? '/partenaires/dashboard' : '/dashboard'}>
+                  <Button variant="ghost" size="sm">
+                    {userRole === 'partner' ? 'Espace partenaire' : 'Tableau de bord'}
+                  </Button>
                 </Link>
-                <Link href="/settings">
-                  <Button variant="ghost" size="sm">Paramètres</Button>
-                </Link>
+                {userRole !== 'partner' && (
+                  <Link href="/settings">
+                    <Button variant="ghost" size="sm">Paramètres</Button>
+                  </Link>
+                )}
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   Déconnexion
                 </Button>
@@ -157,12 +161,19 @@ export default function Navigation() {
                         <Button variant="ghost" className="w-full">Mon profil</Button>
                       </Link>
                     )}
-                    <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className="w-full">Tableau de bord</Button>
+                    <Link
+                      href={userRole === 'partner' ? '/partenaires/dashboard' : '/dashboard'}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Button variant="ghost" className="w-full">
+                        {userRole === 'partner' ? 'Espace partenaire' : 'Tableau de bord'}
+                      </Button>
                     </Link>
-                    <Link href="/settings" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className="w-full">Paramètres</Button>
-                    </Link>
+                    {userRole !== 'partner' && (
+                      <Link href="/settings" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button variant="ghost" className="w-full">Paramètres</Button>
+                      </Link>
+                    )}
                     <Button variant="ghost" className="w-full" onClick={handleSignOut}>
                       Déconnexion
                     </Button>
