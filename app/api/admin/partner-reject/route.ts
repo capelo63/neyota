@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         recipient_email: email,
         recipient_name: firstName || org.organization_name,
         email_type: 'partner_rejected',
+        subject: 'Concernant votre demande de partenariat Teriis',
         template_params: {
           first_name: firstName,
           organization_name: org.organization_name,

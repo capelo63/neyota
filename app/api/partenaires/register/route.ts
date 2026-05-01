@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
       recipient_email: email,
       recipient_name: `${firstName} ${lastName}`,
       email_type: 'partner_application_received',
+      subject: 'Votre demande de partenariat Teriis est en cours d\'examen',
       template_params: {
         first_name: firstName,
         organization_name: organizationName,
@@ -89,6 +90,7 @@ export async function POST(request: NextRequest) {
       recipient_email: 'cyril.hugon@gmail.com',
       recipient_name: 'Admin Teriis',
       email_type: 'partner_new_submission_admin',
+      subject: 'Nouvelle demande de partenariat sur Teriis',
       template_params: {
         first_name: firstName,
         last_name: lastName,
