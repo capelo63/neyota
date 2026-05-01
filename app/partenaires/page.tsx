@@ -29,8 +29,8 @@ export default function PartenairesPage() {
             {[
               {
                 icon: '🏛️',
-                title: 'Acteurs publics',
-                desc: 'Collectivités, structures d\'accompagnement, chambres consulaires, incubateurs et fondations.',
+                title: 'Acteurs du territoire',
+                desc: 'Collectivités, structures d\'accompagnement, chambres consulaires, incubateurs, fondations, mais aussi partenaires financiers et acteurs commerciaux (sur opt-in des utilisateurs).',
               },
               {
                 icon: '👁️',
