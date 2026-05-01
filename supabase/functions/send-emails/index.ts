@@ -362,6 +362,185 @@ const EMAIL_TEMPLATES = {
     `,
   }),
 
+  partner_application_received: (params: any) => ({
+    subject: `Votre demande d'accès partenaire Teriis a bien été reçue`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .info-box { background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1d4ed8; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 26px;">Demande reçue</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.first_name}</strong>,</p>
+              <p>Nous avons bien reçu votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> sur Teriis.</p>
+              <div class="info-box">
+                <p style="margin: 0;"><strong>Prochaine étape :</strong> Notre équipe va examiner votre dossier et vous répondra par email sous <strong>48 à 72 heures ouvrées</strong>.</p>
+              </div>
+              <p>En attendant, vous pouvez suivre l'état de votre demande en vous connectant à votre espace.</p>
+              <div style="text-align: center; margin-top: 30px;">
+                <a href="https://neyota.vercel.app/partenaires/en-attente" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
+                  Suivre ma demande
+                </a>
+              </div>
+              <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
+                Une question ? Répondez directement à cet email ou contactez-nous à <a href="mailto:contact@neyota.com" style="color: #1d4ed8;">contact@neyota.com</a>.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  partner_new_submission_admin: (params: any) => ({
+    subject: `[Admin] Nouvelle demande partenaire — ${params.organization_name}`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #1e293b; color: white; padding: 24px 30px; border-radius: 10px 10px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; margin: 16px 0; }
+            td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+            td:first-child { color: #64748b; width: 40%; }
+            td:last-child { font-weight: 500; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 20px;">Nouvelle demande partenaire</h1>
+            </div>
+            <div class="content">
+              <p>Une nouvelle demande d'accès partenaire a été soumise.</p>
+              <table>
+                <tr><td>Nom</td><td>${params.first_name} ${params.last_name}</td></tr>
+                <tr><td>Email</td><td><a href="mailto:${params.email}" style="color: #1d4ed8;">${params.email}</a></td></tr>
+                <tr><td>Organisation</td><td>${params.organization_name}</td></tr>
+                <tr><td>Type</td><td>${params.organization_type}</td></tr>
+                <tr><td>Périmètre</td><td>${params.territory_scope || 'National'}</td></tr>
+              </table>
+              <div style="text-align: center; margin-top: 24px;">
+                <a href="${params.admin_url}" style="display: inline-block; background: #1e293b; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
+                  Valider ou rejeter la demande
+                </a>
+              </div>
+            </div>
+            <div class="footer">
+              <p>Teriis Admin</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  partner_validated: (params: any) => ({
+    subject: `Votre accès partenaire Teriis a été validé`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 26px;">Accès partenaire activé</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.first_name}</strong>,</p>
+              <p>Bonne nouvelle ! Votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> a été <strong style="color: #059669;">validée</strong>.</p>
+              <p>Vous pouvez maintenant accéder au tableau de bord partenaire Teriis et consulter les porteurs d'initiative et talents qui ont activé leur visibilité partenaire dans votre périmètre d'intervention.</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${params.dashboard_url}" style="display: inline-block; background: #059669; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Accéder au tableau de bord
+                </a>
+              </div>
+              <p style="font-size: 14px; color: #6b7280;">
+                Rappel : seuls les utilisateurs ayant explicitement activé leur visibilité partenaire apparaissent dans votre tableau de bord.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  partner_rejected: (params: any) => ({
+    subject: `Mise à jour de votre demande d'accès partenaire Teriis`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .reason-box { background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; margin: 16px 0; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Demande partenaire</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.first_name}</strong>,</p>
+              <p>Nous avons examiné votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> et ne sommes pas en mesure de la valider à ce stade.</p>
+              ${params.rejection_reason ? `
+                <div class="reason-box">
+                  <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; color: #6b7280;">MOTIF</p>
+                  <p style="margin: 0; font-size: 14px;">${params.rejection_reason}</p>
+                </div>
+              ` : ''}
+              <p style="font-size: 14px; color: #6b7280;">
+                Si vous pensez que cette décision est une erreur ou souhaitez nous apporter des éléments complémentaires, contactez-nous à <a href="mailto:contact@neyota.com" style="color: #1d4ed8;">contact@neyota.com</a>.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
   weekly_digest: (params: any) => ({
     subject: `📬 Votre résumé Teriis de la semaine`,
     htmlContent: `
