@@ -120,7 +120,7 @@ function MultiSelect({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 text-sm border border-neutral-200 rounded-lg px-3 py-1.5 bg-white hover:border-primary-300 transition-colors whitespace-nowrap"
+        className="flex items-center gap-2 w-full text-sm border border-neutral-200 rounded-lg px-3 py-1.5 bg-white hover:border-primary-300 transition-colors"
       >
         <span className="font-medium text-neutral-700">{label}</span>
         {selected.length > 0 && (
@@ -137,7 +137,7 @@ function MultiSelect({
       </button>
 
       {open && (
-        <div className="absolute z-[9999] mt-1 w-64 bg-white border border-neutral-200 rounded-xl shadow-lg py-2 max-h-64 overflow-y-auto">
+        <div className="absolute z-[9999] mt-1 w-full min-w-[14rem] bg-white border border-neutral-200 rounded-xl shadow-lg py-2 max-h-64 overflow-y-auto">
           {options.map((opt) => (
             <label
               key={opt.code}
@@ -507,7 +507,7 @@ export default function PartnerDashboard({
 
         {/* Advanced filters — MultiSelect dropdowns */}
         {(showEntrepreneurFilters || showTalentFilters) && (
-          <div className="flex flex-wrap gap-3 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-start">
             {showEntrepreneurFilters && (
               <MultiSelect
                 label="Phase du projet (porteur)"
