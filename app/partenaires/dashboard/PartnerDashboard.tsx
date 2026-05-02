@@ -507,7 +507,7 @@ export default function PartnerDashboard({
 
         {/* Advanced filters — MultiSelect dropdowns */}
         {(showEntrepreneurFilters || showTalentFilters) && (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 items-start">
             {showEntrepreneurFilters && (
               <MultiSelect
                 label="Phase du projet (porteur)"
