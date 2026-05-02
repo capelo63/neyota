@@ -35,11 +35,20 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **047** (corrections IDOR : REVOKE anon sur profiles/user_skills, auth guard sur find_matching_projects)
-- Migration suivante à appliquer : **048** (module B2B : enum partner_organization_type, tables partner_organizations / partner_visibility_settings / partner_profile_views, is_admin sur profiles)
+- Dernière migration appliquée : **055** (project_categories dans get_partner_profile_extras)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
+
+### Historique récent (048–055)
+- **048** : module B2B — enum `partner_organization_type`, tables `partner_organizations` / `partner_visibility_settings` / `partner_profile_views`, colonne `is_admin` sur `profiles`
+- **049** : fonction `get_partner_visible_profiles()` SECURITY DEFINER
+- **050** : RLS et GRANT sur `partner_organizations` / `partner_visibility_settings`
+- **051** : page `/partenaires/en-attente` — colonnes `is_validated` / `is_rejected` sur `partner_organizations`
+- **052** : coordonnées GPS dans `get_partner_visible_profiles()` via `ST_Y`/`ST_X` (PostGIS)
+- **053** : vue `profiles_public` recréée avec `ST_Y`/`ST_X` pour `latitude`/`longitude`
+- **054** : table `partner_favorites` (RLS, GRANT) + fonction `get_partner_profile_extras(UUID[])`
+- **055** : `get_partner_profile_extras` enrichie avec `project_categories TEXT[]`
 
 ## Système Besoins/Compétences (migration 033+)
 - Porteurs de projet → sélectionnent des **Besoins** (table `project_needs`, 11 catégories, 44 items)
