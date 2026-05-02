@@ -138,20 +138,29 @@ function MultiSelect({
 
       {open && (
         <div className="absolute z-[9999] mt-1 w-full min-w-[14rem] bg-white border border-neutral-200 rounded-xl shadow-lg py-2 max-h-64 overflow-y-auto">
-          {options.map((opt) => (
-            <label
-              key={opt.code}
-              className="flex items-center gap-2.5 px-3 py-1.5 hover:bg-neutral-50 cursor-pointer text-sm text-neutral-700"
-            >
-              <input
-                type="checkbox"
-                checked={selected.includes(opt.code)}
-                onChange={() => toggleOption(opt.code)}
-                className={colors.check}
-              />
-              {opt.label}
-            </label>
-          ))}
+          {options.map((opt) => {
+            const checked = selected.includes(opt.code);
+            return (
+              <div
+                key={opt.code}
+                role="option"
+                aria-selected={checked}
+                onClick={() => toggleOption(opt.code)}
+                className="flex items-center gap-2.5 px-3 py-1.5 hover:bg-neutral-50 cursor-pointer text-sm text-neutral-700 select-none"
+              >
+                <span className={`w-4 h-4 shrink-0 rounded border-2 flex items-center justify-center transition-colors ${
+                  checked ? 'bg-primary-600 border-primary-600' : 'border-neutral-300 bg-white'
+                }`}>
+                  {checked && (
+                    <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </span>
+                {opt.label}
+              </div>
+            );
+          })}
         </div>
       )}
 
