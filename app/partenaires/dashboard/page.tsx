@@ -19,6 +19,7 @@ export type VisibleProfile = {
   project_phases: string[];
   need_categories: string[];
   skill_categories: string[];
+  project_categories: string[];
 };
 
 export type PartnerOrg = {
@@ -33,6 +34,7 @@ type ExtrasRow = {
   project_phases: string[];
   need_categories: string[];
   skill_categories: string[];
+  project_categories: string[];
 };
 
 export default async function PartnerDashboardPage() {
@@ -75,9 +77,10 @@ export default async function PartnerDashboardPage() {
 
   const visibleProfiles: VisibleProfile[] = basicProfiles.map((p) => ({
     ...p,
-    project_phases:   extrasMap.get(p.id)?.project_phases   ?? [],
-    need_categories:  extrasMap.get(p.id)?.need_categories  ?? [],
-    skill_categories: extrasMap.get(p.id)?.skill_categories ?? [],
+    project_phases:    extrasMap.get(p.id)?.project_phases    ?? [],
+    need_categories:   extrasMap.get(p.id)?.need_categories   ?? [],
+    skill_categories:  extrasMap.get(p.id)?.skill_categories  ?? [],
+    project_categories: extrasMap.get(p.id)?.project_categories ?? [],
   }));
 
   // Initial favorites for the current partner

@@ -116,7 +116,7 @@ export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
  */
 export const PROJECT_PHASE_LABELS: Record<ProjectPhase, string> = {
   ideation: '💡 Idéation',
-  mvp_development: '🛠️ Développement MVP',
+  mvp_development: '🛠️ En construction',
   launch: '🚀 Lancement',
   growth: '📈 Croissance',
   scaling: '🌍 Structuration',
