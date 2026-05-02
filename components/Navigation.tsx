@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import { Button } from '@/components/ui';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
@@ -13,6 +13,8 @@ export default function Navigation() {
   const [userRole, setUserRole] = useState<'talent' | 'entrepreneur' | 'partner' | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const isPartnerPage = pathname.startsWith('/partenaires');
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -114,9 +116,11 @@ export default function Navigation() {
                 <Link href="/login">
                   <Button variant="ghost" size="sm">Connexion</Button>
                 </Link>
-                <Link href="/signup">
-                  <Button variant="default" size="sm">S&apos;inscrire</Button>
-                </Link>
+                {!isPartnerPage && (
+                  <Link href="/signup">
+                    <Button variant="default" size="sm">S&apos;inscrire</Button>
+                  </Link>
+                )}
               </>
             )}
           </div>
@@ -183,9 +187,11 @@ export default function Navigation() {
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="ghost" className="w-full">Connexion</Button>
                     </Link>
-                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="default" className="w-full">S&apos;inscrire</Button>
-                    </Link>
+                    {!isPartnerPage && (
+                      <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button variant="default" className="w-full">S&apos;inscrire</Button>
+                      </Link>
+                    )}
                   </>
                 )}
               </div>
