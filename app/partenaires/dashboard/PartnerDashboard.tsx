@@ -137,7 +137,7 @@ function MultiSelect({
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-64 bg-white border border-neutral-200 rounded-xl shadow-lg py-2 max-h-64 overflow-y-auto">
+        <div className="absolute z-[9999] mt-1 w-64 bg-white border border-neutral-200 rounded-xl shadow-lg py-2 max-h-64 overflow-y-auto">
           {options.map((opt) => (
             <label
               key={opt.code}
