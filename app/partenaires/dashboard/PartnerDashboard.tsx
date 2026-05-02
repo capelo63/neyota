@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { createBrowserClient } from '@supabase/ssr';
 import { REGIONS_FRANCE, DEPARTMENTS_FRANCE, getOrgTypeLabel } from '@/lib/constants/france-geo';
 import { NEED_CATEGORIES, SKILL_CATEGORIES } from '@/lib/constants/needs-skills';
@@ -415,6 +416,19 @@ export default function PartnerDashboard({
               profil{filteredProfiles.length !== 1 ? 's' : ''} visible{filteredProfiles.length !== 1 ? 's' : ''}
             </p>
           </div>
+        </div>
+
+        {/* ── Navigation tabs ── */}
+        <div className="flex gap-1 mt-4 border-b border-neutral-200">
+          <span className="px-4 py-2.5 text-sm font-medium text-primary-600 border-b-2 border-primary-600">
+            Annuaire
+          </span>
+          <Link
+            href="/partenaires/dashboard/analytics"
+            className="px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-700 transition-colors"
+          >
+            Statistiques
+          </Link>
         </div>
       </div>
 
