@@ -2,8 +2,10 @@
 
 import { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'react-leaflet-markercluster/styles';
 import type { VisibleProfile } from './page';
 
 // Custom circular markers — avoids the default icon path issue
@@ -54,32 +56,34 @@ export default function PartnerMap({
       />
       <BoundsController profiles={withCoords} />
 
-      {withCoords.map((p) => (
-        <Marker
-          key={p.id}
-          position={[p.latitude!, p.longitude!]}
-          icon={p.role === 'entrepreneur' ? ENTREPRENEUR_ICON : TALENT_ICON}
-        >
-          <Popup>
-            <div className="text-sm min-w-[160px]">
-              <p className="font-semibold text-neutral-900">{p.first_name} {p.last_name}</p>
-              <p className="text-neutral-500 text-xs mt-0.5">{p.city}</p>
-              <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
-                p.role === 'entrepreneur' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
-              }`}>
-                {p.role === 'entrepreneur' ? 'Porteur' : 'Talent'}
-              </span>
-              <br />
-              <button
-                onClick={() => onProfileClick(p)}
-                className="mt-2 text-primary-600 text-xs font-medium hover:underline"
-              >
-                Voir le profil →
-              </button>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+      <MarkerClusterGroup chunkedLoading>
+        {withCoords.map((p) => (
+          <Marker
+            key={p.id}
+            position={[p.latitude!, p.longitude!]}
+            icon={p.role === 'entrepreneur' ? ENTREPRENEUR_ICON : TALENT_ICON}
+          >
+            <Popup>
+              <div className="text-sm min-w-[160px]">
+                <p className="font-semibold text-neutral-900">{p.first_name} {p.last_name}</p>
+                <p className="text-neutral-500 text-xs mt-0.5">{p.city}</p>
+                <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+                  p.role === 'entrepreneur' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
+                }`}>
+                  {p.role === 'entrepreneur' ? 'Porteur' : 'Talent'}
+                </span>
+                <br />
+                <button
+                  onClick={() => onProfileClick(p)}
+                  className="mt-2 text-primary-600 text-xs font-medium hover:underline"
+                >
+                  Voir le profil →
+                </button>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }
