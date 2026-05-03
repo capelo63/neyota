@@ -7,7 +7,9 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { PARTNER_ORG_TYPES, REGIONS_FRANCE, DEPARTMENTS_FRANCE, getOrgTypeLabel } from '@/lib/constants/france-geo';
 
-type Step = 'A' | 'B' | 'C';
+type Step = 'A' | 'B' | 'D' | 'C';
+
+const STEP_ORDER: Record<Step, number> = { A: 0, B: 1, D: 2, C: 3 };
 
 interface FormData {
   firstName: string;
@@ -21,6 +23,7 @@ interface FormData {
   territoryScope: 'national' | 'regional' | 'departmental' | '';
   territoryCodes: string[];
   justificationUrl: string;
+  interventionCategories: string[];
   cgaAccepted: boolean;
 }
 
@@ -28,8 +31,31 @@ const INITIAL: FormData = {
   firstName: '', lastName: '', email: '', password: '',
   organizationName: '', siret: '', organizationType: '',
   organizationSubtype: '', territoryScope: '', territoryCodes: [],
-  justificationUrl: '', cgaAccepted: false,
+  justificationUrl: '', interventionCategories: [], cgaAccepted: false,
 };
+
+const INTERVENTION_CATEGORY_OPTIONS = [
+  { code: 'agriculture',   name: 'Agriculture / Agroalimentaire' },
+  { code: 'mobility',      name: 'Mobilité / Transport' },
+  { code: 'industry',      name: 'Industrie / Manufacturing' },
+  { code: 'tech',          name: 'Tech / Digital' },
+  { code: 'health',        name: 'Santé / Bien-être' },
+  { code: 'education',     name: 'Éducation / Formation' },
+  { code: 'real_estate',   name: 'Immobilier / Construction' },
+  { code: 'environment',   name: 'Environnement / Écologie' },
+  { code: 'culture',       name: 'Culture / Créatif' },
+  { code: 'services',      name: 'Services / Consulting' },
+  { code: 'commerce',      name: 'Commerce / Retail' },
+  { code: 'hospitality',   name: 'Restauration / Hôtellerie' },
+  { code: 'finance',       name: 'Finance / Fintech' },
+  { code: 'energy',        name: 'Énergie' },
+  { code: 'entertainment', name: 'Divertissement / Loisirs' },
+  { code: 'social',        name: 'Social / Solidaire' },
+] as const;
+
+const INTERVENTION_CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  INTERVENTION_CATEGORY_OPTIONS.map((o) => [o.code, o.name])
+);
 
 function FieldError({ msg }: { msg?: string }) {
   return msg ? <p className="text-xs text-error-600 mt-1">{msg}</p> : null;
@@ -124,9 +150,18 @@ export default function PartenaireInscriptionPage() {
     return Object.keys(e).length === 0;
   };
 
+  const validateD = () => {
+    const e: typeof errors = {};
+    if (form.interventionCategories.length === 0)
+      e.interventionCategories = 'Sélectionnez au moins un domaine d\'intervention';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
   const handleNext = () => {
     if (step === 'A' && validateA()) setStep('B');
-    if (step === 'B' && validateB()) setStep('C');
+    if (step === 'B' && validateB()) setStep('D');
+    if (step === 'D' && validateD()) setStep('C');
   };
 
   const handleSubmit = async () => {
@@ -153,6 +188,7 @@ export default function PartenaireInscriptionPage() {
           territoryScope: form.territoryScope,
           territoryCodes: form.territoryCodes,
           justificationUrl: form.justificationUrl || null,
+          interventionCategories: form.interventionCategories,
         }),
       });
 
@@ -185,8 +221,15 @@ export default function PartenaireInscriptionPage() {
   const steps: { key: Step; label: string }[] = [
     { key: 'A', label: 'Contact' },
     { key: 'B', label: 'Organisation' },
+    { key: 'D', label: 'Domaines' },
     { key: 'C', label: 'Validation' },
   ];
+
+  const prevStep = (): Step => {
+    if (step === 'C') return 'D';
+    if (step === 'D') return 'B';
+    return 'A';
+  };
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -211,13 +254,13 @@ export default function PartenaireInscriptionPage() {
             <div key={s.key} className="flex items-center flex-1">
               <div className={`flex items-center gap-2 ${i > 0 ? 'flex-1' : ''}`}>
                 {i > 0 && (
-                  <div className={`flex-1 h-px ${step > s.key || step === s.key ? 'bg-primary-400' : 'bg-neutral-200'}`} />
+                  <div className={`flex-1 h-px ${STEP_ORDER[step] >= STEP_ORDER[s.key] ? 'bg-primary-400' : 'bg-neutral-200'}`} />
                 )}
-                <div className={`flex items-center gap-1.5 shrink-0 ${i > 0 ? '' : ''}`}>
+                <div className={`flex items-center gap-1.5 shrink-0`}>
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                     step === s.key
                       ? 'bg-primary-600 text-white'
-                      : step > s.key
+                      : STEP_ORDER[step] > STEP_ORDER[s.key]
                       ? 'bg-primary-100 text-primary-700'
                       : 'bg-neutral-200 text-neutral-500'
                   }`}>
@@ -364,13 +407,65 @@ export default function PartenaireInscriptionPage() {
             </div>
           )}
 
+          {/* ── Étape D : Domaines d'intervention ── */}
+          {step === 'D' && (
+            <div className="space-y-4">
+              <h2 className="text-base font-semibold text-neutral-900 mb-1">Domaines d'intervention</h2>
+              <p className="text-sm text-neutral-500 mb-4">
+                Sélectionnez les domaines dans lesquels votre organisation accompagne des porteurs de projet ou des talents.
+                Ces informations nous permettent de vous proposer des profils pertinents.
+              </p>
+
+              <div>
+                <div className="max-h-80 overflow-y-auto border border-neutral-200 rounded-lg divide-y divide-neutral-100">
+                  {INTERVENTION_CATEGORY_OPTIONS.map((item) => (
+                    <label
+                      key={item.code}
+                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-neutral-50 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={form.interventionCategories.includes(item.code)}
+                        onChange={() => {
+                          const cats = form.interventionCategories;
+                          set(
+                            'interventionCategories',
+                            cats.includes(item.code)
+                              ? cats.filter((c) => c !== item.code)
+                              : [...cats, item.code]
+                          );
+                        }}
+                        className="w-4 h-4 accent-primary-600 shrink-0"
+                      />
+                      <span className="text-sm text-neutral-800">{item.name}</span>
+                    </label>
+                  ))}
+                </div>
+                <FieldError msg={errors.interventionCategories} />
+              </div>
+
+              {form.interventionCategories.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {form.interventionCategories.map((code) => (
+                    <span
+                      key={code}
+                      className="text-xs font-medium px-2.5 py-1 bg-primary-50 text-primary-700 rounded-full"
+                    >
+                      {INTERVENTION_CATEGORY_LABELS[code] ?? code}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ── Étape C : Récapitulatif ── */}
           {step === 'C' && (
             <div className="space-y-5">
               <h2 className="text-base font-semibold text-neutral-900 mb-4">Récapitulatif de votre demande</h2>
 
               <div className="bg-neutral-50 rounded-lg border border-neutral-200 divide-y divide-neutral-100 text-sm">
-                {[
+                {([
                   ['Contact', `${form.firstName} ${form.lastName} — ${form.email}`],
                   ['Organisation', form.organizationName],
                   ['SIRET', form.siret],
@@ -380,9 +475,10 @@ export default function PartenaireInscriptionPage() {
                     ? 'National'
                     : `${form.territoryScope === 'regional' ? 'Régional' : 'Départemental'} — ${form.territoryCodes.join(', ')}`],
                   ...(form.justificationUrl ? [['Lien justificatif', form.justificationUrl] as [string, string]] : []),
-                ].map(([label, value]) => (
+                  ['Domaines d\'intervention', form.interventionCategories.map((c) => INTERVENTION_CATEGORY_LABELS[c] ?? c).join(', ')],
+                ] as [string, string][]).map(([label, value]) => (
                   <div key={label} className="px-4 py-3 flex gap-4">
-                    <span className="text-neutral-500 w-32 shrink-0">{label}</span>
+                    <span className="text-neutral-500 w-36 shrink-0">{label}</span>
                     <span className="text-neutral-900 break-all">{value}</span>
                   </div>
                 ))}
@@ -412,7 +508,7 @@ export default function PartenaireInscriptionPage() {
             {step !== 'A' ? (
               <button
                 type="button"
-                onClick={() => setStep(step === 'C' ? 'B' : 'A')}
+                onClick={() => setStep(prevStep())}
                 className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
               >
                 ← Précédent

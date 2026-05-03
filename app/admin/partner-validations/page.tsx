@@ -14,6 +14,7 @@ type RawOrg = {
   territory_scope: string | null;
   territory_codes: string[] | null;
   justification_url: string | null;
+  intervention_categories: string[] | null;
   created_at: string;
 };
 
@@ -45,7 +46,7 @@ export default async function PartnerValidationsPage() {
 
   const { data: orgs } = await adminSupabase
     .from('partner_organizations')
-    .select('id, user_id, organization_name, siret, organization_type, organization_subtype, territory_scope, territory_codes, justification_url, created_at')
+    .select('id, user_id, organization_name, siret, organization_type, organization_subtype, territory_scope, territory_codes, justification_url, intervention_categories, created_at')
     .eq('is_validated', false)
     .eq('is_rejected', false)
     .order('created_at', { ascending: true });

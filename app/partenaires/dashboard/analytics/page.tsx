@@ -39,7 +39,7 @@ export default async function PartnerAnalyticsPage() {
 
   const { data: org } = await supabase
     .from('partner_organizations')
-    .select('organization_name, organization_type, territory_scope, territory_codes, is_validated, is_rejected')
+    .select('organization_name, organization_type, territory_scope, territory_codes, is_validated, is_rejected, intervention_categories')
     .eq('user_id', user.id)
     .single();
 
@@ -66,10 +66,16 @@ export default async function PartnerAnalyticsPage() {
     territory_codes:   org.territory_codes,
   };
 
+  const interventionCategories = (org.intervention_categories ?? []) as string[];
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
-      <AnalyticsDashboard org={partnerOrg} analytics={analytics} />
+      <AnalyticsDashboard
+        org={partnerOrg}
+        analytics={analytics}
+        interventionCategories={interventionCategories}
+      />
     </div>
   );
 }

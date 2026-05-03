@@ -53,12 +53,15 @@ export default async function PartnerDashboardPage() {
 
   const { data: org } = await supabase
     .from('partner_organizations')
-    .select('organization_name, organization_type, territory_scope, territory_codes, is_validated, is_rejected')
+    .select('organization_name, organization_type, territory_scope, territory_codes, is_validated, is_rejected, intervention_categories')
     .eq('user_id', user.id)
     .single();
 
   if (!org) redirect('/partenaires/inscription');
   if (!org.is_validated) redirect('/partenaires/en-attente');
+
+  const interventionCats = (org.intervention_categories ?? []) as string[];
+  if (interventionCats.length === 0) redirect('/partenaires/intervention-categories');
 
   // Basic profiles (SECURITY DEFINER bypasses RLS)
   const { data: rawProfiles } = await supabase.rpc('get_partner_visible_profiles');
