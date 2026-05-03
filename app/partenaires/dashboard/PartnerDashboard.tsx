@@ -307,13 +307,18 @@ export default function PartnerDashboard({
     }
 
     if (selectedTerritoryCodes.length > 0) {
+      // selectedTerritoryCodes holds REGIONS_FRANCE codes (e.g. 'OCC').
+      // profiles.region stores the full name (e.g. 'Occitanie') as written by CityAutocomplete.
+      // Convert codes → names before comparing.
+      const selectedRegionNames = selectedTerritoryCodes.map(
+        (c) => REGIONS_FRANCE.find((r) => r.code === c)?.name ?? c
+      );
+
       list = list.filter((p) => {
-        if (!org.territory_scope || org.territory_scope === 'national') {
-          return p.region != null && selectedTerritoryCodes.includes(p.region);
+        if (!org.territory_scope || org.territory_scope === 'national' || org.territory_scope === 'regional') {
+          return p.region != null && selectedRegionNames.includes(p.region);
         }
-        if (org.territory_scope === 'regional') {
-          return p.region != null && selectedTerritoryCodes.includes(p.region);
-        }
+        // departmental: extract dept code from postal_code (e.g. '13') — matches DEPARTMENTS_FRANCE codes
         if (!p.postal_code) return false;
         return selectedTerritoryCodes.includes(deptFromPostal(p.postal_code));
       });
