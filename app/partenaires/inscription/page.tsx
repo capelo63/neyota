@@ -249,30 +249,33 @@ export default function PartenaireInscriptionPage() {
         <p className="text-sm text-neutral-500 mb-8">Votre demande sera examinée sous 48 h ouvrées.</p>
 
         {/* Stepper */}
-        <div className="flex items-center gap-0 mb-8">
+        <div className="flex mb-8">
           {steps.map((s, i) => (
-            <div key={s.key} className="flex items-center flex-1">
-              <div className={`flex items-center gap-2 ${i > 0 ? 'flex-1' : ''}`}>
-                {i > 0 && (
-                  <div className={`flex-1 h-px ${STEP_ORDER[step] >= STEP_ORDER[s.key] ? 'bg-primary-400' : 'bg-neutral-200'}`} />
-                )}
-                <div className={`flex items-center gap-1.5 shrink-0`}>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                    step === s.key
-                      ? 'bg-primary-600 text-white'
-                      : STEP_ORDER[step] > STEP_ORDER[s.key]
-                      ? 'bg-primary-100 text-primary-700'
-                      : 'bg-neutral-200 text-neutral-500'
-                  }`}>
-                    {i + 1}
-                  </div>
-                  <span className={`text-xs font-medium hidden sm:inline ${
-                    step === s.key ? 'text-primary-700' : 'text-neutral-400'
-                  }`}>
-                    {s.label}
-                  </span>
+            <div key={s.key} className="flex-1 flex flex-col items-center">
+              {/* Line-circle-line row — lines are at the circle vertical midpoint */}
+              <div className="flex items-center w-full">
+                <div className={`flex-1 h-px ${
+                  i === 0 ? 'invisible' : STEP_ORDER[step] >= STEP_ORDER[s.key] ? 'bg-primary-400' : 'bg-neutral-200'
+                }`} />
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                  step === s.key
+                    ? 'bg-primary-600 text-white'
+                    : STEP_ORDER[step] > STEP_ORDER[s.key]
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'bg-neutral-200 text-neutral-500'
+                }`}>
+                  {i + 1}
                 </div>
+                <div className={`flex-1 h-px ${
+                  i === steps.length - 1 ? 'invisible' : STEP_ORDER[step] > STEP_ORDER[s.key] ? 'bg-primary-400' : 'bg-neutral-200'
+                }`} />
               </div>
+              {/* Label below circle */}
+              <span className={`text-xs font-medium mt-1.5 text-center hidden sm:block ${
+                step === s.key ? 'text-primary-700' : 'text-neutral-400'
+              }`}>
+                {s.label}
+              </span>
             </div>
           ))}
         </div>

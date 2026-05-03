@@ -20,7 +20,8 @@ type AnalyticsRow = {
     avatar_url: string | null;
     viewed_at: string;
   }[] | null;
-  top_categories:  { category: string; count: number }[] | null;
+  top_categories:              { category: string; count: number }[] | null;
+  intervention_category_counts: { category: string; count: number }[] | null;
 };
 
 export default async function PartnerAnalyticsPage() {
@@ -54,9 +55,10 @@ export default async function PartnerAnalyticsPage() {
     unique_profiles_viewed: raw?.unique_profiles_viewed ?? 0,
     favorites_count:        raw?.favorites_count        ?? 0,
     visible_profiles_count: raw?.visible_profiles_count ?? 0,
-    views_by_day:    raw?.views_by_day    ?? [],
-    recent_views:    raw?.recent_views    ?? [],
-    top_categories:  raw?.top_categories  ?? [],
+    views_by_day:                raw?.views_by_day                ?? [],
+    recent_views:                raw?.recent_views                ?? [],
+    top_categories:              raw?.top_categories              ?? [],
+    intervention_category_counts: raw?.intervention_category_counts ?? [],
   };
 
   const partnerOrg: PartnerOrg = {
@@ -66,16 +68,10 @@ export default async function PartnerAnalyticsPage() {
     territory_codes:   org.territory_codes,
   };
 
-  const interventionCategories = (org.intervention_categories ?? []) as string[];
-
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
-      <AnalyticsDashboard
-        org={partnerOrg}
-        analytics={analytics}
-        interventionCategories={interventionCategories}
-      />
+      <AnalyticsDashboard org={partnerOrg} analytics={analytics} />
     </div>
   );
 }
