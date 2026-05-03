@@ -23,9 +23,10 @@ export type AnalyticsData = {
   unique_profiles_viewed: number;
   favorites_count:        number;
   visible_profiles_count: number;
-  views_by_day:    ViewDay[]     | null;
-  recent_views:    RecentView[]  | null;
-  top_categories:  TopCategory[] | null;
+  views_by_day:                 ViewDay[]     | null;
+  recent_views:                 RecentView[]  | null;
+  top_categories:               TopCategory[] | null;
+  intervention_category_counts: TopCategory[] | null;
 };
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -149,17 +150,17 @@ function StatCard({
 export default function AnalyticsDashboard({
   org,
   analytics,
-  interventionCategories,
 }: {
   org: PartnerOrg;
   analytics: AnalyticsData;
-  interventionCategories: string[];
 }) {
-  const days        = analytics.views_by_day   ?? [];
-  const recentViews = analytics.recent_views   ?? [];
-  const topCats     = analytics.top_categories ?? [];
-  const maxCatCount = Math.max(...topCats.map((c) => c.count), 1);
-  const totalDayViews = days.reduce((s, d) => s + d.count, 0);
+  const days           = analytics.views_by_day               ?? [];
+  const recentViews    = analytics.recent_views               ?? [];
+  const topCats        = analytics.top_categories             ?? [];
+  const interventionCounts = analytics.intervention_category_counts ?? [];
+  const maxCatCount    = Math.max(...topCats.map((c) => c.count), 1);
+  const maxInterventionCount = Math.max(...interventionCounts.map((c) => c.count), 1);
+  const totalDayViews  = days.reduce((s, d) => s + d.count, 0);
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
@@ -273,22 +274,42 @@ export default function AnalyticsDashboard({
         </div>
       </div>
 
-      {/* ── Intervention domains ── */}
-      {interventionCategories.length > 0 && (
+      {/* ── Intervention domains with project counts ── */}
+      {interventionCounts.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-xl p-5 mb-6">
-          <h2 className="text-sm font-semibold text-neutral-700 mb-3">
-            Vos domaines d&apos;intervention
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {interventionCategories.map((cat) => (
-              <span
-                key={cat}
-                className="text-xs font-medium px-2.5 py-1 bg-primary-50 text-primary-700 rounded-full"
-              >
-                {CATEGORY_LABELS[cat] ?? cat}
-              </span>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-neutral-700">
+              Projets actifs dans vos domaines d&apos;intervention
+            </h2>
+            <span className="text-xs text-neutral-400 font-medium">
+              {interventionCounts.reduce((s, c) => s + c.count, 0)} projets au total
+            </span>
+          </div>
+          <div className="flex flex-col gap-3.5">
+            {interventionCounts.map((c) => (
+              <div key={c.category}>
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="font-medium text-neutral-700">
+                    {CATEGORY_LABELS[c.category] ?? c.category}
+                  </span>
+                  <span className="text-neutral-400 shrink-0 ml-2">
+                    {c.count} projet{c.count !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${c.count > 0 ? 'bg-primary-500' : 'bg-neutral-200'}`}
+                    style={{ width: c.count > 0 ? `${(c.count / maxInterventionCount) * 100}%` : '4px' }}
+                  />
+                </div>
+              </div>
             ))}
           </div>
+          {interventionCounts.every((c) => c.count === 0) && (
+            <p className="text-xs text-neutral-400 mt-3 text-center">
+              Aucun projet actif ne correspond encore à vos domaines dans votre périmètre.
+            </p>
+          )}
         </div>
       )}
 

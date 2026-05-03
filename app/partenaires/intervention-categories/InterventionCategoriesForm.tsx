@@ -57,6 +57,8 @@ export default function InterventionCategoriesForm({ organizationName }: { organ
         return;
       }
 
+      // Refresh server component cache so the dashboard re-fetches org data
+      router.refresh();
       router.push('/partenaires/dashboard');
     } catch {
       setError('Une erreur réseau est survenue. Veuillez réessayer.');

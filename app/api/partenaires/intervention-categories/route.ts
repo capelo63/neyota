@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  // Auth check via session client (reads cookies)
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -16,7 +18,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Sélectionnez au moins un domaine d\'intervention.' }, { status: 400 });
   }
 
-  const { error } = await supabase
+  // Use admin client to bypass RLS for the update
+  const admin = createAdminClient();
+  const { error } = await admin
     .from('partner_organizations')
     .update({ intervention_categories: interventionCategories })
     .eq('user_id', user.id);
