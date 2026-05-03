@@ -149,9 +149,11 @@ function StatCard({
 export default function AnalyticsDashboard({
   org,
   analytics,
+  interventionCategories,
 }: {
   org: PartnerOrg;
   analytics: AnalyticsData;
+  interventionCategories: string[];
 }) {
   const days        = analytics.views_by_day   ?? [];
   const recentViews = analytics.recent_views   ?? [];
@@ -239,7 +241,7 @@ export default function AnalyticsDashboard({
         {/* Top categories */}
         <div className="bg-white border border-neutral-200 rounded-xl p-5">
           <h2 className="text-sm font-semibold text-neutral-700 mb-4">
-            Top 5 thématiques dans votre périmètre
+            Thématiques les plus présentes dans votre périmètre
           </h2>
           {topCats.length > 0 ? (
             <div className="flex flex-col gap-3.5">
@@ -270,6 +272,25 @@ export default function AnalyticsDashboard({
           )}
         </div>
       </div>
+
+      {/* ── Intervention domains ── */}
+      {interventionCategories.length > 0 && (
+        <div className="bg-white border border-neutral-200 rounded-xl p-5 mb-6">
+          <h2 className="text-sm font-semibold text-neutral-700 mb-3">
+            Vos domaines d&apos;intervention
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {interventionCategories.map((cat) => (
+              <span
+                key={cat}
+                className="text-xs font-medium px-2.5 py-1 bg-primary-50 text-primary-700 rounded-full"
+              >
+                {CATEGORY_LABELS[cat] ?? cat}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Recent views ── */}
       <div className="bg-white border border-neutral-200 rounded-xl p-5">

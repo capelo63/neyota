@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
       firstName, lastName, email, password,
       organizationName, siret, organizationType, organizationSubtype,
       territoryScope, territoryCodes, justificationUrl,
+      interventionCategories,
     } = body;
 
     if (!email || !password || !firstName || !lastName || !organizationName || !organizationType) {
@@ -59,6 +60,7 @@ export async function POST(request: NextRequest) {
         territory_scope: territoryScope || null,
         territory_codes: territoryCodes?.length > 0 ? territoryCodes : null,
         justification_url: justificationUrl || null,
+        intervention_categories: Array.isArray(interventionCategories) ? interventionCategories : [],
         is_validated: false,
       });
 

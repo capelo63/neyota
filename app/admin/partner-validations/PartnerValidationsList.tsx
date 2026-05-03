@@ -5,6 +5,25 @@ import { useRouter } from 'next/navigation';
 import { getOrgTypeLabel } from '@/lib/constants/france-geo';
 import type { PartnerApplication } from './page';
 
+const CATEGORY_LABELS: Record<string, string> = {
+  agriculture:   'Agriculture / Agroalimentaire',
+  mobility:      'Mobilité / Transport',
+  industry:      'Industrie / Manufacturing',
+  tech:          'Tech / Digital',
+  health:        'Santé / Bien-être',
+  education:     'Éducation / Formation',
+  real_estate:   'Immobilier / Construction',
+  environment:   'Environnement / Écologie',
+  culture:       'Culture / Créatif',
+  services:      'Services / Consulting',
+  commerce:      'Commerce / Retail',
+  hospitality:   'Restauration / Hôtellerie',
+  finance:       'Finance / Fintech',
+  energy:        'Énergie',
+  entertainment: 'Divertissement / Loisirs',
+  social:        'Social / Solidaire',
+};
+
 const SCOPE_LABEL: Record<string, string> = {
   national: 'National',
   regional: 'Régional',
@@ -153,6 +172,19 @@ export default function PartnerValidationsList({ applications }: { applications:
                   {app.justification_url}
                 </a>
               </p>
+            )}
+
+            {app.intervention_categories && app.intervention_categories.length > 0 && (
+              <div className="mb-3">
+                <p className="text-sm font-medium text-neutral-600 mb-1.5">Domaines d&apos;intervention :</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {app.intervention_categories.map((cat) => (
+                    <span key={cat} className="text-xs font-medium px-2 py-0.5 bg-primary-50 text-primary-700 rounded-full">
+                      {CATEGORY_LABELS[cat] ?? cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
 
