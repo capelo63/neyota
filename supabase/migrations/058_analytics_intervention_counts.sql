@@ -6,6 +6,10 @@
 -- projets actifs visibles dans son périmètre.
 -- ============================================
 
+-- DROP obligatoire : la signature RETURNS TABLE passe de 7 à 8 colonnes.
+-- CREATE OR REPLACE échouerait avec "cannot change return type of existing function".
+DROP FUNCTION IF EXISTS get_partner_analytics();
+
 CREATE OR REPLACE FUNCTION get_partner_analytics()
 RETURNS TABLE (
   total_views                  BIGINT,
