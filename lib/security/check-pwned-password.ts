@@ -15,9 +15,11 @@ export async function checkPwnedPassword(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
+    // No custom headers: keeps the request a "simple CORS GET" (no preflight OPTIONS).
+    // Add-Padding would trigger a preflight that HIBP may reject depending on the
+    // client environment, causing a silent network error → pwned: false.
     const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
       signal: controller.signal,
-      headers: { 'Add-Padding': 'true' },
     });
     clearTimeout(timeoutId);
 
@@ -27,7 +29,8 @@ export async function checkPwnedPassword(
     }
 
     const text = await res.text();
-    for (const line of text.split('\r\n')) {
+    // Use /\r?\n/ to handle both CRLF (standard) and LF-only responses.
+    for (const line of text.split(/\r?\n/)) {
       const sep = line.indexOf(':');
       if (sep === -1) continue;
       if (line.slice(0, sep) === suffix) {
