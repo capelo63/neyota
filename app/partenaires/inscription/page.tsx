@@ -6,6 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { PARTNER_ORG_TYPES, REGIONS_FRANCE, DEPARTMENTS_FRANCE, getOrgTypeLabel } from '@/lib/constants/france-geo';
+import { checkPwnedPassword } from '@/lib/security/check-pwned-password';
 
 type Step = 'A' | 'B' | 'D' | 'C';
 
@@ -158,8 +159,24 @@ export default function PartenaireInscriptionPage() {
     return Object.keys(e).length === 0;
   };
 
-  const handleNext = () => {
-    if (step === 'A' && validateA()) setStep('B');
+  const handleNext = async () => {
+    if (step === 'A') {
+      if (!validateA()) return;
+      setIsSubmitting(true);
+      const hibp = await checkPwnedPassword(form.password);
+      setIsSubmitting(false);
+      if (hibp.pwned) {
+        setErrors((e) => ({
+          ...e,
+          password: `Ce mot de passe a été compromis dans une fuite de données connue${
+            hibp.count ? ` (apparu ${hibp.count.toLocaleString('fr-FR')} fois)` : ''
+          }. Pour votre sécurité, veuillez en choisir un autre.`,
+        }));
+        return;
+      }
+      setStep('B');
+      return;
+    }
     if (step === 'B' && validateB()) setStep('D');
     if (step === 'D' && validateD()) setStep('C');
   };
@@ -526,9 +543,10 @@ export default function PartenaireInscriptionPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2.5 rounded-lg text-sm transition-colors"
+                disabled={isSubmitting}
+                className="bg-primary-600 hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium px-6 py-2.5 rounded-lg text-sm transition-colors"
               >
-                Suivant →
+                {isSubmitting && step === 'A' ? 'Vérification…' : 'Suivant →'}
               </button>
             ) : (
               <button
