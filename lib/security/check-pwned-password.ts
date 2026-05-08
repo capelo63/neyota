@@ -9,13 +9,8 @@ export async function checkPwnedPassword(
       .join('')
       .toUpperCase();
 
-    console.log('[HIBP] Hash SHA-1:', hashHex);
-
     const prefix = hashHex.slice(0, 5);
     const suffix = hashHex.slice(5);
-
-    console.log('[HIBP] Prefix envoyé:', prefix);
-    console.log('[HIBP] Suffix recherché:', suffix);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -25,35 +20,21 @@ export async function checkPwnedPassword(
     });
     clearTimeout(timeoutId);
 
-    console.log('[HIBP] Status réponse:', res.status);
-
     if (!res.ok) {
-      console.warn('[HIBP] API non-ok, inscription non bloquée');
+      console.warn('[HIBP] API returned status:', res.status);
       return { pwned: false };
     }
 
     const text = await res.text();
-    const lines = text.split(/\r?\n/).filter((l) => l.includes(':'));
-
-    console.log('[HIBP] Nombre de lignes:', lines.length);
-
-    let match = false;
-    let matchCount: number | undefined;
-    for (const line of lines) {
+    for (const line of text.split(/\r?\n/)) {
       const sep = line.indexOf(':');
+      if (sep === -1) continue;
       if (line.slice(0, sep) === suffix) {
-        match = true;
-        matchCount = parseInt(line.slice(sep + 1), 10);
-        break;
+        return { pwned: true, count: parseInt(line.slice(sep + 1), 10) };
       }
     }
 
-    console.log('[HIBP] Match trouvé:', match);
-
-    const result = match ? { pwned: true, count: matchCount } : { pwned: false };
-    console.log('[HIBP] Résultat final:', result);
-
-    return result;
+    return { pwned: false };
   } catch (err) {
     console.error('[HIBP] Check failed (inscription non bloquée):', err);
     return { pwned: false };
