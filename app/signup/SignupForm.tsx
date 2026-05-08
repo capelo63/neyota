@@ -98,7 +98,9 @@ export default function SignupForm() {
     if (!validateInfoStep()) return;
 
     setIsLoading(true);
+    console.log('[SIGNUP] Avant check HIBP, password length:', formData.password.length);
     const hibp = await checkPwnedPassword(formData.password);
+    console.log('[SIGNUP] Après check HIBP:', hibp);
     setIsLoading(false);
 
     if (hibp.pwned) {
