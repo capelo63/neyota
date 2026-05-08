@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import { Button, Input, Checkbox, Card, CardBody } from '@/components/ui';
+import { checkPwnedPassword } from '@/lib/security/check-pwned-password';
 
 type UserRole = 'entrepreneur' | 'talent';
 
@@ -92,11 +93,24 @@ export default function SignupForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInfoSubmit = (e: React.FormEvent) => {
+  const handleInfoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateInfoStep()) {
-      setStep('charter');
+    if (!validateInfoStep()) return;
+
+    setIsLoading(true);
+    const hibp = await checkPwnedPassword(formData.password);
+    setIsLoading(false);
+
+    if (hibp.pwned) {
+      setErrors({
+        password: `Ce mot de passe a été compromis dans une fuite de données connue${
+          hibp.count ? ` (apparu ${hibp.count.toLocaleString('fr-FR')} fois)` : ''
+        }. Pour votre sécurité, veuillez en choisir un autre.`,
+      });
+      return;
     }
+
+    setStep('charter');
   };
 
   const handleResendConfirmation = async () => {
@@ -434,8 +448,8 @@ export default function SignupForm() {
                     >
                       ← Retour
                     </Button>
-                    <Button type="submit" variant="default" className="flex-1">
-                      Continuer
+                    <Button type="submit" variant="default" className="flex-1" isLoading={isLoading} disabled={isLoading}>
+                      {isLoading ? 'Vérification…' : 'Continuer'}
                     </Button>
                   </div>
                 </form>
