@@ -160,17 +160,11 @@ export default function PartenaireInscriptionPage() {
   };
 
   const handleNext = async () => {
-    console.log('[INSCRIPTION] handleNext appelé, step actuel:', step, '| isSubmitting:', isSubmitting);
-
     if (step === 'A') {
-      const validA = validateA();
-      console.log('[INSCRIPTION] validateA():', validA);
-      if (!validA) return;
-
+      if (!validateA()) return;
       try {
         setIsSubmitting(true);
         const hibp = await checkPwnedPassword(form.password);
-        console.log('[INSCRIPTION] HIBP result:', hibp);
         if (hibp.pwned) {
           setErrors((e) => ({
             ...e,
@@ -186,19 +180,8 @@ export default function PartenaireInscriptionPage() {
       }
       return;
     }
-
-    if (step === 'B') {
-      const validB = validateB();
-      console.log('[INSCRIPTION] validateB():', validB, '| form org:', form.organizationName, '| siret:', form.siret, '| type:', form.organizationType, '| scope:', form.territoryScope);
-      if (validB) setStep('D');
-      return;
-    }
-
-    if (step === 'D') {
-      const validD = validateD();
-      console.log('[INSCRIPTION] validateD():', validD, '| categories:', form.interventionCategories);
-      if (validD) setStep('C');
-    }
+    if (step === 'B' && validateB()) setStep('D');
+    if (step === 'D' && validateD()) setStep('C');
   };
 
   const handleSubmit = async () => {
