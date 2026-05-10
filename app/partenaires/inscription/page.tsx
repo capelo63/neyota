@@ -160,25 +160,45 @@ export default function PartenaireInscriptionPage() {
   };
 
   const handleNext = async () => {
+    console.log('[INSCRIPTION] handleNext appelé, step actuel:', step, '| isSubmitting:', isSubmitting);
+
     if (step === 'A') {
-      if (!validateA()) return;
-      setIsSubmitting(true);
-      const hibp = await checkPwnedPassword(form.password);
-      setIsSubmitting(false);
-      if (hibp.pwned) {
-        setErrors((e) => ({
-          ...e,
-          password: `Ce mot de passe a été compromis dans une fuite de données connue${
-            hibp.count ? ` (apparu ${hibp.count.toLocaleString('fr-FR')} fois)` : ''
-          }. Pour votre sécurité, veuillez en choisir un autre.`,
-        }));
-        return;
+      const validA = validateA();
+      console.log('[INSCRIPTION] validateA():', validA);
+      if (!validA) return;
+
+      try {
+        setIsSubmitting(true);
+        const hibp = await checkPwnedPassword(form.password);
+        console.log('[INSCRIPTION] HIBP result:', hibp);
+        if (hibp.pwned) {
+          setErrors((e) => ({
+            ...e,
+            password: `Ce mot de passe a été compromis dans une fuite de données connue${
+              hibp.count ? ` (apparu ${hibp.count.toLocaleString('fr-FR')} fois)` : ''
+            }. Pour votre sécurité, veuillez en choisir un autre.`,
+          }));
+          return;
+        }
+        setStep('B');
+      } finally {
+        setIsSubmitting(false);
       }
-      setStep('B');
       return;
     }
-    if (step === 'B' && validateB()) setStep('D');
-    if (step === 'D' && validateD()) setStep('C');
+
+    if (step === 'B') {
+      const validB = validateB();
+      console.log('[INSCRIPTION] validateB():', validB, '| form org:', form.organizationName, '| siret:', form.siret, '| type:', form.organizationType, '| scope:', form.territoryScope);
+      if (validB) setStep('D');
+      return;
+    }
+
+    if (step === 'D') {
+      const validD = validateD();
+      console.log('[INSCRIPTION] validateD():', validD, '| categories:', form.interventionCategories);
+      if (validD) setStep('C');
+    }
   };
 
   const handleSubmit = async () => {
