@@ -5,6 +5,11 @@ import Link from 'next/link';
 import { createBrowserClient } from '@supabase/ssr';
 import type { VisibleProfile } from './page';
 
+export type ContactStatus = {
+  status: 'pending' | 'accepted' | 'declined';
+  contact_email: string | null;
+};
+
 function initials(p: VisibleProfile) {
   return `${p.first_name[0] ?? ''}${p.last_name[0] ?? ''}`.toUpperCase();
 }
@@ -14,11 +19,15 @@ export default function PartnerProfileModal({
   isFavorite,
   onToggleFavorite,
   onClose,
+  contactStatus,
+  onContactRequest,
 }: {
   profile: VisibleProfile;
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   onClose: () => void;
+  contactStatus?: ContactStatus | null;
+  onContactRequest?: (profileId: string) => void;
 }) {
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -108,7 +117,48 @@ export default function PartnerProfileModal({
             <p className="text-sm text-neutral-400 italic">Aucune biographie renseignée.</p>
           )}
 
-          <div className="mt-6 pt-4 border-t border-neutral-100 flex gap-3">
+          {/* Contact section */}
+          {onContactRequest && (
+            <div className="mt-5 pt-4 border-t border-neutral-100">
+              {!contactStatus && (
+                <button
+                  onClick={() => onContactRequest(profile.id)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors"
+                >
+                  Envoyer une demande de contact
+                </button>
+              )}
+              {contactStatus?.status === 'pending' && (
+                <div className="flex items-center gap-2 text-sm text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2.5">
+                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Demande de contact en attente de réponse
+                </div>
+              )}
+              {contactStatus?.status === 'accepted' && (
+                <div className="bg-green-50 border border-green-200 rounded-lg px-3 py-2.5">
+                  <p className="text-xs font-semibold text-green-700 mb-1">Contact accepté</p>
+                  <a
+                    href={`mailto:${contactStatus.contact_email}`}
+                    className="text-sm font-medium text-green-800 hover:underline break-all"
+                  >
+                    {contactStatus.contact_email}
+                  </a>
+                </div>
+              )}
+              {contactStatus?.status === 'declined' && (
+                <div className="flex items-center gap-2 text-sm text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-2.5">
+                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Demande déclinée par ce profil
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="mt-4 pt-4 border-t border-neutral-100 flex gap-3">
             <Link
               href={`/profile/${profile.id}`}
               target="_blank"

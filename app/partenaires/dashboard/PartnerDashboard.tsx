@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { createBrowserClient } from '@supabase/ssr';
 import { REGIONS_FRANCE, DEPARTMENTS_FRANCE, getOrgTypeLabel } from '@/lib/constants/france-geo';
 import { NEED_CATEGORIES, SKILL_CATEGORIES } from '@/lib/constants/needs-skills';
-import PartnerProfileModal from './PartnerProfileModal';
+import PartnerProfileModal, { type ContactStatus } from './PartnerProfileModal';
+import ContactRequestModal from './ContactRequestModal';
 import type { VisibleProfile, PartnerOrg } from './page';
 
 const PartnerMap = dynamic(() => import('./PartnerMap'), { ssr: false });
@@ -211,14 +212,22 @@ const SKILL_CATEGORY_OPTIONS = Object.values(SKILL_CATEGORIES).map((c) => ({
 
 const PHASE_OPTIONS = Object.entries(PHASE_LABELS).map(([code, label]) => ({ code, label }));
 
+type InitialContactStatus = {
+  target_profile_id: string;
+  status: string;
+  contact_email: string | null;
+};
+
 export default function PartnerDashboard({
   org,
   profiles,
   initialFavoriteIds,
+  initialContactStatuses,
 }: {
   org: PartnerOrg;
   profiles: VisibleProfile[];
   initialFavoriteIds: string[];
+  initialContactStatuses: InitialContactStatus[];
 }) {
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -255,6 +264,17 @@ export default function PartnerDashboard({
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(
     () => new Set(initialFavoriteIds)
   );
+
+  // ── Contact requests ─────────────────────────────────
+  const [contactMap, setContactMap] = useState<Map<string, ContactStatus>>(
+    () => new Map(
+      initialContactStatuses.map((s) => [
+        s.target_profile_id,
+        { status: s.status as ContactStatus['status'], contact_email: s.contact_email },
+      ])
+    )
+  );
+  const [contactRequestTarget, setContactRequestTarget] = useState<VisibleProfile | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const toggleFavorite = useCallback(async (profileId: string) => {
@@ -428,6 +448,17 @@ export default function PartnerDashboard({
           <span className="px-4 py-2.5 text-sm font-medium text-primary-600 border-b-2 border-primary-600">
             Annuaire
           </span>
+          <Link
+            href="/partenaires/dashboard/contacts"
+            className="relative px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-700 transition-colors"
+          >
+            Contacts
+            {contactMap.size > 0 && (
+              <span className="ml-1.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs font-bold">
+                {contactMap.size}
+              </span>
+            )}
+          </Link>
           <Link
             href="/partenaires/dashboard/analytics"
             className="px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-700 transition-colors"
@@ -646,6 +677,23 @@ export default function PartnerDashboard({
                 >
                   <StarIcon filled={favoriteIds.has(p.id)} />
                 </button>
+
+                {/* Contact status indicator */}
+                {contactMap.has(p.id) && (
+                  <span
+                    className="absolute bottom-3 right-3 text-xs font-medium px-2 py-0.5 rounded-full"
+                    style={
+                      contactMap.get(p.id)?.status === 'accepted'
+                        ? { background: '#d1fae5', color: '#065f46' }
+                        : contactMap.get(p.id)?.status === 'declined'
+                        ? { background: '#f3f4f6', color: '#6b7280' }
+                        : { background: '#fef9c3', color: '#92400e' }
+                    }
+                  >
+                    {contactMap.get(p.id)?.status === 'accepted' ? '✓ Contact' :
+                     contactMap.get(p.id)?.status === 'declined' ? 'Décliné' : '⏳ En attente'}
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -663,13 +711,31 @@ export default function PartnerDashboard({
         </>
       )}
 
-      {/* ── Modal ── */}
+      {/* ── Profile modal ── */}
       {selectedProfile && (
         <PartnerProfileModal
           profile={selectedProfile}
           isFavorite={favoriteIds.has(selectedProfile.id)}
           onToggleFavorite={toggleFavorite}
           onClose={() => setSelectedProfile(null)}
+          contactStatus={contactMap.get(selectedProfile.id) ?? null}
+          onContactRequest={(profileId) => {
+            const p = profiles.find((x) => x.id === profileId);
+            if (p) { setSelectedProfile(null); setContactRequestTarget(p); }
+          }}
+        />
+      )}
+
+      {/* ── Contact request modal ── */}
+      {contactRequestTarget && (
+        <ContactRequestModal
+          targetProfileId={contactRequestTarget.id}
+          targetName={`${contactRequestTarget.first_name} ${contactRequestTarget.last_name}`}
+          onSuccess={(profileId) => {
+            setContactMap((prev) => new Map(prev).set(profileId, { status: 'pending', contact_email: null }));
+            setContactRequestTarget(null);
+          }}
+          onClose={() => setContactRequestTarget(null)}
         />
       )}
     </main>

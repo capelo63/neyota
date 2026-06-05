@@ -582,6 +582,140 @@ const EMAIL_TEMPLATES = {
     `,
   }),
 
+  partner_contact_request_received: (params: any) => ({
+    subject: `${params.partner_org_name} souhaite entrer en contact avec vous`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .message-box { background: white; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1d4ed8; font-style: italic; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Demande de contact partenaire</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.target_first_name}</strong>,</p>
+              <p><strong>${params.partner_org_name}</strong> (${ORG_TYPE_LABELS[params.partner_org_type] ?? params.partner_org_type}) souhaite entrer en contact avec vous sur Teriis.</p>
+              <p><strong>Intention :</strong> ${params.intention}</p>
+              <div class="message-box">
+                <p style="margin: 0;">"${params.message}"</p>
+              </div>
+              <p>Vous pouvez accepter ou décliner cette demande depuis votre espace Teriis :</p>
+              <div style="text-align: center; margin: 24px 0;">
+                <a href="https://neyota.vercel.app/dashboard/partenaire-contacts" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Gérer cette demande
+                </a>
+              </div>
+              <p style="font-size: 13px; color: #6b7280;">
+                Votre adresse email ne sera partagée avec le partenaire <strong>que si vous acceptez</strong> la demande.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  partner_contact_request_accepted: (params: any) => ({
+    subject: `${params.target_first_name} ${params.target_last_name} a accepté votre demande de contact`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .email-box { background: white; border: 1px solid #d1fae5; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 26px;">Demande acceptée !</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.partner_first_name}</strong>,</p>
+              <p>Bonne nouvelle ! <strong>${params.target_first_name} ${params.target_last_name}</strong> a accepté votre demande de contact au nom de <strong>${params.org_name}</strong>.</p>
+              <p>Vous pouvez maintenant les contacter directement :</p>
+              <div class="email-box">
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #6b7280; font-weight: 600;">ADRESSE EMAIL</p>
+                <a href="mailto:${params.target_email}" style="font-size: 18px; color: #059669; font-weight: 700; text-decoration: none;">
+                  ${params.target_email}
+                </a>
+              </div>
+              <p style="font-size: 13px; color: #6b7280; margin-top: 20px;">
+                Rappel : respectez la <a href="https://neyota.vercel.app/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> dans vos échanges.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  partner_contact_request_declined: (params: any) => ({
+    subject: `Mise à jour de votre demande de contact — ${params.target_first_name} ${params.target_first_name ? params.target_first_name[0] + '.' : ''}`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .reason-box { background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; margin: 16px 0; }
+            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Demande de contact</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour <strong>${params.partner_first_name}</strong>,</p>
+              <p><strong>${params.target_first_name}</strong> n'a pas souhaité donner suite à votre demande de contact au nom de <strong>${params.org_name}</strong>.</p>
+              ${params.decline_reason ? `
+                <div class="reason-box">
+                  <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Motif</p>
+                  <p style="margin: 0; font-size: 14px;">${params.decline_reason}</p>
+                </div>
+              ` : ''}
+              <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+                D'autres profils sont disponibles dans votre <a href="https://neyota.vercel.app/partenaires/dashboard" style="color: #1d4ed8;">tableau de bord partenaire</a>.
+              </p>
+            </div>
+            <div class="footer">
+              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
   weekly_digest: (params: any) => ({
     subject: `📬 Votre résumé Teriis de la semaine`,
     htmlContent: `
