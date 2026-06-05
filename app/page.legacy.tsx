@@ -121,9 +121,10 @@ export default async function Home({
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-8 animate-fade-in">
-                <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse shrink-0"></span>
                 <span className="text-sm font-medium text-neutral-700">
-                  Plateforme 100% gratuite pour porteurs d'initiative et talents
+                  <span className="sm:hidden">Plateforme 100% gratuite</span>
+                  <span className="hidden sm:inline">Plateforme 100% gratuite pour porteurs d&apos;initiative et talents</span>
                 </span>
               </div>
 
