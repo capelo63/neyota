@@ -447,6 +447,25 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* Partner contact requests (for entrepreneur / talent) */}
+          {(profile?.role === 'entrepreneur' || profile?.role === 'talent') && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-neutral-900">Demandes de contact partenaires</h2>
+                  <p className="text-sm text-neutral-500 mt-0.5">
+                    Des partenaires (structures d'accompagnement, financeurs…) peuvent vous contacter via Teriis.
+                  </p>
+                </div>
+                <Link href="/dashboard/partenaire-contacts">
+                  <Button variant="secondary" size="sm">
+                    Voir les demandes
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* Quick navigation */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">

@@ -93,6 +93,14 @@ export default async function PartnerDashboardPage() {
     .eq('partner_user_id', user.id);
   const initialFavoriteIds = (favData ?? []).map((f) => f.favorite_profile_id as string);
 
+  // Initial contact statuses
+  const { data: contactData } = await supabase.rpc('get_partner_contact_statuses');
+  const initialContactStatuses = (contactData ?? []) as {
+    target_profile_id: string;
+    status: string;
+    contact_email: string | null;
+  }[];
+
   const partnerOrg: PartnerOrg = {
     organization_name: org.organization_name,
     organization_type: org.organization_type,
@@ -107,6 +115,7 @@ export default async function PartnerDashboardPage() {
         org={partnerOrg}
         profiles={visibleProfiles}
         initialFavoriteIds={initialFavoriteIds}
+        initialContactStatuses={initialContactStatuses}
       />
     </div>
   );
