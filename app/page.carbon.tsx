@@ -125,8 +125,9 @@ export default async function HomeCarbonPage({
               <div className="inline-flex items-center justify-center mb-8 animate-fade-in">
                 <Tag variant="blue" size="default" className="px-4 py-2">
                   <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-                    Plateforme 100% gratuite pour porteurs d'initiative et talents
+                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse shrink-0"></span>
+                    <span className="sm:hidden">Plateforme 100% gratuite</span>
+                    <span className="hidden sm:inline">Plateforme 100% gratuite pour porteurs d&apos;initiative et talents</span>
                   </span>
                 </Tag>
               </div>
