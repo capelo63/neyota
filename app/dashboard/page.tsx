@@ -33,7 +33,6 @@ export default function DashboardPage() {
     const loadUserData = async () => {
       // Capture confirmed param synchronously BEFORE any await or URL change
       const confirmed = new URLSearchParams(window.location.search).get('confirmed') === 'true';
-      console.log('[DASHBOARD] confirmed param:', confirmed, window.location.search);
 
       console.log('[DASHBOARD] Loading user data...');
       const { data: { user } } = await supabase.auth.getUser();
