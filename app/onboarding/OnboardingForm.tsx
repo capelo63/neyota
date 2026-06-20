@@ -56,7 +56,6 @@ export default function OnboardingForm() {
 
   useEffect(() => {
     const confirmed = searchParams.get('confirmed');
-    console.log('[ONBOARDING] confirmed param:', confirmed, window.location.search);
     if (confirmed === 'true') {
       setShowEmailConfirmed(true);
       // Use browser history API to clean the URL without triggering a Next.js navigation
