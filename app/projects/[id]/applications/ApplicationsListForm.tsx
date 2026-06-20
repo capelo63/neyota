@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 import { Button, Badge } from '@/components/ui';
 
 interface ApplicationsListProps {
@@ -125,10 +126,7 @@ export default function ApplicationsListForm({ projectId }: ApplicationsListProp
         <div className="container-custom">
           <div className="flex items-center justify-between">
             <Link href={`/projects/${projectId}`} className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900">Teriis</span>
+              <Logo variant="full" className="h-9 w-auto" />
             </Link>
             <Link href={`/projects/${projectId}`}>
               <Button variant="ghost" size="sm">

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 import { Button, Textarea, Select, Checkbox } from '@/components/ui';
 import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
 import CityAutocomplete from '@/components/CityAutocomplete';
@@ -411,10 +412,7 @@ export default function OnboardingForm() {
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">T</span>
-            </div>
-            <span className="text-2xl font-bold text-neutral-900">Teriis</span>
+            <Logo variant="full" className="h-9 w-auto" />
           </Link>
         </div>
       </header>
