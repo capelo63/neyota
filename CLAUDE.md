@@ -35,12 +35,13 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **055** (project_categories dans get_partner_profile_extras)
+- Dernière migration appliquée : **059** (système de demandes de contact partenaire→porteur/talent)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
+- ⚠️ `ALTER TYPE ... ADD VALUE` doit être exécuté SEUL (hors transaction) avant le reste de la migration
 
-### Historique récent (048–055)
+### Historique récent (048–059)
 - **048** : module B2B — enum `partner_organization_type`, tables `partner_organizations` / `partner_visibility_settings` / `partner_profile_views`, colonne `is_admin` sur `profiles`
 - **049** : fonction `get_partner_visible_profiles()` SECURITY DEFINER
 - **050** : RLS et GRANT sur `partner_organizations` / `partner_visibility_settings`
@@ -49,6 +50,7 @@
 - **053** : vue `profiles_public` recréée avec `ST_Y`/`ST_X` pour `latitude`/`longitude`
 - **054** : table `partner_favorites` (RLS, GRANT) + fonction `get_partner_profile_extras(UUID[])`
 - **055** : `get_partner_profile_extras` enrichie avec `project_categories TEXT[]`
+- **059** : table `partner_contact_requests` (UNIQUE partner/target, statuts pending/accepted/declined), 5 RPCs SECURITY DEFINER, 3 types d'email (partner_contact_request_received/accepted/declined)
 
 ## Système Besoins/Compétences (migration 033+)
 - Porteurs de projet → sélectionnent des **Besoins** (table `project_needs`, 11 catégories, 44 items)
@@ -60,8 +62,9 @@
 - Edge Function : `supabase/functions/send-emails/index.ts` (déployée sur Supabase, pas Vercel)
 - File d'attente : table `email_queue`
 - Cron job : toutes les 10 minutes (`send-pending-emails`)
-- Expéditeur : `notifications@neyota.com`
-- 7 types d'emails : welcome, application_received, invitation_received, application_accepted, application_rejected, profile_incomplete, weekly_digest
+- Expéditeur : `notifications@teriis.fr`
+- 10 types d'emails : welcome, application_received, invitation_received, application_accepted, application_rejected, profile_incomplete, weekly_digest, partner_contact_request_received, partner_contact_request_accepted, partner_contact_request_declined
+- ⚠️ Redéployer manuellement après toute modification : `supabase functions deploy send-emails --project-ref rnzezkzsbdvaizpuukec`
 
 ## Bugs connus / en cours
 - Page Talents : "Types d'intervention" affiche des propositions incorrectes (bug non corrigé)
