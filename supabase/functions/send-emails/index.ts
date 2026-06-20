@@ -62,7 +62,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
@@ -112,7 +112,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://www.teriis.fr/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
@@ -162,7 +162,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://www.teriis.fr/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
@@ -214,7 +214,7 @@ const EMAIL_TEMPLATES = {
               </div>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
@@ -369,7 +369,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
               </p>
@@ -418,7 +418,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -531,7 +531,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -574,7 +574,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -621,7 +621,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -665,7 +665,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -708,7 +708,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -784,7 +784,7 @@ const EMAIL_TEMPLATES = {
               </p>
             </div>
             <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
+              <p>Teriis - TERritoires, Initiatives et Impact social</p>
               <p>
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
                 <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>

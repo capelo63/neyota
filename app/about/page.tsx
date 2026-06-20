@@ -58,7 +58,7 @@ export default async function AboutPage() {
               Teriis
             </h1>
             <p className="text-2xl md:text-3xl font-medium text-primary-600 mb-6">
-              TERritoires, Initiatives et Innovation sociale
+              TERritoires, Initiatives et Impact social
             </p>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
               La plateforme qui réunit les énergies d&apos;un même territoire

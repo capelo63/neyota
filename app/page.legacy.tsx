@@ -134,7 +134,7 @@ export default async function Home({
                   Teriis
                 </h1>
                 <p className="text-xl md:text-2xl font-medium text-primary-600 mb-8">
-                  TERritoires, Initiatives et Innovation sociale
+                  TERritoires, Initiatives et Impact social
                 </p>
               </div>
 

@@ -3,7 +3,7 @@
 ## Lis ce fichier EN PREMIER avant toute action
 
 ## Projet
-- **Nom** : Teriis (TERritoires, Initiatives et Innovation sociale)
+- **Nom** : Teriis (TERritoires, Initiatives et Impact social)
 - **Repo** : github.com/capelo63/neyota
 - **Prod** : https://www.teriis.fr (déployé depuis `main` via Vercel)
 - **Supabase** : https://rnzezkzsbdvaizpuukec.supabase.co

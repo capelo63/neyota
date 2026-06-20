@@ -120,11 +120,6 @@ export default async function HomeCarbonPage({
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full blur-3xl opacity-20 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-20 -z-10"></div>
 
-          {/* Logo watermark — top-right, clipped by overflow-hidden, hidden on mobile */}
-          <div className="absolute -top-20 -right-20 pointer-events-none -z-10 opacity-20 hidden sm:block">
-            <Logo variant="icon-only" className="w-[700px] h-[700px] lg:w-[950px] lg:h-[950px]" />
-          </div>
-
           <div className="container-custom">
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge using Carbon Tag */}
@@ -138,14 +133,10 @@ export default async function HomeCarbonPage({
                 </Tag>
               </div>
 
-              {/* Teriis Brand & Tagline */}
-              <div className="mb-6 animate-slide-up">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-neutral-900 mb-3">
-                  Teriis
-                </h1>
-                <p className="text-xl md:text-2xl font-medium text-primary-600 mb-8">
-                  TERritoires, Initiatives et Innovation sociale
-                </p>
+              {/* Teriis Brand — logo SVG pleine largeur */}
+              <div className="mb-10 animate-slide-up flex justify-center">
+                <h1 className="sr-only">Teriis - TERritoires, Initiatives et Impact social</h1>
+                <Logo variant="full" className="h-auto w-full max-w-[700px] lg:max-w-[900px]" />
               </div>
 
               {/* Main Heading */}
@@ -205,7 +196,11 @@ export default async function HomeCarbonPage({
         </section>
 
         {/* Featured Projects Section - Carbon Tiles */}
-        <section className="py-20 px-4 bg-layer-01">
+        <section className="relative py-20 px-4 bg-layer-01 overflow-hidden">
+          {/* Logo watermark — fond blanc, opacité réduite, caché sur mobile */}
+          <div className="absolute -top-20 -right-20 pointer-events-none -z-10 opacity-10 hidden sm:block">
+            <Logo variant="icon-only" className="w-[600px] h-[600px] lg:w-[800px] lg:h-[800px]" />
+          </div>
           <div className="container-custom">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
