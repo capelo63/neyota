@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 import { Button, Badge, Modal, Textarea } from '@/components/ui';
 import ReportButton from '@/components/ReportButton';
 import { NEED_CATEGORIES, type NeedCategoryId } from '@/lib/constants/needs-skills';
@@ -289,10 +290,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         <div className="container-custom">
           <div className="flex items-center justify-between">
             <Link href="/projects" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900">Teriis</span>
+              <Logo variant="full" className="h-9 w-auto" />
             </Link>
             <div className="flex items-center gap-3">
               {!user && (

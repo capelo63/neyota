@@ -19,6 +19,7 @@ const tagVariants = cva(
         blue: "bg-info-light text-info-dark border border-info",
         yellow: "bg-warning-light text-warning-dark border border-warning",
         gray: "bg-neutral-100 text-neutral-800 border border-neutral-300",
+        orange: "bg-primary-50 text-primary-700 border border-primary-200",
         outline: "bg-transparent text-foreground border border-border",
       },
       size: {
