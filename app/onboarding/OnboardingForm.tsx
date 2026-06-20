@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button, Textarea, Select, Checkbox } from '@/components/ui';
@@ -26,6 +26,7 @@ interface OnboardingData {
 
 export default function OnboardingForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -40,6 +41,7 @@ export default function OnboardingForm() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showEmailConfirmed, setShowEmailConfirmed] = useState(false);
 
   const [formData, setFormData] = useState<OnboardingData>({
     city: '',
@@ -51,6 +53,13 @@ export default function OnboardingForm() {
     customSkillDetails: {}, // For "Autre expertise" custom descriptions
     availability: 'part_time',
   });
+
+  useEffect(() => {
+    if (searchParams.get('confirmed') === 'true') {
+      setShowEmailConfirmed(true);
+      router.replace('/onboarding');
+    }
+  }, [searchParams, router]);
 
   useEffect(() => {
     loadUserAndSkills();
@@ -385,6 +394,17 @@ export default function OnboardingForm() {
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
+      {showEmailConfirmed && (
+        <div className="bg-green-600 text-white text-sm text-center px-4 py-3 flex items-center justify-center gap-2">
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          <span>
+            Votre email a été confirmé avec succès ! Complétons maintenant votre profil pour démarrer sur Teriis.
+          </span>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
