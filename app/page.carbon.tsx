@@ -123,7 +123,7 @@ export default async function HomeCarbonPage({
           <div className="container-custom">
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge using Carbon Tag */}
-              <div className="inline-flex items-center justify-center mb-8 animate-fade-in">
+              <div className="inline-flex items-center justify-center mb-4 animate-fade-in">
                 <Tag variant="orange" size="default" className="px-4 py-2">
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse shrink-0"></span>
@@ -134,7 +134,7 @@ export default async function HomeCarbonPage({
               </div>
 
               {/* Teriis Brand — logo SVG pleine largeur */}
-              <div className="mb-10 animate-slide-up flex justify-center">
+              <div className="mb-4 animate-slide-up flex justify-center">
                 <h1 className="sr-only">Teriis - TERritoires, Initiatives et Impact social</h1>
                 <Logo variant="full" className="h-auto w-full max-w-[700px] lg:max-w-[900px]" />
               </div>
