@@ -886,7 +886,7 @@ serve(async (req) => {
           body: JSON.stringify({
             sender: {
               name: 'Teriis',
-              email: 'notifications@neyota.com', // Configured in Brevo
+              email: 'notifications@teriis.fr',
             },
             to: [
               {
