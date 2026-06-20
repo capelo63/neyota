@@ -134,7 +134,7 @@ export default async function HomeCarbonPage({
               </div>
 
               {/* Teriis Brand — logo SVG pleine largeur */}
-              <div className="mb-4 animate-slide-up flex justify-center">
+              <div className="mb-2 animate-slide-up flex justify-center">
                 <h1 className="sr-only">Teriis - TERritoires, Initiatives et Impact social</h1>
                 <Logo variant="full" className="h-auto w-full max-w-[700px] lg:max-w-[900px]" />
               </div>
