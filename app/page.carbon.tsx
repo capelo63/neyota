@@ -6,6 +6,7 @@ import { Button } from '@/components/ui';
 import { ClickableTile, Tile } from '@/components/ui/carbon-tile';
 import { Tag } from '@/components/ui/carbon-tag';
 import { createClient } from '@supabase/supabase-js';
+import { Logo } from '@/components/Logo';
 
 async function getHomeData() {
   const supabase = createClient(
@@ -118,6 +119,11 @@ export default async function HomeCarbonPage({
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full blur-3xl opacity-20 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-20 -z-10"></div>
+
+          {/* Logo watermark — top-right, clipped by overflow-hidden, hidden on mobile */}
+          <div className="absolute -top-20 -right-20 pointer-events-none -z-10 opacity-20 hidden sm:block">
+            <Logo variant="icon-only" className="w-[700px] h-[700px] lg:w-[950px] lg:h-[950px]" />
+          </div>
 
           <div className="container-custom">
             <div className="max-w-4xl mx-auto text-center">
