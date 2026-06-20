@@ -69,7 +69,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <Logo variant="full" className="h-9 w-auto" />
+            <Logo variant="full" className="h-12 w-auto" />
           </Link>
 
           {/* Desktop — liens publics */}
