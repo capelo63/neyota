@@ -16,7 +16,7 @@ export default function Footer() {
                   <span className="text-2xl font-bold text-white">Teriis</span>
                 </div>
                 <p className="text-primary-400 font-medium text-sm ml-12">
-                  TERritoires, Initiatives et Innovation sociale
+                  TERritoires, Initiatives et Impact social
                 </p>
               </div>
               <div className="text-neutral-400 text-sm space-y-2">

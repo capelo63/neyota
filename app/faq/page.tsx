@@ -26,7 +26,7 @@ const faqData: FAQSection[] = [
         question: "Que signifie Teriis ?",
         answer: (
           <div>
-            <p className="mb-3">Teriis signifie <strong>TERritoires, Initiatives et Innovation sociale</strong>.</p>
+            <p className="mb-3">Teriis signifie <strong>TERritoires, Initiatives et Impact social</strong>.</p>
             <p className="mb-3">La plateforme est née d'une conviction simple : les projets qui font bouger les lignes émergent souvent au cœur des territoires, portés par des personnes engagées et des compétences prêtes à s'impliquer.</p>
             <p>Teriis facilite ces rencontres pour faire émerger des initiatives utiles, concrètes et positives.</p>
           </div>
