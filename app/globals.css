@@ -8,10 +8,10 @@
 
 @layer base {
   :root {
-    /* NEYOTA Brand Colors */
-    --color-primary: 16 185 129; /* rgb(16, 185, 129) - #10b981 */
-    --color-primary-dark: 5 150 105; /* #059669 */
-    --color-primary-light: 187 247 208; /* #bbf7d0 */
+    /* Teriis Brand Colors */
+    --color-primary: 255 153 51; /* rgb(255, 153, 51) - #FF9933 */
+    --color-primary-dark: 232 126 20; /* #E87E14 */
+    --color-primary-light: 255 238 219; /* #FFEEDB */
 
     /* IBM Carbon Design System Spacing (2px base unit) */
     --spacing-01: 0.125rem; /* 2px */
@@ -43,7 +43,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    --primary: 142 71% 39%; /* Neyota green #10b981 */
+    --primary: 30 84% 49%; /* Teriis orange #E87E14 */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 96%;
@@ -60,7 +60,7 @@
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 142 71% 39%; /* Neyota green */
+    --ring: 30 84% 49%; /* Teriis orange */
 
     --radius: 0.5rem;
 
@@ -88,7 +88,7 @@
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 142 71% 45%;
+    --primary: 30 84% 55%;
     --primary-foreground: 0 0% 9%;
 
     --secondary: 0 0% 15%;
@@ -105,7 +105,7 @@
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 142 71% 45%;
+    --ring: 30 84% 55%;
   }
 }
 
@@ -115,7 +115,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
