@@ -27,6 +27,15 @@ export default function DashboardPage() {
   const [impactStats, setImpactStats] = useState<any>(null);
   const [skills, setSkills] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showEmailConfirmed, setShowEmailConfirmed] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('confirmed') === 'true') {
+      setShowEmailConfirmed(true);
+      router.replace('/dashboard');
+    }
+  }, [router]);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -79,7 +88,8 @@ export default function DashboardPage() {
 
       if (isIncomplete) {
         console.log('[DASHBOARD] Profile incomplete, redirecting to onboarding');
-        router.push('/onboarding');
+        const confirmed = new URLSearchParams(window.location.search).get('confirmed') === 'true';
+        router.push(confirmed ? '/onboarding?confirmed=true' : '/onboarding');
         return;
       }
 
@@ -226,6 +236,15 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navigation />
+
+      {showEmailConfirmed && (
+        <div className="bg-green-600 text-white text-sm text-center px-4 py-3 flex items-center justify-center gap-2">
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          <span>Votre email a été confirmé avec succès ! Bienvenue sur Teriis.</span>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="container-custom py-12">
