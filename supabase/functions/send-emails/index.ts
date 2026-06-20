@@ -53,7 +53,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Consultez son profil et sa lettre de motivation pour décider de la suite à donner à cette candidature.</p>
               <div style="text-align: center;">
-                <a href="https://neyota.vercel.app/projects/${params.project_id}/applications" class="button">
+                <a href="https://www.teriis.fr/projects/${params.project_id}/applications" class="button">
                   Voir la candidature
                 </a>
               </div>
@@ -64,8 +64,8 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.vercel.app/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -103,7 +103,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Votre profil a retenu l'attention de ce porteur d'initiative. C'est le moment de découvrir son projet et de décider si vous souhaitez le rejoindre !</p>
               <div style="text-align: center;">
-                <a href="https://neyota.vercel.app/dashboard/invitations" class="button">
+                <a href="https://www.teriis.fr/dashboard/invitations" class="button">
                   Voir l'invitation
                 </a>
               </div>
@@ -114,8 +114,8 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.vercel.app/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Félicitations ! Le porteur d'initiative souhaite travailler avec vous. Vous pouvez maintenant échanger avec lui pour discuter des prochaines étapes.</p>
               <div style="text-align: center;">
-                <a href="https://neyota.vercel.app/projects/${params.project_id}" class="button">
+                <a href="https://www.teriis.fr/projects/${params.project_id}" class="button">
                   Accéder au projet
                 </a>
               </div>
@@ -164,8 +164,8 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.vercel.app/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -208,7 +208,7 @@ const EMAIL_TEMPLATES = {
                 </ul>
               </div>
               <div style="text-align: center;">
-                <a href="https://neyota.vercel.app/projects" class="button">
+                <a href="https://www.teriis.fr/projects" class="button">
                   Découvrir d'autres projets
                 </a>
               </div>
@@ -216,8 +216,8 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.vercel.app/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -283,7 +283,7 @@ const EMAIL_TEMPLATES = {
               `}
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://neyota.vercel.app/dashboard" class="button">
+                <a href="https://www.teriis.fr/dashboard" class="button">
                   Accéder à mon tableau de bord
                 </a>
               </div>
@@ -295,7 +295,7 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - Ensemble, faisons vivre nos territoires</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -359,7 +359,7 @@ const EMAIL_TEMPLATES = {
               </div>
 
               <div style="text-align: center;">
-                <a href="https://neyota.vercel.app/profile/${params.profile_id}/edit" class="button">
+                <a href="https://www.teriis.fr/profile/${params.profile_id}/edit" class="button">
                   Compléter mon profil
                 </a>
               </div>
@@ -371,7 +371,7 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -409,7 +409,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>En attendant, vous pouvez suivre l'état de votre demande en vous connectant à votre espace.</p>
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://neyota.vercel.app/partenaires/en-attente" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
+                <a href="https://www.teriis.fr/partenaires/en-attente" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
                   Suivre ma demande
                 </a>
               </div>
@@ -517,7 +517,7 @@ const EMAIL_TEMPLATES = {
 
               <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
                 <strong>4. Respecter la charte partenaires</strong>
-                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Votre accès est conditionné au respect de la <a href="https://neyota.vercel.app/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> : pas de démarchage agressif, pas d'extraction massive de données, et uniquement des propositions à valeur ajoutée pour les utilisateurs.</p>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Votre accès est conditionné au respect de la <a href="https://www.teriis.fr/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> : pas de démarchage agressif, pas d'extraction massive de données, et uniquement des propositions à valeur ajoutée pour les utilisateurs.</p>
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
@@ -612,7 +612,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Vous pouvez accepter ou décliner cette demande depuis votre espace Teriis :</p>
               <div style="text-align: center; margin: 24px 0;">
-                <a href="https://neyota.vercel.app/dashboard/partenaire-contacts" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                <a href="https://www.teriis.fr/dashboard/partenaire-contacts" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
                   Gérer cette demande
                 </a>
               </div>
@@ -661,7 +661,7 @@ const EMAIL_TEMPLATES = {
                 </a>
               </div>
               <p style="font-size: 13px; color: #6b7280; margin-top: 20px;">
-                Rappel : respectez la <a href="https://neyota.vercel.app/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> dans vos échanges.
+                Rappel : respectez la <a href="https://www.teriis.fr/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> dans vos échanges.
               </p>
             </div>
             <div class="footer">
@@ -704,7 +704,7 @@ const EMAIL_TEMPLATES = {
                 </div>
               ` : ''}
               <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
-                D'autres profils sont disponibles dans votre <a href="https://neyota.vercel.app/partenaires/dashboard" style="color: #1d4ed8;">tableau de bord partenaire</a>.
+                D'autres profils sont disponibles dans votre <a href="https://www.teriis.fr/partenaires/dashboard" style="color: #1d4ed8;">tableau de bord partenaire</a>.
               </p>
             </div>
             <div class="footer">
@@ -774,7 +774,7 @@ const EMAIL_TEMPLATES = {
               ` : ''}
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://neyota.vercel.app/dashboard" class="button">
+                <a href="https://www.teriis.fr/dashboard" class="button">
                   Voir mon tableau de bord
                 </a>
               </div>
@@ -786,8 +786,8 @@ const EMAIL_TEMPLATES = {
             <div class="footer">
               <p>Teriis - TERritoires, Initiatives et Innovation sociale</p>
               <p>
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://neyota.vercel.app/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
               </p>
             </div>
           </div>
@@ -886,7 +886,7 @@ serve(async (req) => {
           body: JSON.stringify({
             sender: {
               name: 'Teriis',
-              email: 'notifications@neyota.com', // Configured in Brevo
+              email: 'notifications@teriis.fr',
             },
             to: [
               {

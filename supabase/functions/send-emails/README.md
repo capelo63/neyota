@@ -23,7 +23,7 @@ Cette fonction :
 ### 2. Configurer le domaine d'envoi
 
 1. Dans Brevo, allez dans **Senders & IP**
-2. Ajoutez votre domaine d'envoi : `notifications@neyota.fr`
+2. Ajoutez votre domaine d'envoi : `notifications@teriis.fr`
 3. Vérifiez le domaine (configuration DNS SPF/DKIM)
 
 Si vous n'avez pas de domaine personnalisé, vous pouvez utiliser une adresse email vérifiée temporairement.

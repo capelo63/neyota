@@ -274,9 +274,9 @@ Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails.
 
 **Porteur de projet** : [Votre nom]
 
-**Email** : contact@neyota.fr (à configurer)
+**Email** : contact@teriis.fr (à configurer)
 
-**Site web** : https://neyota.fr (à venir)
+**Site web** : https://www.teriis.fr (à venir)
 
 ---
 

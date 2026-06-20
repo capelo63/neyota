@@ -11,7 +11,7 @@ import "./globals.css";
 import { OrganizationStructuredData, WebsiteStructuredData } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://neyota.vercel.app'),
+  metadataBase: new URL('https://www.teriis.fr'),
   title: {
     default: "Teriis - Ensemble, faisons vivre nos territoires",
     template: "%s | Teriis"
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://neyota.vercel.app',
+    url: 'https://www.teriis.fr',
     siteName: 'Teriis',
     title: 'Teriis - Ensemble, faisons vivre nos territoires',
     description: 'Plateforme de mise en relation entre porteurs d\'initiative et talents locaux. 100% gratuit • 100% territorial • 100% impact.',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     creator: '@neyota',
   },
   alternates: {
-    canonical: 'https://neyota.vercel.app',
+    canonical: 'https://www.teriis.fr',
   },
   verification: {
     google: 'verification_token_here', // À remplacer par votre token Google Search Console

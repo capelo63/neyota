@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
         organization_name: organizationName,
         organization_type: organizationType,
         territory_scope: territoryScope || 'national',
-        admin_url: 'https://neyota.vercel.app/admin/partner-validations',
+        admin_url: 'https://www.teriis.fr/admin/partner-validations',
       },
       scheduled_for: new Date().toISOString(),
     });

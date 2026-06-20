@@ -37,7 +37,7 @@ export function ProjectStructuredData({ project }: ProjectStructuredDataProps) {
       },
     },
     employmentType: 'CONTRACTOR',
-    url: `https://neyota.vercel.app/projects/${project.id}`,
+    url: `https://www.teriis.fr/projects/${project.id}`,
   };
 
   return (
@@ -55,8 +55,8 @@ export function OrganizationStructuredData() {
     name: 'Teriis',
     description:
       'Plateforme de mise en relation entre porteurs d\'initiative et talents locaux',
-    url: 'https://neyota.vercel.app',
-    logo: 'https://neyota.vercel.app/logo.png',
+    url: 'https://www.teriis.fr',
+    logo: 'https://www.teriis.fr/logo.png',
     foundingDate: '2024',
     contactPoint: {
       '@type': 'ContactPoint',
@@ -83,14 +83,14 @@ export function WebsiteStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Teriis',
-    url: 'https://neyota.vercel.app',
+    url: 'https://www.teriis.fr',
     description:
       'Plateforme de mise en relation entre porteurs de projets et talents locaux',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://neyota.vercel.app/projects?q={search_term_string}',
+        urlTemplate: 'https://www.teriis.fr/projects?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

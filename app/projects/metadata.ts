@@ -16,7 +16,7 @@ export const projectsMetadata: Metadata = {
     description:
       'Découvrez les projets d\'initiative de votre territoire et proposez vos compétences.',
     type: 'website',
-    url: 'https://neyota.vercel.app/projects',
+    url: 'https://www.teriis.fr/projects',
   },
   twitter: {
     card: 'summary_large_image',
@@ -25,6 +25,6 @@ export const projectsMetadata: Metadata = {
       'Découvrez les projets d\'initiative de votre territoire et proposez vos compétences.',
   },
   alternates: {
-    canonical: 'https://neyota.vercel.app/projects',
+    canonical: 'https://www.teriis.fr/projects',
   },
 };
