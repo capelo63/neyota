@@ -115,7 +115,7 @@ export default async function HomeCarbonPage({
 
       <main>
         {/* Hero Section - Carbon Design */}
-        <section className="relative bg-gradient-to-br from-primary-50 via-layer-01 to-primary-50/30 py-20 lg:py-32 px-4 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-primary-50 via-layer-01 to-primary-50/30 pt-10 lg:pt-16 pb-20 lg:pb-32 px-4 overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary-100 rounded-full blur-3xl opacity-20 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-20 -z-10"></div>
