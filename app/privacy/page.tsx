@@ -43,7 +43,7 @@ export default function PrivacyPage() {
               </h2>
               <p className="text-neutral-700 leading-relaxed">
                 Le responsable du traitement des données personnelles est Teriis, accessible via
-                la plateforme neyota.vercel.app.
+                la plateforme www.teriis.fr.
               </p>
             </section>
 

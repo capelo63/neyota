@@ -31,7 +31,7 @@ export default function TermsPage() {
               <p className="text-neutral-700 leading-relaxed mb-4">
                 Les présentes Conditions Générales d&apos;Utilisation (ci-après « CGU ») régissent
                 l&apos;utilisation de la plateforme Teriis (ci-après « la Plateforme »), accessible
-                à l&apos;adresse neyota.vercel.app.
+                à l&apos;adresse www.teriis.fr.
               </p>
               <p className="text-neutral-700 leading-relaxed">
                 Teriis est une plateforme gratuite de mise en relation entre porteurs d'initiative

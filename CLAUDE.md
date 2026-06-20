@@ -5,7 +5,7 @@
 ## Projet
 - **Nom** : Teriis (TERritoires, Initiatives et Innovation sociale)
 - **Repo** : github.com/capelo63/neyota
-- **Prod** : https://neyota.vercel.app (déployé depuis `main` via Vercel)
+- **Prod** : https://www.teriis.fr (déployé depuis `main` via Vercel)
 - **Supabase** : https://rnzezkzsbdvaizpuukec.supabase.co
 
 ## Stack

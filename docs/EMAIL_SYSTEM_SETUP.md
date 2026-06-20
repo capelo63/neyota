@@ -40,7 +40,7 @@ Le système d'emails NEYOTA permet d'envoyer :
 1. Dans Brevo, allez dans **Senders & IP**
 2. Cliquez sur **Add a sender**
 3. Remplissez :
-   - Email : `notifications@neyota.fr`
+   - Email : `notifications@teriis.fr`
    - Nom : `NEYOTA`
 4. Vérifiez votre domaine :
    - Ajoutez les enregistrements DNS (SPF, DKIM, DMARC)
@@ -325,7 +325,7 @@ supabase functions deploy send-emails
 
 1. Configurer **SPF, DKIM, DMARC** dans Brevo
 2. Réchauffer votre IP (envoyer progressivement)
-3. Demander aux utilisateurs d'ajouter `notifications@neyota.fr` à leurs contacts
+3. Demander aux utilisateurs d'ajouter `notifications@teriis.fr` à leurs contacts
 
 ### Erreur "BREVO_API_KEY not configured"
 

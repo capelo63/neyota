@@ -32,7 +32,7 @@ export default function ContactPage() {
               Envoyez-nous un message
             </h2>
 
-            <form action="mailto:contact@neyota.fr?subject=Contact depuis neyota.vercel.app" method="post" encType="text/plain">
+            <form action="mailto:contact@teriis.fr?subject=Contact depuis www.teriis.fr" method="post" encType="text/plain">
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <Input

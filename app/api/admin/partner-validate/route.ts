@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         template_params: {
           first_name: firstName,
           organization_name: org.organization_name,
-          dashboard_url: 'https://neyota.vercel.app/partenaires/dashboard',
+          dashboard_url: 'https://www.teriis.fr/partenaires/dashboard',
         },
         scheduled_for: new Date().toISOString(),
       });

@@ -27,14 +27,14 @@ Créez une image `public/og-image.png` (1200x630px) avec:
 
 ### Google Search Console
 1. Aller sur https://search.google.com/search-console
-2. Ajouter la propriété `https://neyota.vercel.app`
+2. Ajouter la propriété `https://www.teriis.fr`
 3. Vérifier avec le meta tag (déjà en place dans layout.tsx)
 4. Remplacer `verification_token_here` par votre token
 
 ### Bing Webmaster Tools
 1. Aller sur https://www.bing.com/webmasters
 2. Ajouter le site
-3. Soumettre le sitemap: `https://neyota.vercel.app/sitemap.xml`
+3. Soumettre le sitemap: `https://www.teriis.fr/sitemap.xml`
 
 ### Performance
 - ✅ Next.js 15 avec optimisations automatiques
@@ -85,9 +85,9 @@ https://search.google.com/search-console
 https://www.bing.com/webmasters
 
 # À soumettre:
-- https://neyota.vercel.app/
-- https://neyota.vercel.app/projects
-- https://neyota.vercel.app/signup
+- https://www.teriis.fr/
+- https://www.teriis.fr/projects
+- https://www.teriis.fr/signup
 ```
 
 ## 💡 Conseils d'optimisation

@@ -1,5 +1,5 @@
 # robots.txt for NEYOTA - Plateforme de mise en relation territoriale
-# https://neyota.vercel.app
+# https://www.teriis.fr
 
 User-agent: *
 Allow: /
@@ -18,4 +18,4 @@ Disallow: /login
 Disallow: /signup
 
 # Sitemap
-Sitemap: https://neyota.vercel.app/sitemap.xml
+Sitemap: https://www.teriis.fr/sitemap.xml
