@@ -18,18 +18,17 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          // Brand colors - TERRII territorial green
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-          950: '#022c22',
+          // Brand colors - Teriis orange
+          50: '#FFF8F0',
+          100: '#FFEEDB',
+          200: '#FFDDB8',
+          300: '#FFC585',
+          400: '#FFAD52',
+          500: '#FF9933',
+          600: '#E87E14',
+          700: '#BD6310',
+          800: '#8F4B0C',
+          900: '#5C2F07',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -92,9 +91,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['IBM Plex Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        sans: ['var(--font-manrope)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         mono: ['IBM Plex Mono', 'monospace'],
-        display: ['IBM Plex Sans', 'sans-serif'],
+        display: ['var(--font-manrope)', 'sans-serif'],
       },
       fontSize: {
         'display-lg': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],

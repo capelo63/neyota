@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import "@fontsource/ibm-plex-sans/300.css";
-import "@fontsource/ibm-plex-sans/400.css";
-import "@fontsource/ibm-plex-sans/500.css";
-import "@fontsource/ibm-plex-sans/600.css";
-import "@fontsource/ibm-plex-sans/700.css";
+import { Manrope } from "next/font/google";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-mono/600.css";
 import "./globals.css";
 import { OrganizationStructuredData, WebsiteStructuredData } from "@/components/StructuredData";
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.teriis.fr'),
@@ -80,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={manrope.variable}>
       <head>
         <OrganizationStructuredData />
         <WebsiteStructuredData />

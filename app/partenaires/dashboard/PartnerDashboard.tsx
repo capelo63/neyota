@@ -684,7 +684,7 @@ export default function PartnerDashboard({
                     className="absolute bottom-3 right-3 text-xs font-medium px-2 py-0.5 rounded-full"
                     style={
                       contactMap.get(p.id)?.status === 'accepted'
-                        ? { background: '#d1fae5', color: '#065f46' }
+                        ? { background: '#FFEEDB', color: '#8F4B0C' }
                         : contactMap.get(p.id)?.status === 'declined'
                         ? { background: '#f3f4f6', color: '#6b7280' }
                         : { background: '#fef9c3', color: '#92400e' }
