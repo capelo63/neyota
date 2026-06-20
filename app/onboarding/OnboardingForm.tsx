@@ -55,11 +55,14 @@ export default function OnboardingForm() {
   });
 
   useEffect(() => {
-    if (searchParams.get('confirmed') === 'true') {
+    const confirmed = searchParams.get('confirmed');
+    console.log('[ONBOARDING] confirmed param:', confirmed, window.location.search);
+    if (confirmed === 'true') {
       setShowEmailConfirmed(true);
-      router.replace('/onboarding');
+      // Use browser history API to clean the URL without triggering a Next.js navigation
+      window.history.replaceState({}, '', '/onboarding');
     }
-  }, [searchParams, router]);
+  }, [searchParams]);
 
   useEffect(() => {
     loadUserAndSkills();

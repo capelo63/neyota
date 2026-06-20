@@ -30,15 +30,11 @@ export default function DashboardPage() {
   const [showEmailConfirmed, setShowEmailConfirmed] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('confirmed') === 'true') {
-      setShowEmailConfirmed(true);
-      router.replace('/dashboard');
-    }
-  }, [router]);
-
-  useEffect(() => {
     const loadUserData = async () => {
+      // Capture confirmed param synchronously BEFORE any await or URL change
+      const confirmed = new URLSearchParams(window.location.search).get('confirmed') === 'true';
+      console.log('[DASHBOARD] confirmed param:', confirmed, window.location.search);
+
       console.log('[DASHBOARD] Loading user data...');
       const { data: { user } } = await supabase.auth.getUser();
 
@@ -87,13 +83,16 @@ export default function DashboardPage() {
       });
 
       if (isIncomplete) {
-        console.log('[DASHBOARD] Profile incomplete, redirecting to onboarding');
-        const confirmed = new URLSearchParams(window.location.search).get('confirmed') === 'true';
+        console.log('[DASHBOARD] Profile incomplete, redirecting to onboarding, confirmed:', confirmed);
         router.push(confirmed ? '/onboarding?confirmed=true' : '/onboarding');
         return;
       }
 
       console.log('[DASHBOARD] Profile complete, showing dashboard');
+      if (confirmed) {
+        setShowEmailConfirmed(true);
+        window.history.replaceState({}, '', '/dashboard');
+      }
       setProfile(profile);
 
       // Run all secondary queries in parallel to minimize total load time
