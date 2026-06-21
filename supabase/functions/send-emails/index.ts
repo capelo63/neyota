@@ -33,23 +33,30 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #667eea; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">📨 Nouvelle candidature !</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.entrepreneur_name}</strong>,</p>
               <p><strong>${params.talent_name}</strong> vient de postuler à votre projet :</p>
-              <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
-                <h3 style="margin: 0 0 10px 0; color: #667eea;">${params.project_title}</h3>
+              <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14;">
+                <h3 style="margin: 0 0 10px 0; color: #E87E14;">${params.project_title}</h3>
               </div>
               <p>Consultez son profil et sa lettre de motivation pour décider de la suite à donner à cette candidature.</p>
               <div style="text-align: center;">
@@ -61,11 +68,11 @@ const EMAIL_TEMPLATES = {
                 💡 <strong>Conseil :</strong> Répondez rapidement aux candidatures pour maintenir l'engagement des talents !
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #E87E14; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -83,23 +90,30 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #f59e0b; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">🎯 Vous avez une invitation !</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.talent_name}</strong>,</p>
               <p>Bonne nouvelle ! <strong>${params.entrepreneur_name}</strong> a identifié votre profil et souhaite vous inviter à rejoindre son projet :</p>
-              <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-                <h3 style="margin: 0 0 10px 0; color: #f59e0b;">${params.project_title}</h3>
+              <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14;">
+                <h3 style="margin: 0 0 10px 0; color: #E87E14;">${params.project_title}</h3>
               </div>
               <p>Votre profil a retenu l'attention de ce porteur d'initiative. C'est le moment de découvrir son projet et de décider si vous souhaitez le rejoindre !</p>
               <div style="text-align: center;">
@@ -111,11 +125,11 @@ const EMAIL_TEMPLATES = {
                 ✨ <strong>Félicitations :</strong> Cette invitation montre que votre profil correspond aux besoins de ce projet.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://www.teriis.fr/unsubscribe" style="color: #f59e0b; text-decoration: none;">Se désabonner</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #E87E14; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -133,18 +147,25 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #10b981; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">🎉 Candidature acceptée !</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.talent_name}</strong>,</p>
               <p>Excellente nouvelle ! Votre candidature a été <strong style="color: #10b981;">acceptée</strong> pour le projet :</p>
@@ -161,11 +182,11 @@ const EMAIL_TEMPLATES = {
                 🚀 <strong>Prochaine étape :</strong> Prenez contact avec le porteur d'initiative pour démarrer la collaboration !
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://www.teriis.fr/unsubscribe" style="color: #10b981; text-decoration: none;">Se désabonner</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #E87E14; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -183,23 +204,30 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #667eea; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">Mise à jour de candidature</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.talent_name}</strong>,</p>
               <p>Nous vous informons que votre candidature pour le projet "${params.project_title}" n'a pas été retenue cette fois-ci.</p>
               <p>Cela ne reflète pas la qualité de votre profil. Chaque porteur d'initiative a des besoins spécifiques pour son projet.</p>
-              <div style="background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+              <div style="background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14;">
                 <p style="margin: 0;"><strong>💡 Nos conseils :</strong></p>
                 <ul style="margin: 10px 0;">
                   <li>Consultez les autres projets disponibles</li>
@@ -213,11 +241,11 @@ const EMAIL_TEMPLATES = {
                 </a>
               </div>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #667eea; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://www.teriis.fr/unsubscribe" style="color: #667eea; text-decoration: none;">Se désabonner</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/unsubscribe" style="color: #E87E14; text-decoration: none;">Se désabonner</a>
               </p>
             </div>
           </div>
@@ -235,24 +263,31 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #10b981; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
-            .step { background: white; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #10b981; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+            .step { background: white; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #E87E14; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">🎉 Bienvenue sur Teriis !</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
               <p>Nous sommes ravis de vous accueillir sur <strong>Teriis</strong>, la plateforme qui connecte les talents aux projets locaux !</p>
 
-              <h3 style="color: #10b981; margin-top: 30px;">🚀 Pour bien démarrer :</h3>
+              <h3 style="color: #E87E14; margin-top: 30px;">🚀 Pour bien démarrer :</h3>
 
               ${params.user_role === 'entrepreneur' ? `
                 <div class="step">
@@ -289,13 +324,13 @@ const EMAIL_TEMPLATES = {
               </div>
 
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-                💚 <strong>Notre mission :</strong> Faire vivre les territoires en connectant talents locaux et porteurs de projets. 100% gratuit, 100% territorial, 100% initiatives.
+                🧡 <strong>Notre mission :</strong> Faire vivre les territoires en connectant talents locaux et porteurs de projets. 100% gratuit, 100% territorial, 100% initiatives.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - Ensemble, faisons vivre nos territoires</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #10b981; text-decoration: none;">Gérer mes préférences</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -313,20 +348,27 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #f59e0b; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
             .progress-bar { background: #e5e7eb; border-radius: 10px; height: 20px; margin: 20px 0; overflow: hidden; }
-            .progress-fill { background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); height: 100%; transition: width 0.3s; }
+            .progress-fill { background: linear-gradient(90deg, #FF9933 0%, #E87E14 100%); height: 100%; transition: width 0.3s; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">📝 Votre profil n'est pas complet</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
               <p>Votre profil Teriis est complété à <strong>${params.completion_percentage}%</strong>.</p>
@@ -343,7 +385,7 @@ const EMAIL_TEMPLATES = {
                 ${params.user_role === 'talent' ? '<li><strong>Recevoir des invitations</strong> directes sur des projets</li>' : '<li><strong>Attirer les meilleurs talents</strong> locaux</li>'}
               </ul>
 
-              <div style="background: #fffbeb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+              <div style="background: #FFF8F0; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14;">
                 <p style="margin: 0;"><strong>💡 Conseils pour compléter votre profil :</strong></p>
                 <ul style="margin: 10px 0 0 0; padding-left: 20px;">
                   ${params.user_role === 'talent' ? `
@@ -368,10 +410,10 @@ const EMAIL_TEMPLATES = {
                 ⏱️ Cela ne prend que <strong>5 minutes</strong> et augmente considérablement vos chances de succès !
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #f59e0b; text-decoration: none;">Gérer mes préférences</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a>
               </p>
             </div>
           </div>
@@ -389,18 +431,25 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .info-box { background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1d4ed8; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .info-box { background: #FFF8F0; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 26px;">Demande reçue</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.first_name}</strong>,</p>
               <p>Nous avons bien reçu votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> sur Teriis.</p>
@@ -409,16 +458,16 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>En attendant, vous pouvez suivre l'état de votre demande en vous connectant à votre espace.</p>
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://www.teriis.fr/partenaires/en-attente" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
+                <a href="https://www.teriis.fr/partenaires/en-attente" style="display: inline-block; background: #E87E14; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px;">
                   Suivre ma demande
                 </a>
               </div>
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-                Une question ? Répondez directement à cet email ou contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #1d4ed8;">cyril.hugon@gmail.com</a>.
+                Une question ? Répondez directement à cet email ou contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #E87E14;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -483,55 +532,62 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 26px;">Accès partenaire activé</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.first_name}</strong>,</p>
               <p>Bonne nouvelle ! Votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> a été <strong style="color: #059669;">validée</strong>.</p>
 
-              <h3 style="color: #059669; margin-top: 30px; font-size: 16px;">Pour bien démarrer :</h3>
+              <h3 style="color: #E87E14; margin-top: 30px; font-size: 16px;">Pour bien démarrer :</h3>
 
-              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #E87E14;">
                 <strong>1. Accéder au tableau de bord</strong>
                 <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Cliquez sur le bouton ci-dessous pour accéder à votre espace partenaire et consulter les profils et projets visibles dans votre périmètre d'intervention.</p>
               </div>
 
-              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #E87E14;">
                 <strong>2. Principe de l'opt-in</strong>
                 <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Seuls les porteurs d'initiative et talents ayant <strong>explicitement activé leur visibilité partenaire</strong> apparaissent dans votre tableau de bord. Ce choix leur appartient entièrement.</p>
               </div>
 
-              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #E87E14;">
                 <strong>3. Filtrer par territoire</strong>
                 <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Utilisez les filtres région ou département pour cibler les dynamiques locales relevant de votre périmètre d'intervention.</p>
               </div>
 
-              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #059669;">
+              <div style="background: white; padding: 14px 16px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #E87E14;">
                 <strong>4. Respecter la charte partenaires</strong>
-                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Votre accès est conditionné au respect de la <a href="https://www.teriis.fr/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> : pas de démarchage agressif, pas d'extraction massive de données, et uniquement des propositions à valeur ajoutée pour les utilisateurs.</p>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #4b5563;">Votre accès est conditionné au respect de la <a href="https://www.teriis.fr/partenaires/charte" style="color: #E87E14;">charte partenaires Teriis</a> : pas de démarchage agressif, pas d'extraction massive de données, et uniquement des propositions à valeur ajoutée pour les utilisateurs.</p>
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${params.dashboard_url}" style="display: inline-block; background: #059669; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                <a href="${params.dashboard_url}" style="display: inline-block; background: #E87E14; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
                   Accéder au tableau de bord
                 </a>
               </div>
 
               <p style="font-size: 13px; color: #9ca3af; margin-top: 20px;">
-                Une question ? Contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #059669;">cyril.hugon@gmail.com</a>.
+                Une question ? Contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #E87E14;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -548,18 +604,25 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
             .reason-box { background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; margin: 16px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 24px;">Demande partenaire</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.first_name}</strong>,</p>
               <p>Nous avons examiné votre demande d'accès partenaire pour <strong>${params.organization_name}</strong> et ne sommes pas en mesure de la valider à ce stade.</p>
@@ -570,11 +633,11 @@ const EMAIL_TEMPLATES = {
                 </div>
               ` : ''}
               <p style="font-size: 14px; color: #6b7280;">
-                Si vous pensez que cette décision est une erreur ou souhaitez nous apporter des éléments complémentaires, contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #1d4ed8;">cyril.hugon@gmail.com</a>.
+                Si vous pensez que cette décision est une erreur ou souhaitez nous apporter des éléments complémentaires, contactez-nous à <a href="mailto:cyril.hugon@gmail.com" style="color: #E87E14;">cyril.hugon@gmail.com</a>.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -591,18 +654,25 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .message-box { background: white; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1d4ed8; font-style: italic; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .message-box { background: white; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #E87E14; font-style: italic; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 24px;">Demande de contact partenaire</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.target_first_name}</strong>,</p>
               <p><strong>${params.partner_org_name}</strong> (${ORG_TYPE_LABELS[params.partner_org_type] ?? params.partner_org_type}) souhaite entrer en contact avec vous sur Teriis.</p>
@@ -612,7 +682,7 @@ const EMAIL_TEMPLATES = {
               </div>
               <p>Vous pouvez accepter ou décliner cette demande depuis votre espace Teriis :</p>
               <div style="text-align: center; margin: 24px 0;">
-                <a href="https://www.teriis.fr/dashboard/partenaire-contacts" style="display: inline-block; background: #1d4ed8; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                <a href="https://www.teriis.fr/dashboard/partenaire-contacts" style="display: inline-block; background: #E87E14; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600;">
                   Gérer cette demande
                 </a>
               </div>
@@ -620,8 +690,8 @@ const EMAIL_TEMPLATES = {
                 Votre adresse email ne sera partagée avec le partenaire <strong>que si vous acceptez</strong> la demande.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -638,34 +708,41 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .email-box { background: white; border: 1px solid #d1fae5; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .email-box { background: white; border: 1px solid #FFE4BC; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 26px;">Demande acceptée !</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.partner_first_name}</strong>,</p>
               <p>Bonne nouvelle ! <strong>${params.target_first_name} ${params.target_last_name}</strong> a accepté votre demande de contact au nom de <strong>${params.org_name}</strong>.</p>
               <p>Vous pouvez maintenant les contacter directement :</p>
               <div class="email-box">
                 <p style="margin: 0 0 8px 0; font-size: 13px; color: #6b7280; font-weight: 600;">ADRESSE EMAIL</p>
-                <a href="mailto:${params.target_email}" style="font-size: 18px; color: #059669; font-weight: 700; text-decoration: none;">
+                <a href="mailto:${params.target_email}" style="font-size: 18px; color: #E87E14; font-weight: 700; text-decoration: none;">
                   ${params.target_email}
                 </a>
               </div>
               <p style="font-size: 13px; color: #6b7280; margin-top: 20px;">
-                Rappel : respectez la <a href="https://www.teriis.fr/partenaires/charte" style="color: #059669;">charte partenaires Teriis</a> dans vos échanges.
+                Rappel : respectez la <a href="https://www.teriis.fr/partenaires/charte" style="color: #E87E14;">charte partenaires Teriis</a> dans vos échanges.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -682,18 +759,25 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
             .reason-box { background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; margin: 16px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 24px;">Demande de contact</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.partner_first_name}</strong>,</p>
               <p><strong>${params.target_first_name}</strong> n'a pas souhaité donner suite à votre demande de contact au nom de <strong>${params.org_name}</strong>.</p>
@@ -704,11 +788,11 @@ const EMAIL_TEMPLATES = {
                 </div>
               ` : ''}
               <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
-                D'autres profils sont disponibles dans votre <a href="https://www.teriis.fr/partenaires/dashboard" style="color: #1d4ed8;">tableau de bord partenaire</a>.
+                D'autres profils sont disponibles dans votre <a href="https://www.teriis.fr/partenaires/dashboard" style="color: #E87E14;">tableau de bord partenaire</a>.
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
             </div>
           </div>
         </body>
@@ -725,41 +809,47 @@ const EMAIL_TEMPLATES = {
           <meta charset="utf-8">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #3b82f6; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
-            .stat-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #3b82f6; }
-            .recommendation-item { background: #eff6ff; padding: 15px; border-radius: 8px; margin: 10px 0; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #E87E14; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+            .stat-box { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #E87E14; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">📬 Votre semaine sur Teriis</h1>
-            </div>
+            <!-- Bandeau orange fin -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+            </table>
+            <!-- Header avec logo -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <tr>
+                <td style="background-color: #FFF8F0; padding: 34px 40px 28px 40px; text-align: center;">
+                  <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="280" style="display: block; margin: 0 auto;" />
+                </td>
+              </tr>
+            </table>
             <div class="content">
               <p>Bonjour <strong>${params.user_name}</strong>,</p>
               <p>Voici un résumé de votre activité sur Teriis cette semaine :</p>
 
               ${params.recommendations_count > 0 ? `
                 <div class="stat-box">
-                  <h3 style="margin: 0 0 10px 0; color: #3b82f6;">🎯 ${params.recommendations_count} ${params.recommendations_count === 1 ? 'nouveau projet' : 'nouveaux projets'} pour vous</h3>
+                  <h3 style="margin: 0 0 10px 0; color: #E87E14;">🎯 ${params.recommendations_count} ${params.recommendations_count === 1 ? 'nouveau projet' : 'nouveaux projets'} pour vous</h3>
                   <p style="margin: 0; font-size: 14px; color: #6b7280;">Des projets qui correspondent à votre profil et votre localisation</p>
                 </div>
               ` : ''}
 
               ${params.applications_count > 0 ? `
                 <div class="stat-box">
-                  <h3 style="margin: 0 0 10px 0; color: #3b82f6;">📨 ${params.applications_count} ${params.applications_count === 1 ? 'nouvelle candidature' : 'nouvelles candidatures'}</h3>
+                  <h3 style="margin: 0 0 10px 0; color: #E87E14;">📨 ${params.applications_count} ${params.applications_count === 1 ? 'nouvelle candidature' : 'nouvelles candidatures'}</h3>
                   <p style="margin: 0; font-size: 14px; color: #6b7280;">Des talents ont postulé à vos projets</p>
                 </div>
               ` : ''}
 
               ${params.invitations_count > 0 ? `
                 <div class="stat-box">
-                  <h3 style="margin: 0 0 10px 0; color: #3b82f6;">🎯 ${params.invitations_count} ${params.invitations_count === 1 ? 'invitation' : 'invitations'} reçue${params.invitations_count === 1 ? '' : 's'}</h3>
+                  <h3 style="margin: 0 0 10px 0; color: #E87E14;">🎯 ${params.invitations_count} ${params.invitations_count === 1 ? 'invitation' : 'invitations'} reçue${params.invitations_count === 1 ? '' : 's'}</h3>
                   <p style="margin: 0; font-size: 14px; color: #6b7280;">Des porteurs d'initiative ont identifié votre profil</p>
                 </div>
               ` : ''}
@@ -783,11 +873,11 @@ const EMAIL_TEMPLATES = {
                 📊 <strong>Le saviez-vous ?</strong> Les utilisateurs actifs trouvent en moyenne 3 fois plus d'opportunités !
               </p>
             </div>
-            <div class="footer">
-              <p>Teriis - TERritoires, Initiatives et Impact social</p>
-              <p>
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Gérer mes préférences</a> •
-                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #3b82f6; text-decoration: none;">Changer la fréquence</a>
+            <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+              <p style="margin: 0 0 8px 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+              <p style="margin: 0;">
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Gérer mes préférences</a> •
+                <a href="https://www.teriis.fr/settings/email-preferences" style="color: #E87E14; text-decoration: none;">Changer la fréquence</a>
               </p>
             </div>
           </div>
