@@ -104,14 +104,12 @@ export default function DashboardPage() {
         badgesResult,
         impactResult,
       ] = await Promise.all([
-        // Projects (entrepreneur only)
-        profile.role === 'entrepreneur'
-          ? supabase
-              .from('projects')
-              .select('*')
-              .eq('owner_id', user.id)
-              .order('created_at', { ascending: false })
-          : Promise.resolve({ data: [], error: null }),
+        // Projects owned by this user (any role)
+        supabase
+          .from('projects')
+          .select('*')
+          .eq('owner_id', user.id)
+          .order('created_at', { ascending: false }),
 
         // Skills (talent only)
         profile.role === 'talent'
@@ -121,14 +119,12 @@ export default function DashboardPage() {
               .eq('user_id', user.id)
           : Promise.resolve({ data: [], error: null }),
 
-        // Projects count
-        profile.role === 'entrepreneur'
-          ? supabase
-              .from('projects')
-              .select('id', { count: 'exact', head: true })
-              .eq('owner_id', user.id)
-              .then((res) => res.count || 0)
-          : Promise.resolve(0),
+        // Projects count (any role)
+        supabase
+          .from('projects')
+          .select('id', { count: 'exact', head: true })
+          .eq('owner_id', user.id)
+          .then((res) => res.count || 0),
 
         // Applications count
         profile.role === 'talent'
@@ -287,9 +283,7 @@ export default function DashboardPage() {
                 {stats.projectsCount}
               </div>
               <div className="text-neutral-600">
-                {profile?.role === 'entrepreneur'
-                  ? 'Projets créés'
-                  : 'Projets rejoints'}
+                Projets créés
               </div>
             </div>
 
@@ -355,9 +349,8 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Project Holder Actions */}
-          {profile?.role === 'entrepreneur' && (
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          {/* Mes projets */}
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-neutral-900">
                   Mes projets {projects.length > 0 && `(${projects.length})`}
@@ -432,7 +425,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-          )}
 
           {/* Talent Actions */}
           {profile?.role === 'talent' && (
