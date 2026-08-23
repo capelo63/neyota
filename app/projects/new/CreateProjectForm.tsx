@@ -116,12 +116,6 @@ export default function CreateProjectForm() {
         return;
       }
 
-      // Check if user is entrepreneur
-      if (profileData.role !== 'entrepreneur') {
-        router.push('/dashboard');
-        return;
-      }
-
       setProfile(profileData);
 
       // Pre-fill location from profile
