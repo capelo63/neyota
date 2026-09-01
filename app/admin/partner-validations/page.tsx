@@ -1,8 +1,9 @@
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import Navigation from '@/components/Navigation';
-import PartnerValidationsList from './PartnerValidationsList';
+import AdminTabs from './AdminTabs';
 
 type RawOrg = {
   id: string;
@@ -53,7 +54,6 @@ export default async function PartnerValidationsPage() {
 
   const pendingOrgs: RawOrg[] = (orgs as RawOrg[] | null) ?? [];
 
-  // Fetch auth user emails in bulk
   const { data: authUsers } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 });
   const userMap: Record<string, { email: string; first_name: string; last_name: string }> = {};
   for (const u of authUsers?.users ?? []) {
@@ -79,17 +79,17 @@ export default async function PartnerValidationsPage() {
           <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-700 text-xs font-medium px-3 py-1 rounded-full mb-4">
             Administration
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900 mb-2">
-            Validation des demandes partenaires
+          <h1 className="text-2xl font-bold text-neutral-900">
+            Administration Teriis
           </h1>
-          <p className="text-neutral-500">
-            {applications.length === 0
-              ? 'Aucune demande en attente.'
-              : `${applications.length} demande${applications.length > 1 ? 's' : ''} en attente de validation`}
-          </p>
         </div>
-
-        <PartnerValidationsList applications={applications} />
+        <Suspense fallback={
+          <div className="flex items-center justify-center py-16">
+            <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <AdminTabs applications={applications} />
+        </Suspense>
       </main>
     </div>
   );

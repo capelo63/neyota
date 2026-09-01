@@ -795,6 +795,80 @@ const EMAIL_TEMPLATES = {
       </html>
     `,
   }),
+
+  new_registration_alert: (params: any) => ({
+    subject: `Nouvelle inscription sur Teriis — ${params.first_name} ${params.last_name} (${params.role_label})`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+          </style>
+        </head>
+        <body>
+          <div style="background: #f5f5f5; padding: 24px 0;">
+            <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
+              <!-- Bandeau orange -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr><td style="background-color: #FF9933; height: 6px; line-height: 6px; font-size: 1px;">&nbsp;</td></tr>
+              </table>
+              <!-- Header logo -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                  <td style="background-color: #FFF8F0; padding: 24px 40px; text-align: center;">
+                    <img src="https://www.teriis.fr/logo-email.png" alt="Teriis" width="200" style="display: block; margin: 0 auto;" />
+                  </td>
+                </tr>
+              </table>
+              <!-- Corps -->
+              <div style="padding: 32px 40px;">
+                <h2 style="margin: 0 0 20px 0; font-size: 20px; color: #111827;">🆕 Nouvelle inscription</h2>
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse; background: #FFF8F0; border-radius: 8px; border: 1px solid #FFE4BC; margin-bottom: 28px;">
+                  <tr>
+                    <td style="padding: 20px 24px;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding: 7px 0; color: #6b7280; font-size: 13px; width: 110px; vertical-align: top;">Nom</td>
+                          <td style="padding: 7px 0; font-weight: 600; color: #111827; font-size: 14px;">${params.first_name} ${params.last_name}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 7px 0; color: #6b7280; font-size: 13px; vertical-align: top;">Email</td>
+                          <td style="padding: 7px 0; font-size: 14px; color: #111827;">${params.email}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 7px 0; color: #6b7280; font-size: 13px; vertical-align: top;">Rôle</td>
+                          <td style="padding: 7px 0;">
+                            <span style="background: #FEF3C7; color: #92400E; padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 12px;">${params.role_label}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 7px 0; color: #6b7280; font-size: 13px; vertical-align: top;">Inscrit le</td>
+                          <td style="padding: 7px 0; color: #374151; font-size: 14px;">${params.registered_at}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <div style="text-align: center;">
+                  <a href="${params.admin_link}" style="display: inline-block; background-color: #E87E14; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                    Voir dans l'administration →
+                  </a>
+                </div>
+              </div>
+              <!-- Footer -->
+              <div style="background: #FFF8F0; padding: 20px 40px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #FFE4BC;">
+                <p style="margin: 0;">Teriis — TERritoires, Initiatives et Impact social</p>
+                <p style="margin: 6px 0 0 0;">Alerte automatique — ne pas répondre à cet email</p>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
 };
 
 interface EmailQueueItem {
