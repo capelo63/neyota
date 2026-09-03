@@ -57,11 +57,12 @@ export default async function BlogPostPage({ params }: Props) {
       <main>
         {/* Image de couverture */}
         {post.cover_image_url && (
-          <div className="w-full h-64 sm:h-80 overflow-hidden">
+          <div className="w-full overflow-hidden flex items-center justify-center" style={{ background: '#FFF8F0', maxHeight: '420px' }}>
             <img
               src={post.cover_image_url}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full object-contain"
+              style={{ maxHeight: '420px' }}
             />
           </div>
         )}
