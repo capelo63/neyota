@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import PartnerValidationsList from './PartnerValidationsList';
 import RegistrationsList from './RegistrationsList';
 import type { PartnerApplication } from './page';
@@ -45,6 +46,12 @@ export default function AdminTabs({ applications }: Props) {
         >
           Inscriptions
         </button>
+        <Link
+          href="/admin/blog"
+          className="px-5 py-3 text-sm font-medium border-b-2 border-transparent text-neutral-500 hover:text-neutral-700 transition-colors"
+        >
+          Blog
+        </Link>
       </div>
 
       {activeTab === 'validations' && <PartnerValidationsList applications={applications} />}
