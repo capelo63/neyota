@@ -57,7 +57,8 @@ export async function updateSession(request: NextRequest) {
   request.nextUrl.pathname.startsWith('/projects/') ||
   request.nextUrl.pathname.startsWith('/profile/') ||
   request.nextUrl.pathname.startsWith('/partenaires') ||
-  request.nextUrl.pathname.startsWith('/api/partenaires');
+  request.nextUrl.pathname.startsWith('/api/partenaires') ||
+  request.nextUrl.pathname.startsWith('/blog');
 
   // Redirect to login if user is not authenticated and trying to access protected route
   if (!user && !isPublicRoute) {
