@@ -26,11 +26,11 @@ function PostCard({ post }: { post: BlogPost }) {
       className="group block bg-white rounded-xl overflow-hidden border border-neutral-200 hover:border-amber-300 hover:shadow-md transition-all"
     >
       {post.cover_image_url ? (
-        <div className="aspect-video overflow-hidden">
+        <div className="aspect-video overflow-hidden flex items-center justify-center" style={{ background: '#FFF8F0' }}>
           <img
             src={post.cover_image_url}
             alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </div>
       ) : (
