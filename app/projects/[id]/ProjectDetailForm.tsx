@@ -8,6 +8,26 @@ import { Logo } from '@/components/Logo';
 import { Button, Badge, Modal, Textarea } from '@/components/ui';
 import ReportButton from '@/components/ReportButton';
 import { NEED_CATEGORIES, type NeedCategoryId } from '@/lib/constants/needs-skills';
+import CityAutocomplete from '@/components/CityAutocomplete';
+
+const PROJECT_CATEGORIES = [
+  { value: 'agriculture', label: '🌾 Agriculture / Agroalimentaire' },
+  { value: 'mobility', label: '🚗 Mobilité / Transport' },
+  { value: 'industry', label: '🏭 Industrie / Manufacturing' },
+  { value: 'tech', label: '💻 Tech / Digital' },
+  { value: 'health', label: '🏥 Santé / Bien-être' },
+  { value: 'education', label: '🎓 Éducation / Formation' },
+  { value: 'real_estate', label: '🏠 Immobilier / Construction' },
+  { value: 'environment', label: '🌍 Environnement / Écologie' },
+  { value: 'culture', label: '🎨 Culture / Créatif' },
+  { value: 'services', label: '💼 Services / Consulting' },
+  { value: 'commerce', label: '🛒 Commerce / Retail' },
+  { value: 'hospitality', label: '🍽️ Restauration / Hôtellerie' },
+  { value: 'finance', label: '💰 Finance / Fintech' },
+  { value: 'energy', label: '⚡ Énergie' },
+  { value: 'entertainment', label: '🎮 Divertissement / Loisirs' },
+  { value: 'social', label: '🤝 Social / Solidaire' },
+];
 
 const PROJECT_PHASES = [
   { value: 'ideation', label: '💡 Idéation - Je concrétise mon idée' },
@@ -64,12 +84,31 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
   // Edition du projet (porteur uniquement)
   const [isEditing, setIsEditing] = useState(false);
+  const [editStep, setEditStep] = useState<1 | 2 | 3>(1);
+
+  // Étape 1
+  const [editTitle, setEditTitle] = useState('');
+  const [editShortPitch, setEditShortPitch] = useState('');
+  const [editFullDescription, setEditFullDescription] = useState('');
+  const [editSelectedCategories, setEditSelectedCategories] = useState<string[]>([]);
+
+  // Étape 2
   const [editPhase, setEditPhase] = useState('');
   const [editPhaseObjectives, setEditPhaseObjectives] = useState('');
   const [allNeeds, setAllNeeds] = useState<any[]>([]);
   const [needsByCategory, setNeedsByCategory] = useState<Record<string, any[]>>({});
   const [selectedNeedIds, setSelectedNeedIds] = useState<Set<string>>(new Set());
   const [expandedNeedCategories, setExpandedNeedCategories] = useState<Record<string, boolean>>({});
+
+  // Étape 3
+  const [editCity, setEditCity] = useState('');
+  const [editPostalCode, setEditPostalCode] = useState('');
+  const [editRegion, setEditRegion] = useState('');
+  const [editLat, setEditLat] = useState<number | null>(null);
+  const [editLng, setEditLng] = useState<number | null>(null);
+  const [editIsRemotePossible, setEditIsRemotePossible] = useState(false);
+  const [editPreferredRadius, setEditPreferredRadius] = useState(30);
+
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [editSuccess, setEditSuccess] = useState(false);
 
@@ -158,10 +197,22 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
   const openEdit = async () => {
     if (!project) return;
+
+    // Étape 1 — présentation
+    setEditTitle(project.title || '');
+    setEditShortPitch(project.short_pitch || '');
+    setEditFullDescription(project.full_description || '');
+
+    const { data: catData } = await supabase
+      .from('project_categories')
+      .select('category')
+      .eq('project_id', projectId);
+    setEditSelectedCategories((catData ?? []).map((c: any) => c.category));
+
+    // Étape 2 — besoins & phase
     setEditPhase(project.current_phase);
     setEditPhaseObjectives(project.phase_objectives || '');
 
-    // Charger les besoins disponibles si pas encore chargés
     if (allNeeds.length === 0) {
       const { data: needsData } = await supabase.from('needs').select('*').order('sort_order');
       const needs = needsData || [];
@@ -172,12 +223,20 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         return acc;
       }, {});
       setNeedsByCategory(grouped);
-      // Ouvrir toutes les catégories
       setExpandedNeedCategories(Object.keys(grouped).reduce((acc: Record<string, boolean>, k) => ({ ...acc, [k]: true }), {}));
     }
-
-    // Pré-sélectionner les besoins actuels
     setSelectedNeedIds(new Set(project.needs.map((n: any) => n.id)));
+
+    // Étape 3 — localisation
+    setEditCity(project.city || '');
+    setEditPostalCode(project.postal_code || '');
+    setEditRegion(project.region || '');
+    setEditLat(project.latitude ?? null);
+    setEditLng(project.longitude ?? null);
+    setEditIsRemotePossible(project.is_remote_possible || false);
+    setEditPreferredRadius(project.preferred_radius_km || 30);
+
+    setEditStep(1);
     setIsEditing(true);
   };
 
@@ -185,12 +244,33 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
     if (!project) return;
     setIsSavingProject(true);
     try {
-      // Mettre à jour la phase et les objectifs
+      // Mettre à jour tous les champs du projet
       const { error: updateError } = await supabase
         .from('projects')
-        .update({ current_phase: editPhase, phase_objectives: editPhaseObjectives || null })
+        .update({
+          title: editTitle.trim(),
+          short_pitch: editShortPitch.trim(),
+          full_description: editFullDescription.trim(),
+          current_phase: editPhase,
+          phase_objectives: editPhaseObjectives || null,
+          city: editCity,
+          postal_code: editPostalCode,
+          region: editRegion || null,
+          latitude: editLat,
+          longitude: editLng,
+          is_remote_possible: editIsRemotePossible,
+          preferred_radius_km: editPreferredRadius,
+        })
         .eq('id', projectId);
       if (updateError) throw updateError;
+
+      // Remplacer les catégories
+      await supabase.from('project_categories').delete().eq('project_id', projectId);
+      if (editSelectedCategories.length > 0) {
+        await supabase.from('project_categories').insert(
+          editSelectedCategories.map(cat => ({ project_id: projectId, category: cat }))
+        );
+      }
 
       // Remplacer les besoins
       await supabase.from('project_needs').delete().eq('project_id', projectId);
@@ -201,7 +281,6 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
         if (needsError) throw needsError;
       }
 
-      // Rafraîchir les données affichées
       await loadData();
       setIsEditing(false);
       setEditSuccess(true);
@@ -650,108 +729,296 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
 
               {isEditing && (
                 <div className="bg-white border border-primary-200 rounded-xl p-6 space-y-6">
-                  <h3 className="text-lg font-semibold text-neutral-900">Modifier le projet</h3>
-
-                  {/* Phase */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">Phase actuelle</label>
-                    <select
-                      value={editPhase}
-                      onChange={(e) => setEditPhase(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    >
-                      {PROJECT_PHASES.map(p => (
-                        <option key={p.value} value={p.value}>{p.label}</option>
+                  {/* En-tête avec navigation par étapes */}
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-neutral-900">Modifier le projet</h3>
+                    <div className="flex items-center gap-1 text-sm">
+                      {([1, 2, 3] as const).map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setEditStep(s)}
+                          className={`w-7 h-7 rounded-full font-medium transition-colors ${
+                            editStep === s
+                              ? 'bg-primary-600 text-white'
+                              : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
+                          }`}
+                        >
+                          {s}
+                        </button>
                       ))}
-                    </select>
-                  </div>
-
-                  {/* Objectifs de phase */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Objectifs de cette phase <span className="text-neutral-400">(optionnel)</span>
-                    </label>
-                    <textarea
-                      value={editPhaseObjectives}
-                      onChange={(e) => setEditPhaseObjectives(e.target.value)}
-                      rows={3}
-                      maxLength={500}
-                      placeholder="Décrivez ce que vous souhaitez accomplir dans cette phase..."
-                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    />
-                  </div>
-
-                  {/* Besoins */}
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <label className="block text-sm font-medium text-neutral-700">Besoins du projet</label>
-                      <span className="text-xs text-neutral-500">{selectedNeedIds.size} sélectionné{selectedNeedIds.size > 1 ? 's' : ''}</span>
                     </div>
+                  </div>
 
-                    <div className="space-y-2">
-                      {Object.entries(needsByCategory).map(([categoryId, categoryNeeds]) => {
-                        const categoryInfo = NEED_CATEGORIES[categoryId as NeedCategoryId];
-                        const isExpanded = expandedNeedCategories[categoryId];
-                        const selectedCount = categoryNeeds.filter((n: any) => selectedNeedIds.has(n.id)).length;
-                        if (!categoryInfo) return null;
+                  {/* ── Étape 1 : Présentation ── */}
+                  {editStep === 1 && (
+                    <div className="space-y-5">
+                      <p className="text-sm text-neutral-500">Titre, pitch et description du projet</p>
 
-                        return (
-                          <div key={categoryId} className="border border-neutral-200 rounded-lg overflow-hidden">
-                            <button
-                              type="button"
-                              onClick={() => setExpandedNeedCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }))}
-                              className="w-full px-4 py-2.5 bg-neutral-50 hover:bg-neutral-100 transition-colors flex items-center justify-between text-left"
-                            >
-                              <div className="flex items-center gap-2 flex-1">
-                                <span>{categoryInfo.icon}</span>
-                                <span className="font-medium text-sm text-neutral-900">{categoryInfo.label}</span>
-                                {selectedCount > 0 && (
-                                  <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">{selectedCount}</span>
+                      {/* Titre */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Titre du projet <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                      </div>
+
+                      {/* Pitch court */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Pitch court <span className="text-neutral-400 text-xs">({editShortPitch.length} car.)</span>
+                        </label>
+                        <textarea
+                          value={editShortPitch}
+                          onChange={(e) => setEditShortPitch(e.target.value)}
+                          rows={3}
+                          placeholder="Décrivez votre projet en quelques phrases..."
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                      </div>
+
+                      {/* Description complète */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Description complète <span className="text-neutral-400 text-xs">({editFullDescription.length} car.)</span>
+                        </label>
+                        <textarea
+                          value={editFullDescription}
+                          onChange={(e) => setEditFullDescription(e.target.value)}
+                          rows={6}
+                          placeholder="Décrivez votre projet en détail..."
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                      </div>
+
+                      {/* Catégories */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Catégories
+                          <span className="text-neutral-400 text-xs ml-2">{editSelectedCategories.length} sélectionnée(s)</span>
+                        </label>
+                        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+                          {PROJECT_CATEGORIES.map((cat) => {
+                            const selected = editSelectedCategories.includes(cat.value);
+                            return (
+                              <label
+                                key={cat.value}
+                                className={`flex items-center gap-2 p-2.5 rounded-lg cursor-pointer border text-sm transition-all ${
+                                  selected
+                                    ? 'bg-primary-50 border-primary-300 text-primary-800'
+                                    : 'border-neutral-200 hover:bg-neutral-50 text-neutral-700'
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={selected}
+                                  onChange={() =>
+                                    setEditSelectedCategories((prev) =>
+                                      prev.includes(cat.value)
+                                        ? prev.filter((c) => c !== cat.value)
+                                        : [...prev, cat.value]
+                                    )
+                                  }
+                                  className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                />
+                                {cat.label}
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3 pt-2">
+                        <Button variant="ghost" onClick={() => setIsEditing(false)} className="flex-1">
+                          Annuler
+                        </Button>
+                        <Button variant="default" onClick={() => setEditStep(2)} className="flex-1">
+                          Suivant →
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── Étape 2 : Phase & Besoins ── */}
+                  {editStep === 2 && (
+                    <div className="space-y-5">
+                      <p className="text-sm text-neutral-500">Phase actuelle, objectifs et besoins en compétences</p>
+
+                      {/* Phase */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Phase actuelle</label>
+                        <select
+                          value={editPhase}
+                          onChange={(e) => setEditPhase(e.target.value)}
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        >
+                          {PROJECT_PHASES.map(p => (
+                            <option key={p.value} value={p.value}>{p.label}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Objectifs de phase */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Objectifs de cette phase <span className="text-neutral-400">(optionnel)</span>
+                        </label>
+                        <textarea
+                          value={editPhaseObjectives}
+                          onChange={(e) => setEditPhaseObjectives(e.target.value)}
+                          rows={3}
+                          maxLength={500}
+                          placeholder="Décrivez ce que vous souhaitez accomplir dans cette phase..."
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                      </div>
+
+                      {/* Besoins */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="block text-sm font-medium text-neutral-700">Besoins du projet</label>
+                          <span className="text-xs text-neutral-500">{selectedNeedIds.size} sélectionné{selectedNeedIds.size > 1 ? 's' : ''}</span>
+                        </div>
+                        <div className="space-y-2">
+                          {Object.entries(needsByCategory).map(([categoryId, categoryNeeds]) => {
+                            const categoryInfo = NEED_CATEGORIES[categoryId as NeedCategoryId];
+                            const isExpanded = expandedNeedCategories[categoryId];
+                            const selectedCount = categoryNeeds.filter((n: any) => selectedNeedIds.has(n.id)).length;
+                            if (!categoryInfo) return null;
+                            return (
+                              <div key={categoryId} className="border border-neutral-200 rounded-lg overflow-hidden">
+                                <button
+                                  type="button"
+                                  onClick={() => setExpandedNeedCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }))}
+                                  className="w-full px-4 py-2.5 bg-neutral-50 hover:bg-neutral-100 transition-colors flex items-center justify-between text-left"
+                                >
+                                  <div className="flex items-center gap-2 flex-1">
+                                    <span>{categoryInfo.icon}</span>
+                                    <span className="font-medium text-sm text-neutral-900">{categoryInfo.label}</span>
+                                    {selectedCount > 0 && (
+                                      <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">{selectedCount}</span>
+                                    )}
+                                  </div>
+                                  <svg className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  </svg>
+                                </button>
+                                {isExpanded && (
+                                  <div className="p-3 space-y-1 bg-white">
+                                    {categoryNeeds.map((need: any) => {
+                                      const isSelected = selectedNeedIds.has(need.id);
+                                      return (
+                                        <label key={need.id} className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all ${
+                                          isSelected ? 'bg-primary-50 border border-primary-200' : 'hover:bg-neutral-50 border border-transparent'
+                                        }`}>
+                                          <input
+                                            type="checkbox"
+                                            checked={isSelected}
+                                            onChange={() => setSelectedNeedIds(prev => {
+                                              const next = new Set(prev);
+                                              next.has(need.id) ? next.delete(need.id) : next.add(need.id);
+                                              return next;
+                                            })}
+                                            className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                          />
+                                          <span className="text-sm text-neutral-900">{need.name}</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
                                 )}
                               </div>
-                              <svg className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </button>
+                            );
+                          })}
+                        </div>
+                      </div>
 
-                            {isExpanded && (
-                              <div className="p-3 space-y-1 bg-white">
-                                {categoryNeeds.map((need: any) => {
-                                  const isSelected = selectedNeedIds.has(need.id);
-                                  return (
-                                    <label key={need.id} className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all ${
-                                      isSelected ? 'bg-primary-50 border border-primary-200' : 'hover:bg-neutral-50 border border-transparent'
-                                    }`}>
-                                      <input
-                                        type="checkbox"
-                                        checked={isSelected}
-                                        onChange={() => setSelectedNeedIds(prev => {
-                                          const next = new Set(prev);
-                                          next.has(need.id) ? next.delete(need.id) : next.add(need.id);
-                                          return next;
-                                        })}
-                                        className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                                      />
-                                      <span className="text-sm text-neutral-900">{need.name}</span>
-                                    </label>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                      <div className="flex gap-3 pt-2">
+                        <Button variant="ghost" onClick={() => setEditStep(1)} className="flex-1">
+                          ← Retour
+                        </Button>
+                        <Button variant="default" onClick={() => setEditStep(3)} className="flex-1">
+                          Suivant →
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div className="flex gap-3 pt-2">
-                    <Button variant="ghost" onClick={() => setIsEditing(false)} disabled={isSavingProject} className="flex-1">
-                      Annuler
-                    </Button>
-                    <Button variant="default" onClick={handleSaveProject} disabled={isSavingProject} className="flex-1">
-                      {isSavingProject ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                    </Button>
-                  </div>
+                  {/* ── Étape 3 : Localisation ── */}
+                  {editStep === 3 && (
+                    <div className="space-y-5">
+                      <p className="text-sm text-neutral-500">Localisation et préférences de travail</p>
+
+                      {/* Ville + Code postal */}
+                      <CityAutocomplete
+                        cityValue={editCity}
+                        postalCodeValue={editPostalCode}
+                        onSelect={(s) => {
+                          setEditCity(s.city);
+                          setEditPostalCode(s.postalCode);
+                          setEditRegion(s.region);
+                          setEditLat(s.lat);
+                          setEditLng(s.lng);
+                        }}
+                      />
+
+                      {/* Région */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                          Région <span className="text-neutral-400 text-xs">(remplie automatiquement)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={editRegion}
+                          onChange={(e) => setEditRegion(e.target.value)}
+                          placeholder="Île-de-France"
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                      </div>
+
+                      {/* Rayon */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Rayon de recherche de talents</label>
+                        <select
+                          value={editPreferredRadius.toString()}
+                          onChange={(e) => setEditPreferredRadius(parseInt(e.target.value))}
+                          className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        >
+                          <option value="10">10 km</option>
+                          <option value="20">20 km</option>
+                          <option value="30">30 km (recommandé)</option>
+                          <option value="50">50 km</option>
+                          <option value="100">100 km</option>
+                          <option value="200">200 km</option>
+                        </select>
+                      </div>
+
+                      {/* Distanciel */}
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={editIsRemotePossible}
+                          onChange={(e) => setEditIsRemotePossible(e.target.checked)}
+                          className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
+                        />
+                        <span className="text-sm text-neutral-700">Le projet peut se faire en distanciel</span>
+                      </label>
+
+                      <div className="flex gap-3 pt-2">
+                        <Button variant="ghost" onClick={() => setEditStep(2)} disabled={isSavingProject} className="flex-1">
+                          ← Retour
+                        </Button>
+                        <Button variant="default" onClick={handleSaveProject} disabled={isSavingProject} className="flex-1">
+                          {isSavingProject ? 'Enregistrement...' : '✓ Enregistrer'}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
