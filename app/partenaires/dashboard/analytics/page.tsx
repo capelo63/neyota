@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import type { PartnerOrg } from '../page';
 import type { AnalyticsData } from './AnalyticsDashboard';
@@ -69,9 +70,12 @@ export default async function PartnerAnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <AnalyticsDashboard org={partnerOrg} analytics={analytics} />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

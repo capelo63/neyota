@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { PARTNER_ORG_TYPES, REGIONS_FRANCE, DEPARTMENTS_FRANCE, getOrgTypeLabel } from '@/lib/constants/france-geo';
 import { checkPwnedPassword } from '@/lib/security/check-pwned-password';
 
@@ -252,7 +253,7 @@ export default function PartenaireInscriptionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
 
       <div className="max-w-xl mx-auto px-4 py-10">
@@ -563,6 +564,9 @@ export default function PartenaireInscriptionPage() {
             )}
           </div>
         </div>
+      </div>
+      <div className="mt-auto">
+        <Footer />
       </div>
     </div>
   );

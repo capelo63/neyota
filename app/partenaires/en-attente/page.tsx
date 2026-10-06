@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { getOrgTypeLabel } from '@/lib/constants/france-geo';
 
 export default async function EnAttentePage() {
@@ -43,7 +44,7 @@ export default async function EnAttentePage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <main className="max-w-2xl mx-auto px-4 py-16">
         {org.is_rejected ? (
@@ -137,6 +138,9 @@ export default async function EnAttentePage() {
           </div>
         )}
       </main>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

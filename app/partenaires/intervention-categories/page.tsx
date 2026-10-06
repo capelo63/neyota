@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import InterventionCategoriesForm from './InterventionCategoriesForm';
 
 export default async function InterventionCategoriesPage() {
@@ -30,9 +31,12 @@ export default async function InterventionCategoriesPage() {
   if (cats.length > 0) redirect('/partenaires/dashboard');
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <InterventionCategoriesForm organizationName={org.organization_name as string} />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

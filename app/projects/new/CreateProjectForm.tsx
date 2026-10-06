@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import Footer from '@/components/Footer';
 import { Button, Input, Textarea, Select, Checkbox } from '@/components/ui';
 import CityAutocomplete from '@/components/CityAutocomplete';
 import { isValidFrenchPostalCode, getPostalCodeErrorMessage } from '@/lib/constants/regions';
@@ -806,6 +807,9 @@ export default function CreateProjectForm() {
           </div>
         </div>
       </main>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
