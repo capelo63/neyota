@@ -24,204 +24,100 @@ export default function LegalPage() {
               Informations légales concernant la plateforme Teriis
             </p>
             <div className="mt-4 text-sm text-neutral-500">
-              Dernière mise à jour : Avril 2026
+              Dernière mise à jour : octobre 2026
             </div>
           </div>
 
           {/* Content */}
           <div className="bg-white rounded-xl shadow-sm p-8 md:p-12 space-y-8">
-            {/* Section 1: Éditeur */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                 1. Éditeur du site
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  <strong>Raison sociale :</strong> [À compléter]
+                  Le site teriis.fr est édité par Cyril Hugon et Cynthia Beausoleil, à titre non professionnel, dans le cadre du projet Teriis (association en cours de création).
                 </p>
                 <p>
-                  <strong>Forme juridique :</strong> [À compléter]
+                  <strong>Contact :</strong>{' '}<a href="mailto:contact@teriis.fr" className="text-primary-600 hover:text-primary-700">contact@teriis.fr</a>
                 </p>
                 <p>
-                  <strong>Capital social :</strong> [À compléter]
-                </p>
-                <p>
-                  <strong>Siège social :</strong> [Adresse à compléter]
-                </p>
-                <p>
-                  <strong>SIRET :</strong> [Numéro à compléter]
-                </p>
-                <p>
-                  <strong>RCS :</strong> [Numéro à compléter]
-                </p>
-                <p>
-                  <strong>Directeur de la publication :</strong> [Nom à compléter]
-                </p>
-                <p>
-                  <strong>Contact :</strong>{' '}
-                  <a href="mailto:contact@teriis.fr" className="text-primary-600 hover:text-primary-700">
-                    contact@teriis.fr
-                  </a>
+                  <strong>Directeur de la publication :</strong> Cyril Hugon
                 </p>
               </div>
             </section>
 
-            {/* Section 2: Hébergeur */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                 2. Hébergement
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  Le site Teriis est hébergé par :
+                  <strong>Plateforme et site :</strong> Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis —{' '}<a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">vercel.com</a>
                 </p>
                 <p>
-                  <strong>Vercel Inc.</strong><br />
-                  440 N Barranca Ave #4133<br />
-                  Covina, CA 91723<br />
-                  États-Unis<br />
-                  <a
-                    href="https://vercel.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary-600 hover:text-primary-700"
-                  >
-                    https://vercel.com
-                  </a>
+                  <strong>Base de données :</strong> Supabase Inc., 65 Chulia Street, #38-02/03, OCBC Centre, Singapore 049513 —{' '}<a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">supabase.com</a>. Les données sont hébergées dans l&apos;Union européenne.
                 </p>
                 <p>
-                  <strong>Base de données hébergée par :</strong><br />
-                  Supabase, Inc.<br />
-                  <a
-                    href="https://supabase.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary-600 hover:text-primary-700"
-                  >
-                    https://supabase.com
-                  </a>
+                  <strong>Géocodage des adresses :</strong> API Adresse, service public de la Base Adresse Nationale (<a href="https://data.gouv.fr" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">data.gouv.fr</a>).
                 </p>
               </div>
             </section>
 
-            {/* Section 3: Propriété intellectuelle */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                 3. Propriété intellectuelle
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  L'ensemble du contenu de ce site (textes, images, vidéos, logos, icônes, etc.)
-                  est la propriété exclusive de Teriis, sauf mention contraire.
-                </p>
-                <p>
-                  Toute reproduction, représentation, modification, publication, adaptation de tout
-                  ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé,
-                  est interdite, sauf autorisation écrite préalable de Teriis.
-                </p>
-                <p>
-                  La marque « Teriis » ainsi que tous les signes distinctifs reproduits sur le site
-                  sont la propriété de Teriis et ne peuvent être utilisés sans autorisation.
+                  Les textes, visuels, logos et la marque Teriis présents sur ce site sont protégés par le droit de la propriété intellectuelle. Toute reproduction ou réutilisation, totale ou partielle, sans autorisation préalable est interdite.
                 </p>
               </div>
             </section>
 
-            {/* Section 4: Protection des données */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                4. Protection des données personnelles
+                4. Données personnelles
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  Conformément au Règlement Général sur la Protection des Données (RGPD), vous
-                  disposez d'un droit d'accès, de rectification, de suppression et de portabilité
-                  de vos données personnelles.
+                  Les données personnelles collectées sur la plateforme sont traitées conformément au Règlement général sur la protection des données (RGPD). Les informations détaillées (données collectées, finalités, durées de conservation, droits) figurent dans notre Politique de confidentialité :{' '}<Link href="/privacy" className="text-primary-600 hover:text-primary-700 font-medium">www.teriis.fr/privacy</Link>
                 </p>
                 <p>
-                  Pour exercer ces droits ou pour toute question sur le traitement de vos données,
-                  vous pouvez nous contacter à l'adresse :{' '}
-                  <a href="mailto:contact@teriis.fr" className="text-primary-600 hover:text-primary-700">
-                    contact@teriis.fr
-                  </a>
-                </p>
-                <p>
-                  Pour plus d'informations sur la collecte et le traitement de vos données, consultez
-                  notre{' '}
-                  <Link href="/privacy" className="text-primary-600 hover:text-primary-700 font-medium">
-                    Politique de Confidentialité
-                  </Link>.
+                  Pour exercer vos droits d&apos;accès, de rectification, d&apos;effacement, d&apos;opposition ou de portabilité, écrivez à{' '}<a href="mailto:contact@teriis.fr" className="text-primary-600 hover:text-primary-700">contact@teriis.fr</a>. Vous pouvez également adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">www.cnil.fr</a>).
                 </p>
               </div>
             </section>
 
-            {/* Section 5: Cookies */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                 5. Cookies
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  Le site Teriis utilise des cookies pour améliorer l'expérience utilisateur,
-                  réaliser des statistiques de visite et assurer le bon fonctionnement de la plateforme.
-                </p>
-                <p>
-                  Vous pouvez à tout moment désactiver les cookies depuis les paramètres de votre navigateur.
-                  Toutefois, cela peut affecter certaines fonctionnalités du site.
+                  Ce site utilise uniquement les cookies strictement nécessaires à son fonctionnement. Aucun cookie publicitaire ni traceur tiers n&apos;est utilisé.
                 </p>
               </div>
             </section>
 
-            {/* Section 6: Responsabilité */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                6. Limitation de responsabilité
+                6. Responsabilité
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  Teriis s'efforce d'assurer au mieux de ses possibilités, l'exactitude et la mise
-                  à jour des informations diffusées sur ce site.
-                </p>
-                <p>
-                  Toutefois, Teriis ne peut garantir l'exactitude, la précision ou l'exhaustivité
-                  des informations mises à disposition sur ce site.
-                </p>
-                <p>
-                  En conséquence, Teriis décline toute responsabilité pour toute imprécision,
-                  inexactitude ou omission portant sur des informations disponibles sur le site.
+                  Teriis met en relation des porteurs de projets et des personnes souhaitant s&apos;impliquer. Les contenus publiés par les utilisateurs (profils, projets, messages) relèvent de leur seule responsabilité. Tout contenu inapproprié peut être signalé à{' '}<a href="mailto:contact@teriis.fr" className="text-primary-600 hover:text-primary-700">contact@teriis.fr</a>.
                 </p>
               </div>
             </section>
 
-            {/* Section 7: Liens externes */}
             <section>
               <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                7. Liens hypertextes
+                7. Droit applicable et juridiction compétente
               </h2>
               <div className="space-y-3 text-neutral-700">
                 <p>
-                  Le site Teriis peut contenir des liens hypertextes vers d'autres sites. Teriis
-                  n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à
-                  leur contenu.
-                </p>
-                <p>
-                  La création de liens hypertextes vers le site Teriis est soumise à l'accord
-                  préalable écrit de Teriis.
-                </p>
-              </div>
-            </section>
-
-            {/* Section 8: Droit applicable */}
-            <section>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-4">
-                8. Droit applicable et juridiction compétente
-              </h2>
-              <div className="space-y-3 text-neutral-700">
-                <p>
-                  Les présentes mentions légales sont régies par le droit français.
-                </p>
-                <p>
-                  En cas de litige et à défaut d'accord amiable, le tribunal compétent sera celui
-                  du siège social de Teriis.
+                  Les présentes mentions légales sont régies par le droit français. En cas de litige et à défaut d&apos;accord amiable, les tribunaux français seront compétents.
                 </p>
               </div>
             </section>
