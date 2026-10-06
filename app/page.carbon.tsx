@@ -59,12 +59,12 @@ async function getHomeData() {
     .eq('status', 'active');
 
   const { count: talentsCount } = await supabase
-    .from('profiles')
+    .from('profiles_public')
     .select('*', { count: 'exact', head: true })
     .eq('role', 'talent');
 
   const { count: entrepreneursCount } = await supabase
-    .from('profiles')
+    .from('profiles_public')
     .select('*', { count: 'exact', head: true })
     .eq('role', 'entrepreneur');
 
@@ -350,7 +350,7 @@ export default async function HomeCarbonPage({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 {[
                   { value: stats.projects, label: `Projet${stats.projects > 1 ? 's' : ''} en cours` },
-                  { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''} engagé${stats.talents > 1 ? 's' : ''}` },
+                  { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''} inscrit${stats.talents > 1 ? 's' : ''}` },
                   { value: stats.entrepreneurs, label: `Porteur${stats.entrepreneurs > 1 ? 's' : ''} de projet` },
                   { value: stats.applications, label: `Mise${stats.applications > 1 ? 's' : ''} en relation` },
                 ].map((stat, index) => (

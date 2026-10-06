@@ -56,12 +56,12 @@ async function getHomeData() {
     .eq('status', 'active');
 
   const { count: talentsCount } = await supabase
-    .from('profiles')
+    .from('profiles_public')
     .select('*', { count: 'exact', head: true })
     .eq('role', 'talent');
 
   const { count: entrepreneursCount } = await supabase
-    .from('profiles')
+    .from('profiles_public')
     .select('*', { count: 'exact', head: true })
     .eq('role', 'entrepreneur');
 
