@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 const INTENTION_LABELS: Record<string, string> = {
   accompaniment: 'Accompagnement / Conseil',
@@ -54,7 +55,7 @@ export default async function PartnerContactsPage() {
   const declined = list.filter((r) => r.status === 'declined');
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Back + header */}
@@ -172,6 +173,9 @@ export default async function PartnerContactsPage() {
           </div>
         )}
       </main>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

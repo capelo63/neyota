@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 export default function ChartePartenairesPage() {
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
 
       <main className="max-w-3xl mx-auto px-4 py-16">
@@ -128,6 +129,9 @@ export default function ChartePartenairesPage() {
           </Link>
         </div>
       </main>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

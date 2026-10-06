@@ -122,7 +122,7 @@ export default function PartnerVisibilityClient({ userId, role, initialSettings,
   const commercialBlocked = !settings.visible_to_support_partners;
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="bg-neutral-50">
       <div className="max-w-2xl mx-auto px-4 py-8">
 
         {/* Breadcrumb */}

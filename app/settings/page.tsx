@@ -26,7 +26,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="bg-neutral-50">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-neutral-900 mb-8">Paramètres</h1>
         <div className="flex flex-col gap-3">

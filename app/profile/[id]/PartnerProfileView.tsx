@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { getOrgTypeLabel, REGIONS_FRANCE, DEPARTMENTS_FRANCE } from '@/lib/constants/france-geo';
 
 const INTERVENTION_CATEGORY_LABELS: Record<string, string> = {
@@ -63,7 +64,7 @@ export default function PartnerProfileView({
   const interventionCats = org?.intervention_categories ?? [];
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
 
       <div className="max-w-2xl mx-auto px-4 py-10">
@@ -196,6 +197,10 @@ export default function PartnerProfileView({
             </Link>
           </div>
         )}
+      </div>
+
+      <div className="mt-auto">
+        <Footer />
       </div>
     </div>
   );

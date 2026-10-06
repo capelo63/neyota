@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import PartnerProfileEditForm from './PartnerProfileEditForm';
 
 export default async function PartnerProfileEditPage() {
@@ -27,7 +28,7 @@ export default async function PartnerProfileEditPage() {
   if (!org.is_validated) redirect('/partenaires/en-attente');
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <PartnerProfileEditForm
         userId={user.id}
@@ -41,6 +42,9 @@ export default async function PartnerProfileEditPage() {
           intervention_categories: (org.intervention_categories as string[] | null) ?? [],
         }}
       />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

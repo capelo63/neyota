@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import PartnerDashboard from './PartnerDashboard';
 
 export type VisibleProfile = {
@@ -109,7 +110,7 @@ export default async function PartnerDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <PartnerDashboard
         org={partnerOrg}
@@ -117,6 +118,9 @@ export default async function PartnerDashboardPage() {
         initialFavoriteIds={initialFavoriteIds}
         initialContactStatuses={initialContactStatuses}
       />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
