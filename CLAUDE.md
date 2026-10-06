@@ -28,6 +28,8 @@
 - `useSearchParams()` → toujours dans `<Suspense>`
 - RLS pages publiques : `GRANT SELECT ON table TO anon` EN PLUS du `CREATE POLICY ... TO public`
 - **NE PAS** accorder `GRANT SELECT ON profiles TO anon` ni `GRANT SELECT ON user_skills TO anon` (révoqués en 047 — utiliser les vues `profiles_public` / `projects_public`)
+- Toute nouvelle table ou vue lisible publiquement reçoit un `GRANT SELECT` **explicite** à `anon` (depuis la migration 063, les privilèges par défaut du schéma `public` n'accordent plus rien à `anon`)
+- **Interdit sans validation** : toute politique RLS d'écriture (INSERT/UPDATE/DELETE/ALL) ouverte à `public` ou `anon`, et tout `GRANT` d'écriture à `anon`. Les vues `profiles_public` / `projects_public` sont en lecture seule (047 : `REVOKE SELECT` sur `profiles` / `user_skills` pour `anon` ; 063 : retrait des écritures `anon`, vues en `SELECT` seul)
 
 ## Diagnostic erreurs
 - **Quand une page server-side retourne 0 résultats** → vérifier les logs Vercel EN PREMIER
@@ -35,7 +37,7 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **059** (système de demandes de contact partenaire→porteur/talent)
+- Dernière migration appliquée : **062** (module blog ; 063 — retrait des écritures anon — en attente d'application)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
