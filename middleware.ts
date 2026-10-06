@@ -18,6 +18,8 @@ export async function middleware(request: NextRequest) {
     '/charter',
     '/privacy',
     '/terms',
+    '/legal',
+    '/matching',
     '/contact',
     '/forgot-password',
     '/projects',
