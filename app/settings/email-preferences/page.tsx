@@ -99,7 +99,7 @@ export default function EmailPreferencesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="bg-neutral-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 mb-8 text-sm text-neutral-500">

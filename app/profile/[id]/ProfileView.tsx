@@ -7,6 +7,7 @@ import { Button } from '@/components/ui';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import ReportButton from '@/components/ReportButton';
 import InviteTalentModal from '@/components/InviteTalentModal';
 
@@ -283,7 +284,7 @@ export default function ProfileView({ userId }: { userId: string }) {
     !!currentUserId && currentUserProfile?.role === 'entrepreneur';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navigation />
 
       {/* Banner for unauthenticated visitors viewing a talent profile */}
@@ -561,6 +562,10 @@ export default function ProfileView({ userId }: { userId: string }) {
           }}
         />
       )}
+
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

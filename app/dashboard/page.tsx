@@ -6,6 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats as ImpactStatsComponent } from '@/components/badges/ImpactStats';
 
@@ -228,7 +229,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
 
       {showEmailConfirmed && (
@@ -506,6 +507,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
