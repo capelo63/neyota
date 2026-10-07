@@ -16,7 +16,7 @@ async function getHomeData() {
 
   // Fetch latest 3 active projects
   const { data: projectsData, error: projectsError } = await supabase
-    .from('projects')
+    .from('projects_public')
     .select(`
       id,
       title,
@@ -59,7 +59,7 @@ async function getHomeData() {
   // Fetch real stats
   const { count: projectsCount, error: projectsCountError } = await supabase
     .from('projects')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('status', 'active');
   if (projectsCountError) {
     console.error('[HOME] Error counting projects:', projectsCountError.message);
@@ -67,7 +67,7 @@ async function getHomeData() {
 
   const { count: talentsCount, error: talentsCountError } = await supabase
     .from('profiles_public')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('role', 'talent');
   if (talentsCountError) {
     console.error('[HOME] Error counting talents:', talentsCountError.message);
@@ -86,7 +86,7 @@ async function getHomeData() {
 
   const { count: applicationsCount, error: applicationsCountError } = await supabase
     .from('applications')
-    .select('*', { count: 'exact', head: true });
+    .select('id', { count: 'exact', head: true });
   if (applicationsCountError) {
     console.error('[HOME] Error counting applications:', applicationsCountError.message);
   }

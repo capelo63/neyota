@@ -19,27 +19,36 @@ async function getStats() {
 
   const { count: projectsCount } = await supabase
     .from('projects')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('status', 'active');
 
-  const { count: talentsCount } = await supabase
-    .from('profiles')
-    .select('*', { count: 'exact', head: true })
+  const { count: talentsCount, error: talentsError } = await supabase
+    .from('profiles_public')
+    .select('id', { count: 'exact', head: true })
     .eq('role', 'talent');
+  if (talentsError) {
+    console.error('[ABOUT] Error counting talents:', talentsError.message);
+  }
 
-  const { count: entrepreneursCount } = await supabase
-    .from('profiles')
-    .select('*', { count: 'exact', head: true })
-    .eq('role', 'entrepreneur');
+  // Porteurs d'initiative = propriétaires distincts de projets actifs
+  // (les talents peuvent aussi créer des projets). Lecture via projects_public.
+  const { data: activeOwners, error: ownersError } = await supabase
+    .from('projects_public')
+    .select('owner_id')
+    .eq('status', 'active');
+  if (ownersError) {
+    console.error('[ABOUT] Error fetching project owners:', ownersError.message);
+  }
+  const entrepreneursCount = new Set((activeOwners || []).map((p) => p.owner_id)).size;
 
   const { count: applicationsCount } = await supabase
     .from('applications')
-    .select('*', { count: 'exact', head: true });
+    .select('id', { count: 'exact', head: true });
 
   return {
     projects: projectsCount || 0,
     talents: talentsCount || 0,
-    entrepreneurs: entrepreneursCount || 0,
+    entrepreneurs: entrepreneursCount,
     collaborations: applicationsCount || 0,
   };
 }
