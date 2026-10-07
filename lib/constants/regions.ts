@@ -93,6 +93,15 @@ function normalizeForCompare(s: string): string {
     .replace(/[\u2018\u2019\u02bc]/g, "'"); // curly/modifier apostrophes → straight
 }
 
+/** Returns the region slug (FRENCH_REGIONS value) matching a region label, or ''. */
+export function getRegionSlugFromLabel(label: string | null | undefined): string {
+  if (!label) return '';
+  const norm = normalizeForCompare(label);
+  const entry = (FRENCH_REGIONS as readonly { value: string; label: string }[])
+    .find(r => normalizeForCompare(r.label) === norm);
+  return entry?.value ?? '';
+}
+
 /**
  * Returns the region slug (e.g. 'provence-alpes-cote-azur') from a postal code.
  * Comparison is done on normalized strings to be immune to accent/apostrophe variants.

@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { Button, Input, Select, Badge } from '@/components/ui';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { FRENCH_REGIONS, getRegionSlugFromPostal } from '@/lib/constants/regions';
+import { FRENCH_REGIONS, getRegionSlugFromPostal, getRegionSlugFromLabel } from '@/lib/constants/regions';
+import { getUserErrorMessage } from '@/lib/errors';
 
 interface Project {
   id: string;
@@ -19,10 +20,12 @@ interface Project {
   region: string | null;
   is_remote_possible: boolean;
   created_at: string;
+  // Absent pour les visiteurs non connectés (aperçu public)
   owner: {
     first_name: string;
     last_name: string;
-  };
+  } | null;
+  region_slug?: string;
   needs: Array<{
     id: string;
     name: string;
@@ -72,6 +75,7 @@ export default function ProjectsListForm() {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [needs, setNeeds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -92,6 +96,11 @@ export default function ProjectsListForm() {
     try {
       // Try to load user (optional - page is public)
       const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        await loadPublicProjects();
+        return;
+      }
 
       if (user) {
         setUser(user);
@@ -171,6 +180,70 @@ export default function ProjectsListForm() {
     }
   };
 
+  // Aperçu public (visiteurs non connectés) : colonnes limitées de projects_public,
+  // sans porteur, code postal ni description complète.
+  const loadPublicProjects = async () => {
+    const { data: rows, error: projectsError } = await supabase
+      .from('projects_public')
+      .select('id, title, short_pitch, current_phase, city, region, is_remote_possible, created_at')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+
+    if (projectsError) {
+      console.error('Error loading public projects:', projectsError);
+      setLoadError(getUserErrorMessage(projectsError, 'Impossible de charger les projets pour le moment. Veuillez réessayer.'));
+      setIsLoading(false);
+      return;
+    }
+
+    const ids = (rows || []).map((p: any) => p.id);
+    const needsByProject: Record<string, Project['needs']> = {};
+    const categoriesByProject: Record<string, Project['categories']> = {};
+
+    if (ids.length > 0) {
+      const [needsResult, categoriesResult] = await Promise.all([
+        supabase
+          .from('project_needs')
+          .select('project_id, need:needs(id, name, category)')
+          .in('project_id', ids),
+        supabase
+          .from('project_categories')
+          .select('project_id, category')
+          .in('project_id', ids),
+      ]);
+
+      if (needsResult.error) console.error('Error loading public project needs:', needsResult.error);
+      if (categoriesResult.error) console.error('Error loading public project categories:', categoriesResult.error);
+
+      for (const row of (needsResult.data || []) as any[]) {
+        const need = Array.isArray(row.need) ? row.need[0] : row.need;
+        if (!need) continue;
+        (needsByProject[row.project_id] ||= []).push(need);
+      }
+      for (const row of (categoriesResult.data || []) as any[]) {
+        (categoriesByProject[row.project_id] ||= []).push({ category: row.category });
+      }
+    }
+
+    const publicProjects = (rows || []).map((p: any) => ({
+      ...p,
+      postal_code: '',
+      owner: null,
+      region_slug: getRegionSlugFromLabel(p.region),
+      needs: needsByProject[p.id] || [],
+      categories: categoriesByProject[p.id] || [],
+    })) as Project[];
+
+    // Les besoins servent aussi à alimenter le filtre
+    const seen = new Map<string, any>();
+    publicProjects.forEach(p => p.needs.forEach(n => seen.set(n.id, n)));
+    setNeeds(Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name, 'fr')));
+
+    setProjects(publicProjects);
+    setFilteredProjects(publicProjects);
+    setIsLoading(false);
+  };
+
   const applyFilters = () => {
     let filtered = [...projects];
 
@@ -206,7 +279,9 @@ export default function ProjectsListForm() {
     // postal_code is always present and reliable; stored region field may be null/inconsistent
     if (selectedRegion !== 'all') {
       filtered = filtered.filter(project =>
-        getRegionSlugFromPostal(project.postal_code) === selectedRegion
+        (project.postal_code
+          ? getRegionSlugFromPostal(project.postal_code)
+          : project.region_slug) === selectedRegion
       );
     }
 
@@ -336,7 +411,15 @@ export default function ProjectsListForm() {
 
           {/* Projects List */}
           <div className="lg:col-span-3">
-            {filteredProjects.length === 0 ? (
+            {loadError ? (
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                <div className="text-6xl mb-4">⚠️</div>
+                <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+                  Les projets sont momentanément indisponibles
+                </h3>
+                <p className="text-neutral-600">{loadError}</p>
+              </div>
+            ) : filteredProjects.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="text-xl font-semibold text-neutral-900 mb-2">
@@ -361,13 +444,17 @@ export default function ProjectsListForm() {
                             {project.title}
                           </h3>
                           <div className="flex items-center gap-3 text-sm text-neutral-600">
-                            <span className="flex items-center gap-1">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                              {project.owner.first_name} {project.owner.last_name}
-                            </span>
-                            <span>•</span>
+                            {project.owner && (
+                              <>
+                                <span className="flex items-center gap-1">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                  </svg>
+                                  {project.owner.first_name} {project.owner.last_name}
+                                </span>
+                                <span>•</span>
+                              </>
+                            )}
                             <span className="flex items-center gap-1">
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

@@ -8,6 +8,7 @@ import { Logo } from '@/components/Logo';
 import { Button, Badge, Modal, Textarea } from '@/components/ui';
 import ReportButton from '@/components/ReportButton';
 import { NEED_CATEGORIES, type NeedCategoryId } from '@/lib/constants/needs-skills';
+import { getUserErrorMessage } from '@/lib/errors';
 import CityAutocomplete from '@/components/CityAutocomplete';
 
 const PROJECT_CATEGORIES = [
@@ -68,6 +69,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
   const [profile, setProfile] = useState<any>(null);
   const [project, setProject] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [hasApplied, setHasApplied] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
   const [ownerContactEmail, setOwnerContactEmail] = useState<string | null>(null);
@@ -116,8 +118,54 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
     loadData();
   }, [projectId]);
 
+  // Aperçu public (visiteurs non connectés) : colonnes limitées de projects_public,
+  // sans description complète, objectifs de phase, code postal ni porteur.
+  const loadPublicProject = async () => {
+    const { data: row, error: projectError } = await supabase
+      .from('projects_public')
+      .select('id, title, short_pitch, current_phase, city, region, is_remote_possible, created_at')
+      .eq('id', projectId)
+      .eq('status', 'active')
+      .maybeSingle();
+
+    if (projectError) {
+      console.error('Error loading public project:', projectError);
+      setLoadError(getUserErrorMessage(projectError, 'Impossible de charger ce projet pour le moment. Veuillez réessayer.'));
+      setIsLoading(false);
+      return;
+    }
+    if (!row) {
+      router.push('/projects');
+      return;
+    }
+
+    const { data: needsRows, error: needsError } = await supabase
+      .from('project_needs')
+      .select('need:needs(id, name, category)')
+      .eq('project_id', projectId);
+    if (needsError) {
+      console.error('Error loading public project needs:', needsError);
+    }
+
+    setProject({
+      ...row,
+      owner: null,
+      needs: (needsRows || [])
+        .map((n: any) => (Array.isArray(n.need) ? n.need[0] : n.need))
+        .filter((n: any) => n),
+    });
+    setIsLoading(false);
+  };
+
   const loadData = async () => {
     try {
+      // Visiteur non connecté : aperçu public uniquement (lecture locale de la session)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        await loadPublicProject();
+        return;
+      }
+
       // Fetch user session and project data in parallel
       const [userResult, projectResult] = await Promise.all([
         supabase.auth.getUser(),
@@ -355,6 +403,21 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-xl shadow-sm p-10 text-center max-w-md">
+          <div className="text-5xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold text-neutral-900 mb-2">Projet indisponible</h2>
+          <p className="text-neutral-600 mb-6">{loadError}</p>
+          <Link href="/projects">
+            <Button variant="secondary">Retour aux projets</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!project) {
     return null;
   }
@@ -432,7 +495,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    {project.city} ({project.postal_code})
+                    {project.city}{project.postal_code ? ` (${project.postal_code})` : ''}
                   </span>
                   <span>•</span>
                   <span>Publié le {new Date(project.created_at).toLocaleDateString('fr-FR')}</span>
@@ -488,25 +551,20 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
                 </div>
               </div>
             ) : (
-              <div className="mb-6 relative">
+              <div className="mb-6">
                 <h2 className="text-2xl font-bold text-neutral-900 mb-4">
                   Description du projet
                 </h2>
-                {/* Blurred preview */}
-                <div className="relative overflow-hidden rounded-lg">
-                  <div className="blur-sm select-none pointer-events-none text-neutral-700 leading-relaxed line-clamp-4">
-                    {project.full_description}
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white flex items-end justify-center pb-4">
-                    <Link href={`/login?redirect=/projects/${projectId}`}>
-                      <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-lg font-semibold shadow hover:bg-primary-700 transition-colors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        Se connecter pour lire la suite
-                      </button>
-                    </Link>
-                  </div>
+                <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-8 text-center">
+                  <div className="text-4xl mb-3" aria-hidden="true">🔒</div>
+                  <p className="text-lg font-semibold text-neutral-900 mb-4">
+                    Connectez-vous pour lire la description complète
+                  </p>
+                  <Link href={`/login?redirect=/projects/${projectId}`}>
+                    <button className="bg-primary-600 text-white px-5 py-2.5 rounded-lg font-semibold shadow hover:bg-primary-700 transition-colors">
+                      Se connecter
+                    </button>
+                  </Link>
                 </div>
               </div>
             )}
@@ -551,7 +609,8 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
             )}
           </div>
 
-          {/* Owner Info */}
+          {/* Owner Info — non disponible pour les visiteurs non connectés */}
+          {project.owner && (
           <div className="bg-white rounded-xl shadow-sm p-8">
             <h2 className="text-2xl font-bold text-neutral-900 mb-6">
               À propos du porteur de projet
@@ -581,6 +640,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
               </div>
             </div>
           </div>
+          )}
 
           {/* Apply CTA Bottom — candidature acceptée */}
           {user && !isOwner && isTalent && applicationStatus === 'accepted' && (
@@ -1037,7 +1097,7 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
             <h3 className="font-semibold text-neutral-900 mb-2">{project?.title}</h3>
             <p className="text-sm text-neutral-700">
-              Vous postulez auprès de {project?.owner.first_name} {project?.owner.last_name}
+              Vous postulez auprès de {project?.owner?.first_name} {project?.owner?.last_name}
             </p>
           </div>
 

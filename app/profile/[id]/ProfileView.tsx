@@ -7,6 +7,7 @@ import { Button } from '@/components/ui';
 import { BadgeGrid, type BadgeType } from '@/components/badges/Badge';
 import { ImpactStats } from '@/components/badges/ImpactStats';
 import Navigation from '@/components/Navigation';
+import { getUserErrorMessage } from '@/lib/errors';
 import Footer from '@/components/Footer';
 import ReportButton from '@/components/ReportButton';
 import InviteTalentModal from '@/components/InviteTalentModal';
@@ -244,7 +245,7 @@ export default function ProfileView({ userId }: { userId: string }) {
       }
     } catch (err: any) {
       console.error('Error loading profile:', err);
-      setError(err.message || 'Erreur lors du chargement du profil');
+      setError(getUserErrorMessage(err, 'Erreur lors du chargement du profil. Veuillez réessayer.'));
     } finally {
       setLoading(false);
     }

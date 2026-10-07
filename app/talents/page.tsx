@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
 import TalentsFilter from '@/components/TalentsFilter';
+import LoginRequired from '@/components/LoginRequired';
 
 export const metadata: Metadata = {
   title: 'Talents disponibles',
@@ -76,6 +77,26 @@ async function getTalentsAndSkills() {
 export const revalidate = 60;
 
 export default async function TalentsPage() {
+  // Visiteur non connecté : aucune lecture de profils ni de compétences
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex flex-col">
+        <Navigation />
+        <main className="flex-1 container-custom py-16 px-4">
+          <LoginRequired
+            title="Connectez-vous pour consulter les talents"
+            description="L'annuaire des talents est réservé aux membres connectés de Teriis."
+            redirectPath="/talents"
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const { talents, allSkills } = await getTalentsAndSkills();
 
   return (
