@@ -523,7 +523,7 @@ export default function CreateProjectForm() {
                       </svg>
                       <div className="text-sm text-neutral-700">
                         <strong>Protection de vos idées :</strong> Seul le pitch court est visible publiquement.
-                        La description complète n'est accessible qu'aux talents qui manifestent leur intérêt.
+                        La description complète est visible uniquement par les membres connectés de Teriis.
                       </div>
                     </div>
                   </div>
