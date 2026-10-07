@@ -24,6 +24,9 @@ export async function middleware(request: NextRequest) {
     '/forgot-password',
     '/projects',
     '/talents',
+    '/sitemap.xml',
+    '/robots.txt',
+    '/api/ping',
   ];
 
   // Check if the current path is public

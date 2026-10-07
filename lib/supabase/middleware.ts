@@ -51,6 +51,9 @@ export async function updateSession(request: NextRequest) {
     '/forgot-password',
     '/projects',
     '/talents',
+    '/sitemap.xml',
+    '/robots.txt',
+    '/api/ping',
   ];
 
   const isPublicRoute = publicRoutes.some(route =>
