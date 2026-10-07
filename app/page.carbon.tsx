@@ -39,11 +39,15 @@ async function getHomeData() {
   // For each project, fetch owner info separately
   const projects = await Promise.all(
     (projectsData || []).map(async (project) => {
-      const { data: ownerData } = await supabase
+      const { data: ownerData, error: ownerError } = await supabase
         .from('profiles')
         .select('first_name, last_name')
         .eq('id', project.owner_id)
         .maybeSingle();
+
+      if (ownerError) {
+        console.error('[HOME] Error fetching project owner:', ownerError.message);
+      }
 
       return {
         ...project,
@@ -53,31 +57,46 @@ async function getHomeData() {
   );
 
   // Fetch real stats
-  const { count: projectsCount } = await supabase
+  const { count: projectsCount, error: projectsCountError } = await supabase
     .from('projects')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'active');
+  if (projectsCountError) {
+    console.error('[HOME] Error counting projects:', projectsCountError.message);
+  }
 
-  const { count: talentsCount } = await supabase
-    .from('profiles')
+  const { count: talentsCount, error: talentsCountError } = await supabase
+    .from('profiles_public')
     .select('*', { count: 'exact', head: true })
     .eq('role', 'talent');
+  if (talentsCountError) {
+    console.error('[HOME] Error counting talents:', talentsCountError.message);
+  }
 
-  const { count: entrepreneursCount } = await supabase
-    .from('profiles')
-    .select('*', { count: 'exact', head: true })
-    .eq('role', 'entrepreneur');
+  // Porteurs d'initiative = propriétaires distincts de projets actifs
+  // (les talents peuvent aussi créer des projets). Lecture via projects_public.
+  const { data: activeOwners, error: ownersError } = await supabase
+    .from('projects_public')
+    .select('owner_id')
+    .eq('status', 'active');
+  if (ownersError) {
+    console.error('[HOME] Error fetching project owners:', ownersError.message);
+  }
+  const entrepreneursCount = new Set((activeOwners || []).map((p) => p.owner_id)).size;
 
-  const { count: applicationsCount } = await supabase
+  const { count: applicationsCount, error: applicationsCountError } = await supabase
     .from('applications')
     .select('*', { count: 'exact', head: true });
+  if (applicationsCountError) {
+    console.error('[HOME] Error counting applications:', applicationsCountError.message);
+  }
 
   return {
     projects: projects || [],
     stats: {
       projects: projectsCount || 0,
       talents: talentsCount || 0,
-      entrepreneurs: entrepreneursCount || 0,
+      entrepreneurs: entrepreneursCount,
       applications: applicationsCount || 0,
     },
   };
@@ -350,7 +369,7 @@ export default async function HomeCarbonPage({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 {[
                   { value: stats.projects, label: `Projet${stats.projects > 1 ? 's' : ''} en cours` },
-                  { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''} engagé${stats.talents > 1 ? 's' : ''}` },
+                  { value: stats.talents, label: `Talent${stats.talents > 1 ? 's' : ''} inscrit${stats.talents > 1 ? 's' : ''}` },
                   { value: stats.entrepreneurs, label: `Porteur${stats.entrepreneurs > 1 ? 's' : ''} de projet` },
                   { value: stats.applications, label: `Mise${stats.applications > 1 ? 's' : ''} en relation` },
                 ].map((stat, index) => (
