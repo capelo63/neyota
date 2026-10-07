@@ -3,6 +3,9 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import ProfileView from './ProfileView';
 import PartnerProfileView from './PartnerProfileView';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import LoginRequired from '@/components/LoginRequired';
 
 export default async function ProfilePage({
   params,
@@ -10,6 +13,26 @@ export default async function ProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
+  // Visiteur non connecté : aucune lecture de profil (ni client admin, ni profiles, ni user_skills)
+  const authClient = await createClient();
+  const { data: { user: viewer } } = await authClient.auth.getUser();
+
+  if (!viewer) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex flex-col">
+        <Navigation />
+        <main className="flex-1 container-custom py-16 px-4">
+          <LoginRequired
+            title="Connectez-vous pour consulter les talents"
+            description="Les profils sont réservés aux membres connectés de Teriis."
+            redirectPath={`/profile/${id}`}
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const admin = createAdminClient();
   const { data: profile } = await admin
