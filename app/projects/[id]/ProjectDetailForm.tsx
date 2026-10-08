@@ -9,6 +9,7 @@ import { Button, Badge, Modal, Textarea } from '@/components/ui';
 import ReportButton from '@/components/ReportButton';
 import { NEED_CATEGORIES, type NeedCategoryId } from '@/lib/constants/needs-skills';
 import { getUserErrorMessage } from '@/lib/errors';
+import Footer from '@/components/Footer';
 import CityAutocomplete from '@/components/CityAutocomplete';
 
 const PROJECT_CATEGORIES = [
@@ -1085,6 +1086,10 @@ export default function ProjectDetailForm({ projectId }: ProjectDetailProps) {
           )}
         </div>
       </main>
+
+      <div className="mt-auto">
+        <Footer />
+      </div>
 
       {/* Application Modal */}
       <Modal

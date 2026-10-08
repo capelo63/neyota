@@ -6,6 +6,7 @@ import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui';
+import Footer from '@/components/Footer';
 
 interface Project {
   id: string;
@@ -369,7 +370,7 @@ export default function MatchingView() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
@@ -663,6 +664,10 @@ export default function MatchingView() {
           </div>
         </div>
       </main>
+
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
