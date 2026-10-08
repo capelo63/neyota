@@ -37,7 +37,7 @@
 - **Build Vercel échoue** → TypeScript strict, vérifier les types null/undefined
 
 ## Migrations Supabase
-- Dernière migration appliquée : **062** (module blog ; 063 — retrait des écritures anon — en attente d'application)
+- Dernière migration appliquée : **063** (retrait des écritures `anon`, vues `profiles_public` / `projects_public` en lecture seule, privilèges par défaut durcis)
 - Fichiers dans `supabase/migrations/`
 - Appliquer manuellement via Dashboard Supabase → SQL Editor
 - Toujours créer une migration pour chaque changement de schéma
