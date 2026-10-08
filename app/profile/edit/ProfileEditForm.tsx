@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import AvatarUpload from '@/components/AvatarUpload';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { SKILL_CATEGORIES, hasCustomField, type SkillCategoryId } from '@/lib/constants/needs-skills';
 
 interface Profile {
@@ -201,8 +203,9 @@ export default function ProfileEditForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navigation />
+      <div className="max-w-3xl w-full mx-auto px-4 py-8">
         <div className="mb-6 flex items-center justify-between gap-3">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Modifier mon profil</h1>
           <Link href={`/profile/${profile.id}`} className="shrink-0">
@@ -371,6 +374,10 @@ export default function ProfileEditForm() {
             </Button>
           </div>
         )}
+      </div>
+
+      <div className="mt-auto">
+        <Footer />
       </div>
     </div>
   );
