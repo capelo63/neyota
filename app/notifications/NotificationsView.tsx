@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 
 interface Notification {
   id: string;
@@ -155,7 +156,7 @@ export default function NotificationsView() {
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-neutral-200 py-4 px-4">
         <div className="container-custom">
@@ -308,6 +309,10 @@ export default function NotificationsView() {
           )}
         </div>
       </main>
+
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

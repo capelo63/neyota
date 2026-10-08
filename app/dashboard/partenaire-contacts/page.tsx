@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import ReceivedContactsList, { type ReceivedRequest } from './ReceivedContactsList';
 
 export default async function PartenairesContactsPage() {
@@ -21,9 +22,12 @@ export default async function PartenairesContactsPage() {
   const { data: requests } = await supabase.rpc('get_received_contact_requests');
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <Navigation />
       <ReceivedContactsList requests={(requests ?? []) as ReceivedRequest[]} />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }
